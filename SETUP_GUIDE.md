@@ -14,7 +14,7 @@ Centaurion/
 ├── SETUP_GUIDE.md                    ← This file
 ├── Framework/
 │   └── README.md
-├── Co-operative-Company/
+├── Cognitive-Company/
 │   ├── README.md
 │   ├── AI-operations/
 │   │   └── README.md

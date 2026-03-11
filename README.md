@@ -1,6 +1,6 @@
 # Centaurion Framework
 
-> AI-Driven Co-operative Operating System
+> AI-Driven Cognitive Operating System
 
 ## Overview
 
@@ -11,7 +11,7 @@ Centaurion is an autonomous AI-driven framework for business operations, market 
 ```
 Centaurion/
 ├── Framework/                    # Core AI framework
-├── Co-operative-Company/
+├── Cognitive-Company/
 │   ├── AI-operations/          # AI automation scripts
 │   ├── toolkeep/               # Tool management
 │   ├── market-intelligence/     # Market research & reports
