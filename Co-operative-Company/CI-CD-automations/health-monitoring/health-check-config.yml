@@ -1,0 +1,18 @@
+health_checks:
+  - name: API Health
+    endpoint: /health
+    interval: 60
+    timeout: 10
+
+  - name: Database
+    type: database
+    interval: 300
+
+  - name: Memory Usage
+    type: system
+    threshold: 85
+
+alerts:
+  - type: email
+    recipients:
+      - admin@example.com

@@ -1,0 +1,13 @@
+# Centaurion Cron Jobs Example
+
+# Market Intelligence - Daily at 8 AM
+0 8 * * * /app/scripts/market-intel.sh
+
+# Health Check - Every 5 minutes
+*/5 * * * * /app/scripts/health-check.sh
+
+# Report Generation - Weekly on Monday
+0 10 * * 1 /app/scripts/weekly-report.sh
+
+# Cleanup - Daily at 2 AM
+0 2 * * * /app/scripts/cleanup.sh
