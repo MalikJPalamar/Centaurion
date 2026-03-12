@@ -7,11 +7,19 @@ WORKDIR /app
 # Install dependencies
 RUN pip install --no-cache-dir \
     requests \
-    beautifulsoup4 \
-    playwright
+    beautifulsoup4
 
-# Copy application files
-COPY . .
+# Create app directory structure
+RUN mkdir -p /app/Cognitive-Company
+
+# Copy main entry point
+COPY main.py /app/
+
+# Copy Framework
+COPY ../../../Framework /app/Framework
+
+# Copy Cognitive-Company structure
+COPY ../../* /app/Cognitive-Company/
 
 # Default command
 CMD ["python", "main.py"]
