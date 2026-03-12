@@ -94,20 +94,65 @@ class Handler(BaseHTTPRequestHandler):
         .info span {{
             color: #00d4ff;
         }}
+        .capabilities {{
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }}
+        .capability {{
+            background: rgba(255,255,255,0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8;
+        }}
+        .api-link {{
+            display: inline-block;
+            margin-top: 1rem;
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }}
+        .api-link:hover {{ text-decoration: underline; }}
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">🦄</div>
-        <h1>Centaurion Framework</h1>
+        <div class="logo">
+            <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" stroke="url(#grad)" stroke-width="3" fill="none"/>
+                <circle cx="50" cy="50" r="30" stroke="url(#grad)" stroke-width="2" fill="none" opacity="0.6"/>
+                <circle cx="50" cy="50" r="15" stroke="url(#grad)" stroke-width="2" fill="none" opacity="0.3"/>
+                <circle cx="50" cy="50" r="5" fill="url(#grad)"/>
+                <path d="M50 20 L50 35 M50 65 L50 80 M20 50 L35 50 M65 50 L80 50" stroke="url(#grad)" stroke-width="2" opacity="0.4"/>
+                <path d="M30 30 L40 40 M60 60 L70 70 M30 70 L40 60 M60 40 L70 30" stroke="url(#grad)" stroke-width="2" opacity="0.4"/>
+                <defs>
+                    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#00d4ff"/>
+                        <stop offset="100%" style="stop-color:#7c3aed"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <h1>Centaurion</h1>
         <p class="tagline">AI-Driven Cognitive Operating System</p>
         <div class="status">
             <span class="status-dot"></span>
             System Online
         </div>
+        <div class="capabilities">
+            <span class="capability">Market Intelligence</span>
+            <span class="capability">AI Automation</span>
+            <span class="capability">CI/CD Pipelines</span>
+            <span class="capability">Monitoring</span>
+        </div>
         <div class="info">
             <p>Started: <span>{START_TIME.strftime('%Y-%m-%d %H:%M:%S')}</span></p>
-            <p>Version: 1.0.0</p>
+            <p>Version: <span>1.0.0</span></p>
+            <a href="/status" class="api-link">View API Status</a>
         </div>
     </div>
 </body>
