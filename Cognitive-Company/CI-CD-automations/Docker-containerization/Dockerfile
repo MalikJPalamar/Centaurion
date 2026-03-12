@@ -9,17 +9,8 @@ RUN pip install --no-cache-dir \
     requests \
     beautifulsoup4
 
-# Create app directory structure
-RUN mkdir -p /app/Cognitive-Company
-
-# Copy main entry point
-COPY main.py /app/
-
-# Copy Framework
-COPY ../../../Framework /app/Framework
-
-# Copy Cognitive-Company structure
-COPY ../../* /app/Cognitive-Company/
+# Copy all files from repo root
+COPY . .
 
 # Default command
-CMD ["python", "main.py"]
+CMD ["python", "Cognitive-Company/CI-CD-automations/Docker-containerization/main.py"]

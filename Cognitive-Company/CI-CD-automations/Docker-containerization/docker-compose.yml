@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   centaurion:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../..
+      dockerfile: Cognitive-Company/CI-CD-automations/Docker-containerization/Dockerfile
     container_name: centaurion
     environment:
       - API_KEYS=${API_KEYS:-}
