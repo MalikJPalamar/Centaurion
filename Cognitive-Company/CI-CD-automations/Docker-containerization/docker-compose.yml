@@ -1,7 +1,7 @@
 services:
   centaurion:
     build:
-      context: ../..
+      context: ../../..
       dockerfile: Cognitive-Company/CI-CD-automations/Docker-containerization/Dockerfile
     container_name: centaurion
     environment:

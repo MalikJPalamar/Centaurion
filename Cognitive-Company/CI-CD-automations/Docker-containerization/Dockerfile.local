@@ -1,0 +1,13 @@
+# Simplified Dockerfile for local development
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir requests beautifulsoup4
+
+# Copy only needed files
+COPY main.py /app/main.py
+COPY ../../main.py /app/root_main.py 2>/dev/null || true
+
+CMD ["python", "main.py"]
