@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: centaurion
+    env: docker
+    dockerfilePath: Cognitive-Company/CI-CD-automations/Docker-containerization/Dockerfile
+    dockerContext: ./
+    port: 8000
+    envVars:
+      - key: PORT
+        value: "8000"

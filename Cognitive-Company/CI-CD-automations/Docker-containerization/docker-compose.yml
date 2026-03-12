@@ -7,24 +7,8 @@ services:
       dockerfile: Dockerfile
     container_name: centaurion
     environment:
-      - API_KEYS=${API_KEYS}
-    volumes:
-      - ./data:/app/data
-    restart: unless-stopped
-
-  monitoring:
-    image: prom/prometheus:latest
-    container_name: centaurion-monitoring
+      - API_KEYS=${API_KEYS:-}
+      - PORT=8000
     ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-
-  cron:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: centaurion-cron
-    command: ["python", "cron.py"]
-    environment:
-      - SCHEDULE=${SCHEDULE}
+      - "8000:8000"
+    restart: unless-stopped
