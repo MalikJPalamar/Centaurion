@@ -31,8 +31,12 @@ async def health_check():
         "timestamp": "2026-03-13T12:00:00Z"
     }
 
-if os.path.exists(FRONTEND_DIR):
-    app.mount("", StaticFiles(directory=FRONTEND_DIR, html=True), name="static")
+@app.get("/{full_path:path}")
+async def serve_frontend(full_path: str):
+    index_path = os.path.join(FRONTEND_DIR, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return {"error": "Frontend not found", "path": FRONTEND_DIR, "exists": os.path.exists(FRONTEND_DIR)}
 
 if __name__ == "__main__":
     import uvicorn
