@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from api.routes import router
 import os
@@ -23,6 +23,9 @@ app.add_middleware(
 
 app.include_router(router, prefix="/api")
 
+if os.path.exists(FRONTEND_DIR):
+    app.mount("/assets", StaticFiles(directory=FRONTEND_DIR), name="assets")
+
 @app.get("/api/health")
 async def health_check():
     return {
@@ -31,12 +34,9 @@ async def health_check():
         "timestamp": "2026-03-13T12:00:00Z"
     }
 
-@app.get("/{full_path:path}")
-async def serve_frontend(full_path: str):
-    index_path = os.path.join(FRONTEND_DIR, "index.html")
-    if os.path.exists(index_path):
-        return FileResponse(index_path)
-    return {"error": "Frontend not found", "path": FRONTEND_DIR, "exists": os.path.exists(FRONTEND_DIR)}
+@app.get("/")
+async def root():
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
 
 if __name__ == "__main__":
     import uvicorn
