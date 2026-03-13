@@ -24,14 +24,14 @@ app.add_middleware(
 app.include_router(router, prefix="/api")
 
 if os.path.exists(FRONTEND_DIR):
-    app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+    app.mount("", StaticFiles(directory=FRONTEND_DIR, html=True), name="static")
 
 @app.get("/")
-async def root():
+async def root(request: Request):
     index_path = os.path.join(FRONTEND_DIR, "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path)
-    return {"message": "Centaurion Framework API", "status": "running", "frontend_dir": FRONTEND_DIR, "exists": os.path.exists(FRONTEND_DIR)}
+    return {"message": "Centaurion", "frontend_dir": FRONTEND_DIR, "exists": os.path.exists(FRONTEND_DIR)}
 
 @app.get("/api/health")
 async def health_check():
