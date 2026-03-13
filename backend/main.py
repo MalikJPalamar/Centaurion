@@ -1,14 +1,18 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from api.routes import router
 import os
 
 app = FastAPI(
-    title="Centaurion API",
+    title="Centaurion",
     description="AI-Driven Cognitive Operating System",
     version="1.0.0"
 )
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), "frontend", "dist")
 
 app.add_middleware(
     CORSMiddleware,
@@ -20,8 +24,14 @@ app.add_middleware(
 
 app.include_router(router, prefix="/api")
 
+if os.path.exists(FRONTEND_DIR):
+    app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+
 @app.get("/")
 async def root():
+    index_path = os.path.join(FRONTEND_DIR, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
     return {"message": "Centaurion Framework API", "status": "running"}
 
 @app.get("/api/health")
