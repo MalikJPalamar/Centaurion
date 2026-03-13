@@ -1,101 +1,121 @@
 # Centaurion Deployment Guide
 
-## Quick Deploy (Docker)
+## Project Structure
+The project now includes both frontend and backend:
 
-### Prerequisites
-- Docker installed
-- Docker Compose installed
-
-### Steps
-
-1. **Clone the repo**
-```bash
-git clone https://github.com/MalikJPalamar/Centaurion.git
-cd Centaurion
 ```
-
-2. **Configure environment**
-```bash
-# Create .env file
-cp .env.example .env
-# Edit .env with your API keys
-```
-
-3. **Deploy**
-```bash
-cd Cognitive-Company/CI-CD-automations/Docker-containerization
-docker-compose up -d
-```
-
-4. **Check status**
-```bash
-docker-compose ps
-docker-compose logs -f
+Centaurion/
+├── SPEC.md              # Detailed specification
+├── backend/             # FastAPI backend
+│   ├── main.py         # Application entry point
+│   ├── requirements.txt
+│   └── api/
+│       ├── routes.py   # API endpoints
+│       └── mock_data.py
+├── frontend/           # React frontend
+│   ├── src/
+│   │   ├── pages/      # Dashboard, AIOperations, etc.
+│   │   ├── App.tsx     # Main app component
+│   │   └── index.css   # Global styles
+│   └── package.json
+├── Dockerfile          # Backend container
+└── render.yaml        # Render.com config
 ```
 
 ---
 
-## Deploy without Docker (Manual)
+## Deploy to Render.com
 
 ### Prerequisites
-- Python 3.11+
-- Node.js (for some tools)
+1. GitHub account
+2. Render.com account connected to GitHub
 
 ### Steps
 
-1. **Clone and install**
+1. **Push to GitHub**
+   ```bash
+   cd Centaurion
+   git add .
+   git commit -m "Add frontend and backend"
+   git push origin main
+   ```
+
+2. **Deploy Backend**
+   - Go to Render.com Dashboard
+   - Create new "Web Service"
+   - Connect to GitHub repo
+   - Settings:
+     - Environment: Python
+     - Build Command: `cd backend && pip install -r requirements.txt`
+     - Start Command: `cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT`
+   - Create
+
+3. **Deploy Frontend**
+   - Create new "Static Site" on Render
+   - Connect to GitHub repo
+   - Settings:
+     - Build Command: `cd frontend && npm install && npm run build`
+     - Publish Directory: `frontend/dist`
+     - Environment Variables:
+       - `VITE_API_URL`: Your backend URL (e.g., https://centaurion-backend.onrender.com)
+   - Create
+
+---
+
+## Local Development
+
+### Backend
 ```bash
-git clone https://github.com/MalikJPalamar/Centaurion.git
-cd Centaurion
+cd backend
 pip install -r requirements.txt
-```
-
-2. **Configure**
-```bash
-cp .env.example .env
-# Edit with your settings
-```
-
-3. **Run**
-```bash
 python main.py
+# API available at http://localhost:8000
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+# App available at http://localhost:5173
 ```
 
 ---
 
-## Deploy to Cloud
+## Environment Variables
 
-### Option 1: Render.com
-1. Connect GitHub repo
-2. Set build command: `pip install -r requirements.txt`
-3. Set start command: `python main.py`
-
-### Option 2: Railway
-1. Connect GitHub repo
-2. Auto-detects Dockerfile
-
-### Option 3: DigitalOcean App Platform
-1. Connect GitHub repo
-2. Choose Docker container
+| Variable | Description | Required |
+|----------|-------------|----------|
+| PORT | Server port (default: 8000) | No |
+| OPENAI_API_KEY | OpenAI API key | Optional |
+| ANTHROPIC_API_KEY | Anthropic API key | Optional |
+| MARKET_DATA_API_KEY | Market data provider key | Optional |
 
 ---
 
-## Current Services
+## API Endpoints
 
-| Service | Port | Purpose |
-|---------|------|---------|
-| Centaurion | 8000 | Main AI framework |
-| Prometheus | 9090 | Monitoring |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/health | Health check |
+| GET | /api/dashboard/stats | Dashboard statistics |
+| GET | /api/ai-operations | List AI operations |
+| POST | /api/ai-operations | Create operation |
+| GET | /api/market/intelligence | Market data |
+| POST | /api/market/generate | Generate report |
+| GET | /api/cicd/pipelines | List pipelines |
+| POST | /api/cicd/trigger | Trigger pipeline |
+| GET | /api/cicd/health | Health status |
+| GET | /api/settings | Get settings |
+| PUT | /api/settings | Update settings |
 
 ---
 
-## Next Steps After Deploy
+## Design System
 
-1. Add your API keys to .env
-2. Configure market intelligence sources
-3. Set up cron jobs for social listening
-4. Enable health monitoring
+The frontend uses a premium Centaurion theme:
 
----
-
-*For more details, see CI-CD-automations/README.md*
+- **Colors**: Obsidian dark (#0a0a0f), Centurion Gold (#c9a227)
+- **Fonts**: Cinzel (display), Sora (headings), IBM Plex Sans (body), JetBrains Mono (data)
+- **Components**: Cards, tables, badges, buttons, forms
+- **Animations**: Subtle hover effects, smooth transitions
