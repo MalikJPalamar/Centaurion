@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Play, Pause, RotateCcw, Search } from 'lucide-react'
+import { Plus, Play, Pause, RotateCcw } from 'lucide-react'
 
 interface AIOperation {
   id: string
@@ -9,6 +9,7 @@ interface AIOperation {
   created_at: string
   progress?: number
   result?: string
+  error?: string
 }
 
 const mockOperations: AIOperation[] = [

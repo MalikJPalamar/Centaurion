@@ -5,7 +5,6 @@ import {
   CheckCircle, 
   AlertTriangle,
   TrendingUp,
-  TrendingDown,
   GitBranch,
   Server
 } from 'lucide-react'

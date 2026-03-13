@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown, Users, FileText, Download } from 'lucide-react'
+import { TrendingUp, TrendingDown, Users, FileText } from 'lucide-react'
 
 const marketData = {
   sectors: [

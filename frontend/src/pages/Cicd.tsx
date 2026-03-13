@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Play, Clock, AlertCircle, CheckCircle, XCircle, RefreshCw } from 'lucide-react'
+import { Play, AlertCircle, RefreshCw } from 'lucide-react'
 
 const pipelines = [
   {
@@ -51,15 +51,6 @@ export default function Cicd() {
   const handleTrigger = (pipelineId: string) => {
     setTriggering(pipelineId)
     setTimeout(() => setTriggering(null), 2000)
-  }
-  
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'success': return <CheckCircle size={18} color="#4ade80" />
-      case 'running': return <Clock size={18} color="var(--accent-gold)" />
-      case 'failed': return <XCircle size={18} color="#f87171" />
-      default: return <AlertCircle size={18} color="var(--text-tertiary)" />
-    }
   }
   
   return (
