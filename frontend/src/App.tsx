@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
 import { 
   LayoutDashboard, 
@@ -7,7 +8,9 @@ import {
   Settings,
   Search,
   Bell,
-  Shield
+  Shield,
+  Menu,
+  X
 } from 'lucide-react'
 import Dashboard from './pages/Dashboard'
 import AIOperations from './pages/AIOperations'
@@ -24,10 +27,12 @@ const navItems = [
 ]
 
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  
   return (
     <BrowserRouter>
       <div className="app-layout">
-        <aside className="sidebar">
+        <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
           <div className="sidebar-header">
             <div className="logo">
               <div className="logo-icon">C</div>
@@ -45,6 +50,7 @@ function App() {
                   to={item.path} 
                   className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                   end
+                  onClick={() => setSidebarOpen(false)}
                 >
                   <item.icon className="nav-icon" />
                   {item.label}
@@ -59,6 +65,7 @@ function App() {
                   key={item.path} 
                   to={item.path} 
                   className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+                  onClick={() => setSidebarOpen(false)}
                 >
                   <item.icon className="nav-icon" />
                   {item.label}
@@ -73,6 +80,7 @@ function App() {
                   key={item.path} 
                   to={item.path} 
                   className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+                  onClick={() => setSidebarOpen(false)}
                 >
                   <item.icon className="nav-icon" />
                   {item.label}
@@ -92,6 +100,9 @@ function App() {
         <main className="main-content">
           <header className="header">
             <div className="header-left">
+              <button className="mobile-menu-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+                {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
               <h1 className="page-title">Centaurion</h1>
             </div>
             <div className="header-right">
