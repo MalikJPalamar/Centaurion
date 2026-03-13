@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -11,8 +11,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FRONTEND_DIR = os.path.join(os.path.dirname(BASE_DIR), "frontend", "dist")
+FRONTEND_DIR = "/app/frontend/dist"
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,7 +31,7 @@ async def root():
     index_path = os.path.join(FRONTEND_DIR, "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path)
-    return {"message": "Centaurion Framework API", "status": "running"}
+    return {"message": "Centaurion Framework API", "status": "running", "frontend_dir": FRONTEND_DIR, "exists": os.path.exists(FRONTEND_DIR)}
 
 @app.get("/api/health")
 async def health_check():
