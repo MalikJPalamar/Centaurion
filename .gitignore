@@ -52,3 +52,7 @@ Thumbs.db
 # Data
 data/
 *.csv
+frontend/node_modules/
+frontend/dist/
+*.pyc
+__pycache__/
