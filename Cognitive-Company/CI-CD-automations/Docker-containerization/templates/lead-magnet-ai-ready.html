@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Readiness Assessment - The Cognitive Company</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; color: #fff; padding: 2rem; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: rgba(255,255,255,0.05); border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); padding: 2rem; margin-bottom: 1.5rem; }
+        h1 { font-size: 2.5rem; background: linear-gradient(90deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+        .section { margin-bottom: 2rem; }
+        .section h3 { color: #00d4ff; margin-bottom: 1rem; font-size: 1.2rem; }
+        .question { margin-bottom: 1.5rem; }
+        .question label { display: block; margin-bottom: 0.5rem; color: #e2e8f0; }
+        .options { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .option { padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; transition: all 0.3s; }
+        .option:hover, .option.selected { background: rgba(0,212,255,0.2); border-color: #00d4ff; }
+        .btn { display: inline-block; padding: 1rem 2rem; background: linear-gradient(90deg, #00d4ff, #7c3aed); border-radius: 8px; color: white; text-decoration: none; font-weight: 600; border: none; cursor: pointer; font-size: 1rem; }
+        .btn:hover { transform: scale(1.05); }
+        .progress { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 2rem; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #00d4ff, #7c3aed); width: 0%; transition: width 0.3s; }
+        .result { display: none; text-align: center; }
+        .score { font-size: 4rem; font-weight: 700; background: linear-gradient(90deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .level { font-size: 1.5rem; color: #22c55e; margin: 1rem 0; }
+        .breakdown { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+        .breakdown-item { background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; }
+        .breakdown-item label { color: #94a3b8; font-size: 0.85rem; }
+        .breakdown-item .value { font-size: 1.5rem; color: #00d4ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>AI Readiness Assessment</h1>
+            <p style="color: #94a3b8; margin-bottom: 1.5rem;">Discover how prepared your organization is for AI transformation.</p>
+            <div class="progress"><div class="progress-bar" id="progress"></div></div>
+
+            <div id="assessment">
+                <div class="section" data-category="infrastructure">
+                    <h3>1. Infrastructure Readiness</h3>
+                    <div class="question" data-q="i1"><label>Do you have cloud infrastructure in place?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Planning</span><span class="option" data-value="3">Partial</span><span class="option" data-value="4">Mostly</span><span class="option" data-value="5">Fully</span></div></div>
+                    <div class="question" data-q="i2"><label>Is your data properly structured and accessible?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Planning</span><span class="option" data-value="3">Partial</span><span class="option" data-value="4">Mostly</span><span class="option" data-value="5">Fully</span></div></div>
+                    <div class="question" data-q="i3"><label>Do you have API capabilities for integration?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Planning</span><span class="option" data-value="3">Partial</span><span class="option" data-value="4">Mostly</span><span class="option" data-value="5">Fully</span></div></div>
+                </div>
+                <div class="section" data-category="data">
+                    <h3>2. Data Readiness</h3>
+                    <div class="question" data-q="d1"><label>How is your data quality?</label><div class="options"><span class="option" data-value="1">Poor</span><span class="option" data-value="2">Fair</span><span class="option" data-value="3">Good</span><span class="option" data-value="4">Very Good</span><span class="option" data-value="5">Excellent</span></div></div>
+                    <div class="question" data-q="d2"><label>Do you have data governance policies?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Planning</span><span class="option" data-value="3">Partial</span><span class="option" data-value="4">Mostly</span><span class="option" data-value="5">Fully</span></div></div>
+                    <div class="question" data-q="d3"><label>Is historical data available for training?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Limited</span><span class="option" data-value="3">Some</span><span class="option" data-value="4">Most</span><span class="option" data-value="5">Fully</span></div></div>
+                </div>
+                <div class="section" data-category="team">
+                    <h3>3. Team & Skills</h3>
+                    <div class="question" data-q="t1"><label>Do you have AI/ML expertise in-house?</label><div class="options"><span class="option" data-value="1">None</span><span class="option" data-value="2">Learning</span><span class="option" data-value="3">1-2 People</span><span class="option" data-value="4">Team</span><span class="option" data-value="5">Full Team</span></div></div>
+                    <div class="question" data-q="t2"><label>Is there budget for training?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Planning</span><span class="option" data-value="3">Limited</span><span class="option" data-value="4">Available</span><span class="option" data-value="5">Fully Funded</span></div></div>
+                    <div class="question" data-q="t3"><label>Are teams open to AI adoption?</label><div class="options"><span class="option" data-value="1">Resistant</span><span class="option" data-value="2">Skeptical</span><span class="option" data-value="3">Neutral</span><span class="option" data-value="4">Interested</span><span class="option" data-value="5">Excited</span></div></div>
+                </div>
+                <button class="btn" onclick="calculateScore()">Get My Results</button>
+            </div>
+
+            <div class="result" id="result">
+                <div class="score" id="totalScore">0</div>
+                <div class="level" id="readinessLevel">-</div>
+                <div class="breakdown" id="breakdown"></div>
+                <button class="btn" onclick="location.reload()" style="margin-top: 2rem;">Retake Assessment</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const answers = {};
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.addEventListener('click', function() {
+                const q = this.closest('.question').dataset.q;
+                answers[q] = parseInt(this.dataset.value);
+                this.parentElement.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                updateProgress();
+            });
+        });
+        function updateProgress() {
+            const total = 9;
+            const answered = Object.keys(answers).length;
+            document.getElementById('progress').style.width = (answered / total * 100) + '%';
+        }
+        function calculateScore() {
+            let total = 0;
+            const categories = { infrastructure: 0, data: 0, team: 0 };
+            Object.values(answers).forEach(v => total += v);
+            ['i','d','t'].forEach((c, i) => {
+                for(let j=1; j<=3; j++) {
+                    if(answers[c+j]) categories[Object.keys(categories)[i]] += answers[c+j];
+                }
+            });
+            document.getElementById('assessment').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('totalScore').textContent = total + '/30';
+            let level = 'Getting Started';
+            if(total >= 25) level = 'AI-Ready';
+            else if(total >= 20) level = 'Well on Your Way';
+            else if(total >= 15) level = 'Making Progress';
+            document.getElementById('readinessLevel').textContent = level;
+            let html = '';
+            Object.keys(categories).forEach(cat => {
+                html += `<div class="breakdown-item"><label>${cat.charAt(0).toUpperCase() + cat.slice(1)}</label><div class="value">${categories[cat]}/15</div></div>`;
+            });
+            document.getElementById('breakdown').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
