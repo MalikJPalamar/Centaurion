@@ -448,6 +448,216 @@ def monitoring_page():
 </body>
 </html>"""
 
+def ai_ready_page():
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Readiness Assessment - The Cognitive Company</title>
+    <style>{COMMON_CSS}
+        .section {{ margin-bottom: 2rem; }}
+        .section h3 {{ color: #00d4ff; margin-bottom: 1rem; font-size: 1.2rem; }}
+        .question {{ margin-bottom: 1.5rem; }}
+        .question label {{ display: block; margin-bottom: 0.5rem; color: #e2e8f0; }}
+        .options {{ display: flex; gap: 0.5rem; flex-wrap: wrap; }}
+        .option {{ padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; cursor: pointer; transition: all 0.3s; }}
+        .option:hover, .option.selected {{ background: rgba(0,212,255,0.2); border-color: #00d4ff; }}
+        .progress {{ height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-bottom: 2rem; overflow: hidden; }}
+        .progress-bar {{ height: 100%; background: linear-gradient(90deg, #00d4ff, #7c3aed); width: 0%; transition: width 0.3s; }}
+        .result {{ display: none; text-align: center; }}
+        .score {{ font-size: 4rem; font-weight: 700; background: linear-gradient(90deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }}
+    </style>
+</head>
+<body>
+    {get_nav('/ai-ready')}
+    <div class="container">
+        <div class="card">
+            <h1>AI Readiness Assessment</h1>
+            <p style="color: #94a3b8; margin-bottom: 1.5rem;">Discover how prepared your organization is for AI transformation.</p>
+            <div class="progress"><div class="progress-bar" id="progress"></div></div>
+            <div id="assessment">
+                <div class="section" data-category="infrastructure">
+                    <h3>1. Infrastructure Readiness</h3>
+                    <div class="question" data-q="i1"><label>Do you have cloud infrastructure in place?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Planning</span><span class="option" data-value="3">Partial</span><span class="option" data-value="4">Mostly</span><span class="option" data-value="5">Fully</span></div></div>
+                    <div class="question" data-q="i2"><label>Is your data properly structured and accessible?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Planning</span><span class="option" data-value="3">Partial</span><span class="option" data-value="4">Mostly</span><span class="option" data-value="5">Fully</span></div></div>
+                    <div class="question" data-q="i3"><label>Do you have API capabilities for integration?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Planning</span><span class="option" data-value="3">Partial</span><span class="option" data-value="4">Mostly</span><span class="option" data-value="5">Fully</span></div></div>
+                </div>
+                <div class="section" data-category="data">
+                    <h3>2. Data Readiness</h3>
+                    <div class="question" data-q="d1"><label>How is your data quality?</label><div class="options"><span class="option" data-value="1">Poor</span><span class="option" data-value="2">Fair</span><span class="option" data-value="3">Good</span><span class="option" data-value="4">Very Good</span><span class="option" data-value="5">Excellent</span></div></div>
+                    <div class="question" data-q="d2"><label>Do you have data governance policies?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Planning</span><span class="option" data-value="3">Partial</span><span class="option" data-value="4">Mostly</span><span class="option" data-value="5">Fully</span></div></div>
+                </div>
+                <div class="section" data-category="team">
+                    <h3>3. Team & Skills</h3>
+                    <div class="question" data-q="t1"><label>Do you have AI/ML expertise in-house?</label><div class="options"><span class="option" data-value="1">None</span><span class="option" data-value="2">Learning</span><span class="option" data-value="3">1-2 People</span><span class="option" data-value="4">Team</span><span class="option" data-value="5">Full Team</span></div></div>
+                    <div class="question" data-q="t2"><label>Is there budget for training?</label><div class="options"><span class="option" data-value="1">No</span><span class="option" data-value="2">Planning</span><span class="option" data-value="3">Limited</span><span class="option" data-value="4">Available</span><span class="option" data-value="5">Fully Funded</span></div></div>
+                </div>
+                <button class="btn" onclick="calculateScore()">Get My Results</button>
+            </div>
+            <div class="result" id="result">
+                <div class="score" id="totalScore">0</div>
+                <p style="color: #22c55f; font-size: 1.5rem; margin: 1rem 0;" id="readinessLevel">-</p>
+                <button class="btn" onclick="location.reload()" style="margin-top: 2rem;">Retake Assessment</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const answers = {{}};
+        document.querySelectorAll('.option').forEach(opt => {{
+            opt.addEventListener('click', function() {{
+                const q = this.closest('.question').dataset.q;
+                answers[q] = parseInt(this.dataset.value);
+                this.parentElement.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                updateProgress();
+            }});
+        }});
+        function updateProgress() {{
+            const total = 7;
+            const answered = Object.keys(answers).length;
+            document.getElementById('progress').style.width = (answered / total * 100) + '%';
+        }}
+        function calculateScore() {{
+            let total = 0;
+            Object.values(answers).forEach(v => total += v);
+            document.getElementById('assessment').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('totalScore').textContent = total + '/35';
+            let level = 'Getting Started';
+            if(total >= 28) level = 'AI-Ready';
+            else if(total >= 22) level = 'Well on Your Way';
+            else if(total >= 15) level = 'Making Progress';
+            document.getElementById('readinessLevel').textContent = level;
+        }}
+    </script>
+    {get_footer()}
+</body>
+</html>"""
+
+def website_ideas_page():
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Ideas Generator - The Cognitive Company</title>
+    <style>{COMMON_CSS}
+        .form-row {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }}
+        select {{ width: 100%; padding: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 1rem; }}
+        .results {{ display: none; }}
+        .idea-card {{ background: rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.1); }}
+        .idea-card h3 {{ color: #00d4ff; margin-bottom: 0.5rem; }}
+        .idea-card .url {{ color: #7c3aed; font-size: 0.9rem; margin-bottom: 0.5rem; }}
+        .features {{ display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }}
+        .feature {{ background: rgba(0,212,255,0.1); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; color: #00d4ff; }}
+    </style>
+</head>
+<body>
+    {get_nav('/website-ideas')}
+    <div class="container">
+        <div class="card">
+            <h1>Website Ideas Generator</h1>
+            <p style="color: #94a3b8; margin-bottom: 2rem; text-align: center;">Get unique website concepts tailored to your business</p>
+            <div class="form-row">
+                <select id="industry"><option value="">Select Industry</option><option value="tech">Technology</option><option value="healthcare">Healthcare</option><option value="education">Education</option><option value="ecommerce">E-commerce</option><option value="finance">Finance</option><option value="realestate">Real Estate</option><option value="food">Food & Beverage</option><option value="fitness">Fitness</option></select>
+                <select id="businessType"><option value="">Business Type</option><option value="b2b">B2B</option><option value="b2c">B2C</option><option value="saas">SaaS</option><option value="service">Service</option><option value="startup">Startup</option></select>
+                <select id="audience"><option value="">Target Audience</option><option value="professionals">Professionals</option><option value="millennials">Millennials</option><option value="genz">Gen Z</option><option value="entrepreneurs">Entrepreneurs</option></select>
+            </div>
+            <button class="btn" onclick="generateIdeas()">Generate Ideas</button>
+        </div>
+        <div class="results" id="results">
+            <div class="card">
+                <h2 style="margin-bottom: 1rem;">Your Website Ideas</h2>
+                <div id="ideas"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const ideas = {{
+            tech: {{ name: 'TechFlow', colors: ['#00d4ff', '#7c3aed'], features: ['SaaS Dashboard', 'API Docs', 'Pricing Tables'] }},
+            healthcare: {{ name: 'HealthHub', colors: ['#10b981', '#059669'], features: ['Appointment Booking', 'Patient Portal'] }},
+            education: {{ name: 'LearnPath', colors: ['#f59e0b', '#d97706'], features: ['Course Builder', 'Progress Tracking'] }},
+            ecommerce: {{ name: 'ShopNova', colors: ['#ec4899', '#db2777'], features: ['Product Gallery', 'Cart System'] }},
+            finance: {{ name: 'FinancePro', colors: ['#22c55e', '#16a34a'], features: ['Investment Tracker', 'Budget Planner'] }},
+            default: {{ name: 'BrandX', colors: ['#00d4ff', '#7c3aed'], features: ['Modern Design', 'Contact Form'] }}
+        }};
+        function generateIdeas() {{
+            const industry = document.getElementById('industry').value || 'default';
+            const data = ideas[industry] || ideas.default;
+            const types = ['Landing Page', 'Web App', 'Membership Site'];
+            let html = '';
+            types.forEach((type, i) => {{
+                html += `<div class="idea-card"><h3>${{data.name}} ${{type}}</h3><div class="url">${{data.name.toLowerCase()}}${{type.replace(/\\s/g,'')}}.com</div><p>Perfect for ${{industry}} businesses. Modern, conversion-focused design.</p><div class="features">${{data.features.map(f=>`<span class="feature">${{f}}</span>`).join('')}}</div></div>`;
+            }});
+            document.getElementById('ideas').innerHTML = html;
+            document.getElementById('results').style.display = 'block';
+        }}
+    </script>
+    {get_footer()}
+</body>
+</html>"""
+
+def rnd_ideas_page():
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R&D Innovation Lab - The Cognitive Company</title>
+    <style>{COMMON_CSS}
+        .form-row {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }}
+        select {{ width: 100%; padding: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 1rem; }}
+        .results {{ display: none; }}
+        .project-card {{ background: rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; border: 1px solid rgba(255,255,255,0.1); }}
+        .project-card h3 {{ color: #00d4ff; margin-bottom: 0.5rem; }}
+        .project-card p {{ color: #94a3b8; font-size: 0.9rem; margin-bottom: 1rem; }}
+        .tags {{ display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }}
+        .tag {{ background: rgba(255,255,255,0.1); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; }}
+        .impact-high {{ color: #ef4444; }} .impact-medium {{ color: #f59e0b; }} .impact-low {{ color: #22c55e; }}
+    </style>
+</head>
+<body>
+    {get_nav('/rnd-ideas')}
+    <div class="container">
+        <div class="card">
+            <h1>R&D Innovation Lab</h1>
+            <p style="color: #94a3b8; margin-bottom: 2rem; text-align: center;">Generate breakthrough R&D project ideas for your organization</p>
+            <div class="form-row">
+                <select id="size"><option value="">Company Size</option><option value="startup">Startup</option><option value="small">Small (1-50)</option><option value="medium">Medium (51-500)</option><option value="large">Large (500+)</option></select>
+                <select id="industry"><option value="">Industry</option><option value="tech">Technology</option><option value="healthcare">Healthcare</option><option value="finance">Finance</option><option value="manufacturing">Manufacturing</option></select>
+                <select id="challenge"><option value="">Challenge</option><option value="efficiency">Efficiency</option><option value="experience">Customer Experience</option><option value="analytics">Data & Analytics</option><option value="automation">Process Automation</option></select>
+            </div>
+            <button class="btn" onclick="generateProjects()">Generate Projects</button>
+        </div>
+        <div class="results" id="results">
+            <div class="card">
+                <h2 style="margin-bottom:1rem;">Recommended R&D Projects</h2>
+                <div id="projects"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const projects = [
+            {{ title: 'AI-Powered Process Automation', problem: 'Streamline repetitive tasks', impact: 'High', resource: '3-5 engineers', timeline: '3-6 months' }},
+            {{ title: 'Predictive Analytics Dashboard', problem: 'Forecast trends accurately', impact: 'High', resource: '2-4 engineers', timeline: '2-4 months' }},
+            {{ title: 'Computer Vision Quality Control', problem: 'Automate inspection', impact: 'High', resource: '4-6 engineers', timeline: '6-9 months' }},
+            {{ title: 'NLP Customer Service Bot', problem: '24/7 support automation', impact: 'Medium', resource: '2-3 engineers', timeline: '3-4 months' }},
+            {{ title: 'IoT Predictive Maintenance', problem: 'Reduce downtime', impact: 'High', resource: '3-5 engineers', timeline: '4-6 months' }}
+        ];
+        function generateProjects() {{
+            let html = '';
+            projects.slice(0,5).forEach(p => {{
+                html += `<div class="project-card"><h3>${{p.title}}</h3><p>${{p.problem}}</p><div class="tags"><span class="tag impact-${{p.impact.toLowerCase()}}">${{p.impact}} Impact</span><span class="tag">${{p.resource}}</span><span class="tag">${{p.timeline}}</span></div></div>`;
+            }});
+            document.getElementById('projects').innerHTML = html;
+            document.getElementById('results').style.display = 'block';
+        }}
+    </script>
+    {get_footer()}
+</body>
+</html>"""
+
 def status_json():
     import platform
     uptime = (datetime.now() - START_TIME).total_seconds()
@@ -489,6 +699,21 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/html')
             self.end_headers()
             self.wfile.write(monitoring_page().encode())
+        elif self.path == '/ai-ready' or self.path == '/tools/ai-ready':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(ai_ready_page().encode())
+        elif self.path == '/website-ideas' or self.path == '/tools/website-ideas':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(website_ideas_page().encode())
+        elif self.path == '/rnd-ideas' or self.path == '/tools/rnd-ideas':
+            self.send_response(200)
+            self.send_header('Content-type', 'text/html')
+            self.end_headers()
+            self.wfile.write(rnd_ideas_page().encode())
         elif self.path == '/status':
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
