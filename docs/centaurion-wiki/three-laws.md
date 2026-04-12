@@ -23,6 +23,6 @@ All agents share memory via Supermemory (real-time), LLM Wikis (compiled knowled
 
 ## Related
 
-- [Fitness Equation](fitness-equation.md) — The optimization target
+- [Precision Ratio](precision-ratio.md) — The optimization target
 - [Routing Gate](routing-gate.md) — Law 2 made operational
 - [Active Inference Loop](active-inference-loop.md) — The execution cycle

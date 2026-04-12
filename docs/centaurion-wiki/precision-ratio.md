@@ -1,12 +1,12 @@
-# The Fitness Equation
+# The Precision Ratio
 
 ```
-Fitness = Predictive Order / Thermodynamic Cost = -ε / C
+Precision = Predictive Order / Thermodynamic Cost = -ε / C
 ```
 
 ## What It Means
 
-Every persistent system is a prediction machine. Fitness is the ratio between how well it predicts its environment and how much those predictions cost to maintain.
+Every persistent system is a prediction machine. Precision — in Active Inference terms — is the confidence-weight on predictions. The Precision Ratio measures how sharply a system models reality relative to the cost of maintaining those models.
 
 ## Components
 

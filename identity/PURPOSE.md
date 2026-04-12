@@ -1,9 +1,9 @@
 # Purpose
 
-## The Fitness Equation
+## The Precision Ratio
 
 ```
-Fitness = Predictive Order / Thermodynamic Cost = -ε / C
+Precision = Predictive Order / Thermodynamic Cost = -ε / C
 ```
 
 Every persistent system — from a bacterium to a business — is a prediction machine that survives by being right about the world cheaply.
@@ -18,7 +18,7 @@ The human (Malik) provides calibration — priors, values, strategic judgment, t
 
 2. **Thermodynamic Cost (denominator):** The system does this cheaply — in time, money, cognitive load, and energy. Automation handles the routine. Human attention is reserved for the novel and high-stakes.
 
-3. **Fitness increases** when predictions improve faster than costs grow. The exo-cortex is fit when Malik can run three ventures with less effort than one, because the system carries the cognitive load that doesn't require human judgment.
+3. **Precision increases** when predictions improve faster than costs grow. The exo-cortex is fit when Malik can run three ventures with less effort than one, because the system carries the cognitive load that doesn't require human judgment.
 
 ## The North Star
 

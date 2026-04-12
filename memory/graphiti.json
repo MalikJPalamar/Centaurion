@@ -17,7 +17,7 @@
     "people": ["Malik", "Anthony", "Chrissy", "Anna", "Renārs", "Amy", "Tania", "Katerina", "Moni"],
     "tools": ["GoHighLevel", "Ontraport", "Mighty Networks", "RetreatGuru", "Monday.com", "Zapier", "Stripe"],
     "ventures": ["AOB", "BuilderBee", "Centaurion"],
-    "concepts": ["FEP", "Markov Blanket", "Active Inference", "Three Laws", "Routing Gate", "Fitness Equation"]
+    "concepts": ["FEP", "Markov Blanket", "Active Inference", "Three Laws", "Routing Gate", "Precision Ratio"]
   },
   "purpose": "Answers questions the other tools can't: 'When did we first decide to migrate from Ontraport?' 'How has Anna's role evolved over the last 6 months?' 'What's the relationship between the GHL evaluation and the B2B pivot decision?'"
 }

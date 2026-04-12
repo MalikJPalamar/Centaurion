@@ -82,7 +82,7 @@ for f in $IDENTITY_FILES; do
   check_file_nonempty "identity/$f" "R1.4: identity/$f exists and non-empty"
 done
 
-# R1.5: PURPOSE.md contains Fitness Equation
+# R1.5: PURPOSE.md contains Precision Ratio
 check_file_contains "identity/PURPOSE.md" "Predictive Order" "R1.5a: PURPOSE.md contains Predictive Order"
 check_file_contains "identity/PURPOSE.md" "Thermodynamic Cost" "R1.5b: PURPOSE.md contains Thermodynamic Cost"
 
@@ -185,8 +185,8 @@ check_file_contains "framework/three-laws.md" "Routing" "R5.1b: three-laws.md de
 check_file_contains "framework/three-laws.md" "Coupling" "R5.1c: three-laws.md defines Coupling"
 
 # R5.2: Fitness equation doc
-check_file_contains "framework/fitness-equation.md" "Predictive Order" "R5.2a: fitness-equation.md has numerator"
-check_file_contains "framework/fitness-equation.md" "Thermodynamic Cost" "R5.2b: fitness-equation.md has denominator"
+check_file_contains "framework/precision-ratio.md" "Predictive Order" "R5.2a: precision-ratio.md has numerator"
+check_file_contains "framework/precision-ratio.md" "Thermodynamic Cost" "R5.2b: precision-ratio.md has denominator"
 
 # R5.3: Five sensing layers doc
 check_file_contains "framework/five-sensing-layers.md" "L0" "R5.3a: Defines L0"

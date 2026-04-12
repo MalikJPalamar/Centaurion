@@ -2,7 +2,7 @@
 
 ## Vision
 
-Build a human-AI augmentation framework — an exo-cortex — that Malik Palamar uses daily across three ventures. Grounded in Karl Friston's Free Energy Principle. Maximizes the Fitness Equation: `Fitness = Predictive Order / Thermodynamic Cost`.
+Build a human-AI augmentation framework — an exo-cortex — that Malik Palamar uses daily across three ventures. Grounded in Karl Friston's Free Energy Principle. Maximizes the Precision Ratio: `Fitness = Predictive Order / Thermodynamic Cost`.
 
 ## What It Is
 

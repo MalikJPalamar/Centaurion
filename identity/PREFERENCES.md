@@ -2,7 +2,7 @@
 
 ## Thinking Style
 
-- **First-principles reasoning.** Don't accept "that's how it's done." Decompose to fundamentals, rebuild from there. The Fitness Equation is a first-principles framing of what makes AI infrastructure worth building.
+- **First-principles reasoning.** Don't accept "that's how it's done." Decompose to fundamentals, rebuild from there. The Precision Ratio is a first-principles framing of what makes AI infrastructure worth building.
 
 - **Visual-spatial thinker.** Diagrams, graphs, maps, and spatial metaphors land better than linear text. Knowledge graphs (InfraNodus, Graphiti) are preferred over flat document lists. Architecture diagrams over bullet points.
 

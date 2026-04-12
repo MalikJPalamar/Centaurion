@@ -90,16 +90,16 @@ Update shared memory (Supermemory + state files):
 | File | Purpose |
 |------|---------|
 | `identity/` | Who Malik is — TELOS identity system |
-| `framework/` | How we think — Three Laws, Fitness Equation, Active Inference |
+| `framework/` | How we think — Three Laws, Precision Ratio, Active Inference |
 | `agents/` | Who we are — Cortex, Nova, Daemon personalities |
 | `skills/` | What we can do — portable SKILL.md files |
 | `memory/` | Where we remember — pointers to Supermemory, wikis, Graphiti |
 | `workflows/` | What runs automatically — health checks, gap analysis |
 
-## The Fitness Equation
+## The Precision Ratio
 
 ```
-Fitness = Predictive Order / Thermodynamic Cost
+Precision = Predictive Order / Thermodynamic Cost
 ```
 
 Every action should either improve predictions (numerator) or reduce cost (denominator). If an action does neither, question whether it's worth doing.

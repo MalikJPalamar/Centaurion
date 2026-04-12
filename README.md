@@ -4,10 +4,10 @@
 
 ## What Is Centaurion?
 
-Centaurion is an **exo-cortex** — a composite human-AI system that maximizes the Fitness Equation:
+Centaurion is an **exo-cortex** — a composite human-AI system that maximizes the Precision Ratio:
 
 ```
-Fitness = Predictive Order / Thermodynamic Cost
+Precision = Predictive Order / Thermodynamic Cost
 ```
 
 The human (Malik Palamar) provides calibration: values, taste, strategic direction. The AI agents (Cortex, Nova, Daemon) provide execution: analysis, memory, tireless iteration. Neither reaches the fitness peak alone. Together, they form a centaur.
@@ -24,7 +24,7 @@ The human (Malik Palamar) provides calibration: values, taste, strategic directi
 
 ```
 identity/       Who Malik is — TELOS identity system (10 files)
-framework/      How we think — Three Laws, Fitness Equation, Active Inference loop
+framework/      How we think — Three Laws, Precision Ratio, Active Inference loop
 agents/         Who we are — Cortex (reasoning), Nova (sensing), Daemon (identity root)
 skills/         What we can do — portable SKILL.md files for any runtime
 memory/         Where we remember — Supermemory, LLM Wikis, Graphiti, MemPalace

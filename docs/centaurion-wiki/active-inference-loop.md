@@ -40,6 +40,6 @@ SENSE → PREDICT → COMPARE → ROUTE → ACT → OBSERVE OUTCOME → REMEMBER
 
 ## Related
 
-- [Fitness Equation](fitness-equation.md) — What the loop optimizes
+- [Precision Ratio](precision-ratio.md) — What the loop optimizes
 - [Three Laws](three-laws.md) — Constraints the loop operates under
 - [Routing Gate](routing-gate.md) — The ROUTE step in detail

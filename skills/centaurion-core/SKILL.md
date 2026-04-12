@@ -14,7 +14,7 @@ This is the foundational skill of the Centaurion exo-cortex. It ensures every ag
 On every session start, load the following context:
 
 ### Who is Malik?
-Read `identity/PURPOSE.md` — The Fitness Equation and why Centaurion exists.
+Read `identity/PURPOSE.md` — The Precision Ratio and why Centaurion exists.
 Read `identity/MISSION.md` — The Three Laws and the three ventures (AOB, BuilderBee, Centaurion.me).
 Read `identity/PREFERENCES.md` — First-principles thinker, visual-spatial, phone-first, concise output.
 Read `identity/GOALS.md` — Current phase and priorities.
@@ -54,7 +54,7 @@ Apply this loop to every non-trivial task. See `framework/active-inference-loop.
 Once identity is loaded, the agent should be able to answer:
 - "What are Malik's three ventures?" → AOB, BuilderBee, Centaurion.me
 - "What's the Routing Law?" → Prediction errors are signals routed to the right substrate
-- "What's the Fitness Equation?" → Fitness = Predictive Order / Thermodynamic Cost
+- "What's the Precision Ratio?" → Fitness = Predictive Order / Thermodynamic Cost
 - "How should I format output?" → Concise, structured, phone-readable
 
 If the agent cannot answer these, identity loading has failed. Re-read the files.

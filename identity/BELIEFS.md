@@ -13,7 +13,7 @@ This is not a metaphor. It is the mathematical foundation of Centaurion. Every d
 Agents don't just passively predict — they act to confirm their predictions. The seven-step loop (Sense → Predict → Compare → Route → Act → Observe → Remember) IS active inference made operational. The system doesn't wait for data; it seeks the data that would most reduce uncertainty.
 
 ### Compression = Intelligence
-Intelligence is efficient compression of experience into predictive models. The wiki repos compress raw experience into structured knowledge. Graphiti compresses events into temporal entity relationships. The Fitness Equation (Predictive Order / Cost) IS a compression metric.
+Intelligence is efficient compression of experience into predictive models. The wiki repos compress raw experience into structured knowledge. Graphiti compresses events into temporal entity relationships. The Precision Ratio (Predictive Order / Cost) IS a compression metric.
 
 ### Markov Blankets
 Every system has a boundary (Markov Blanket) that separates internal states from external states. The blanket mediates all interaction. Centaurion's Daemon agent IS the Markov Blanket — the API surface between Malik's internal model and the external world. All information flows through defined channels, not ad hoc.

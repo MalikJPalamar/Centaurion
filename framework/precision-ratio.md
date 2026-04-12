@@ -1,12 +1,14 @@
-# The Fitness Equation
+# The Precision Ratio
 
 ```
-Fitness = Predictive Order / Thermodynamic Cost = -ε / C
+Precision = Predictive Order / Thermodynamic Cost = -ε / C
 ```
 
 ## Definition
 
-**Fitness** is the ratio between how well a system predicts its environment (predictive order) and how much it costs to maintain those predictions (thermodynamic cost). This is Centaurion's first principle — every design decision traces back to this ratio.
+**Precision** — in Active Inference, the confidence-weight assigned to predictions. The Precision Ratio measures how sharply a system models its environment relative to the cost of maintaining those models. This is Centaurion's first principle — every design decision traces back to this ratio.
+
+> Future evolution: The **Coherence Equation** will extend the Precision Ratio to measure alignment between human and AI substrates — how well the centaur's two halves share a unified model. Precision is individual acuity; Coherence is composite alignment.
 
 ## Components
 
@@ -41,9 +43,9 @@ The total resources consumed to maintain the system:
 3. **Async by default:** Agents run overnight, Malik reviews in the morning. No synchronous waiting.
 4. **Free tiers first:** Supermemory free tier, GitHub Actions free tier, self-hosted VPS. Scale cost only when value is proven.
 
-## The Fitness Gradient
+## The Precision Gradient
 
-The system is on a fitness gradient when:
+The system is on a precision gradient when:
 - Malik's ratings trend upward over weeks
 - Time-per-review trends downward
 - Wiki coverage increases without manual effort

@@ -17,7 +17,7 @@ The minimum viable exo-cortex. When a user opens this repo in Claude Code, the a
 - **R1.2:** `CLAUDE.md` references Cortex as the agent identity
 - **R1.3:** `CLAUDE.md` references all 4 core identity files: PURPOSE.md, MISSION.md, GOALS.md, PREFERENCES.md
 - **R1.4:** All 10 identity files exist in `identity/` and are non-empty
-- **R1.5:** `identity/PURPOSE.md` contains the Fitness Equation (`Predictive Order / Thermodynamic Cost`)
+- **R1.5:** `identity/PURPOSE.md` contains the Precision Ratio (`Predictive Order / Thermodynamic Cost`)
 - **R1.6:** `identity/MISSION.md` contains all Three Laws (Hierarchy, Routing, Coupling)
 - **R1.7:** `identity/MISSION.md` references all three ventures (AOB, BuilderBee, Centaurion)
 
@@ -44,7 +44,7 @@ The minimum viable exo-cortex. When a user opens this repo in Claude Code, the a
 
 ### R5: Framework Coherence
 - **R5.1:** `framework/three-laws.md` defines Hierarchy, Routing, and Coupling laws
-- **R5.2:** `framework/fitness-equation.md` contains the equation and its components
+- **R5.2:** `framework/precision-ratio.md` contains the equation and its components
 - **R5.3:** `framework/five-sensing-layers.md` defines L0-L4 with triggers and descriptions
 - **R5.4:** All framework files are cross-referenced (Three Laws reference Routing Gate, etc.)
 - **R5.5:** `framework/markov-blanket.md` defines the boundary concept and maps it to Daemon

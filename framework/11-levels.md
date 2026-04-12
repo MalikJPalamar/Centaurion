@@ -16,7 +16,7 @@ A maturity model for human-AI systems, published at `MalikJPalamar/centaurion-ag
 | 7 | **Feedback Loop Architect** | Closed-loop systems that improve from outcomes. Ratings → threshold adjustments. | L0-L4 sensing layers |
 | 8 | **Knowledge Graph Operator** | Temporal entity tracking. Facts change over time. The system tracks evolution. | Graphiti + Neo4j |
 | 9 | **Autonomous Iteration Engineer** | Overnight autonomous research and iteration. Human reviews results, doesn't drive process. | Autoresearch patterns |
-| 10 | **Exo-Cortex Architect** | Full composite human-AI system. Markov Blanket defined. Fitness Equation optimized. | Centaurion at maturity |
+| 10 | **Exo-Cortex Architect** | Full composite human-AI system. Markov Blanket defined. Precision Ratio optimized. | Centaurion at maturity |
 
 ## Where Centaurion Sits Today
 
@@ -27,9 +27,9 @@ Phase 1: Adding Level 5 (Routing Gate) + Level 6 (Multi-Agent) capabilities.
 Phase 2: Building Level 7 (Feedback Loops) + beginning Level 8 (Knowledge Graph).
 Phase 3-4: Reaching Level 9 (Autonomous Iteration) capabilities.
 
-## Relationship to the Fitness Equation
+## Relationship to the Precision Ratio
 
-Each level increase should produce a measurable improvement in the Fitness Equation:
+Each level increase should produce a measurable improvement in the Precision Ratio:
 - Levels 0-3: Primarily reduce **Thermodynamic Cost** (automation, reuse, structure)
 - Levels 4-6: Primarily increase **Predictive Order** (memory, routing, coordination)
 - Levels 7-10: Optimize the **ratio** (feedback loops tune the system to maximize fitness)

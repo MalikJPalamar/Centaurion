@@ -10,7 +10,7 @@ Centaurion implements hierarchical predictive processing through five sensing la
 **Implementation:** `skills/centaurion-core/SKILL.md` — loaded automatically via CLAUDE.md
 
 **Content loaded:**
-- identity/PURPOSE.md (Fitness Equation)
+- identity/PURPOSE.md (Precision Ratio)
 - identity/MISSION.md (Three Laws, ventures)
 - identity/GOALS.md (current priorities)
 - identity/PREFERENCES.md (communication and work style)
@@ -89,7 +89,7 @@ Centaurion implements hierarchical predictive processing through five sensing la
 - **Routing threshold review:** Are current thresholds optimal? Adjust based on month's data.
 - **Knowledge graph audit:** Run InfraNodus gap analysis on all three wikis. What clusters are disconnected? What questions aren't being asked?
 - **Memory utilization:** How much of Supermemory's capacity is used? What's the signal-to-noise ratio?
-- **Fitness assessment:** Has the Fitness Equation improved? Is predictive order increasing faster than cost?
+- **Fitness assessment:** Has the Precision Ratio improved? Is predictive order increasing faster than cost?
 
 **Output:** GitHub Issue titled "[closed-loop] Month of {date}" with comprehensive findings, trend charts (where possible), and recommended adjustments.
 
