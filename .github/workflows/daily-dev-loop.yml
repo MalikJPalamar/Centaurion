@@ -1,0 +1,189 @@
+name: Daily Development Loop
+
+on:
+  schedule:
+    # 6am CEST (UTC+2 in summer) = 4am UTC
+    # 6am CET  (UTC+1 in winter) = 5am UTC
+    # Using 4am UTC to hit 6am during CEST (April-October)
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+    inputs:
+      force_phase:
+        description: 'Force a specific phase (1, 2, 3, etc.)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  verify-and-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Phase 1 verification (Core Loop)
+        id: phase1
+        continue-on-error: true
+        run: |
+          chmod +x tests/verify-core-loop.sh
+          OUTPUT=$(bash tests/verify-core-loop.sh 2>&1) || true
+          P1_PASS=$(echo "$OUTPUT" | grep -c "  ✓" || true)
+          P1_FAIL=$(echo "$OUTPUT" | grep -c "  ✗" || true)
+          echo "pass=$P1_PASS" >> $GITHUB_OUTPUT
+          echo "fail=$P1_FAIL" >> $GITHUB_OUTPUT
+          echo "output<<PHASE1EOF" >> $GITHUB_OUTPUT
+          echo "$OUTPUT" >> $GITHUB_OUTPUT
+          echo "PHASE1EOF" >> $GITHUB_OUTPUT
+
+      - name: Run Dev Loop self-test
+        id: devloop
+        continue-on-error: true
+        run: |
+          chmod +x tests/verify-dev-loop.sh
+          OUTPUT=$(bash tests/verify-dev-loop.sh 2>&1) || true
+          DL_PASS=$(echo "$OUTPUT" | grep -c "  ✓" || true)
+          DL_FAIL=$(echo "$OUTPUT" | grep -c "  ✗" || true)
+          echo "pass=$DL_PASS" >> $GITHUB_OUTPUT
+          echo "fail=$DL_FAIL" >> $GITHUB_OUTPUT
+
+      - name: Run Phase 2 verification (Memory Integration)
+        id: phase2
+        continue-on-error: true
+        run: |
+          chmod +x tests/verify-memory-integration.sh
+          OUTPUT=$(bash tests/verify-memory-integration.sh 2>&1) || true
+          P2_PASS=$(echo "$OUTPUT" | grep -c "  ✓" || true)
+          P2_FAIL=$(echo "$OUTPUT" | grep -c "  ✗" || true)
+          echo "pass=$P2_PASS" >> $GITHUB_OUTPUT
+          echo "fail=$P2_FAIL" >> $GITHUB_OUTPUT
+          echo "output<<PHASE2EOF" >> $GITHUB_OUTPUT
+          echo "$OUTPUT" >> $GITHUB_OUTPUT
+          echo "PHASE2EOF" >> $GITHUB_OUTPUT
+
+      - name: Identify next priority
+        id: priority
+        run: |
+          chmod +x tests/identify-next-priority.sh
+          PRIORITY_JSON=$(bash tests/identify-next-priority.sh 2>/dev/null)
+          echo "json<<PRIORITYEOF" >> $GITHUB_OUTPUT
+          echo "$PRIORITY_JSON" >> $GITHUB_OUTPUT
+          echo "PRIORITYEOF" >> $GITHUB_OUTPUT
+
+          # Extract key fields for issue title
+          STATUS=$(echo "$PRIORITY_JSON" | grep -o '"status": *"[^"]*"' | head -1 | sed 's/.*: *"//;s/"//')
+          PHASE=$(echo "$PRIORITY_JSON" | grep -o '"phase": *[0-9]*' | head -1 | sed 's/.*: *//')
+          PHASE_NAME=$(echo "$PRIORITY_JSON" | grep -o '"phase_name": *"[^"]*"' | head -1 | sed 's/.*: *"//;s/"//')
+          FIRST_FAIL=$(echo "$PRIORITY_JSON" | grep -o '"first_failure": *"[^"]*"' | head -1 | sed 's/.*: *"//;s/"//')
+          TDD_RED=$(echo "$PRIORITY_JSON" | grep -o '"red": *"[^"]*"' | head -1 | sed 's/.*: *"//;s/"//')
+          TDD_GREEN=$(echo "$PRIORITY_JSON" | grep -o '"green": *"[^"]*"' | head -1 | sed 's/.*: *"//;s/"//')
+
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+          echo "phase=$PHASE" >> $GITHUB_OUTPUT
+          echo "phase_name=$PHASE_NAME" >> $GITHUB_OUTPUT
+          echo "first_fail=$FIRST_FAIL" >> $GITHUB_OUTPUT
+          echo "tdd_red=$TDD_RED" >> $GITHUB_OUTPUT
+          echo "tdd_green=$TDD_GREEN" >> $GITHUB_OUTPUT
+
+      - name: Create development issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const date = new Date().toISOString().split('T')[0];
+            const phase = '${{ steps.priority.outputs.phase }}';
+            const phaseName = '${{ steps.priority.outputs.phase_name }}';
+            const status = '${{ steps.priority.outputs.status }}';
+
+            const p1Pass = '${{ steps.phase1.outputs.pass }}';
+            const p1Fail = '${{ steps.phase1.outputs.fail }}';
+            const p2Pass = '${{ steps.phase2.outputs.pass }}';
+            const p2Fail = '${{ steps.phase2.outputs.fail }}';
+            const dlPass = '${{ steps.devloop.outputs.pass }}';
+            const dlFail = '${{ steps.devloop.outputs.fail }}';
+
+            const totalPass = parseInt(p1Pass) + parseInt(p2Pass) + parseInt(dlPass);
+            const totalFail = parseInt(p1Fail) + parseInt(p2Fail) + parseInt(dlFail);
+
+            const firstFail = `${{ steps.priority.outputs.first_fail }}`;
+            const tddRed = `${{ steps.priority.outputs.tdd_red }}`;
+            const tddGreen = `${{ steps.priority.outputs.tdd_green }}`;
+
+            const statusEmoji = status === 'all_passing' ? '✅' :
+                               status === 'progressing' ? '🔄' : '🔴';
+
+            const title = `[dev-loop] ${date} — Phase ${phase}: ${phaseName}`;
+
+            const body = `## ${statusEmoji} Daily Development Loop — ${date}
+
+            ### Test Suite Status
+            | Phase | Pass | Fail | Status |
+            |-------|------|------|--------|
+            | Phase 1: Core Loop | ${p1Pass} | ${p1Fail} | ${parseInt(p1Fail) === 0 ? '✅' : '❌'} |
+            | Phase 2: Memory Integration | ${p2Pass} | ${p2Fail} | ${parseInt(p2Fail) === 0 ? '✅' : '⏳'} |
+            | Dev Loop Infrastructure | ${dlPass} | ${dlFail} | ${parseInt(dlFail) === 0 ? '✅' : '❌'} |
+            | **Total** | **${totalPass}** | **${totalFail}** | |
+
+            ### Next Priority
+            **Phase ${phase}: ${phaseName}**
+            ${firstFail ? `First failing test: \`${firstFail}\`` : 'All current tests passing — ready for next phase.'}
+
+            ### TDD Plan
+            | Step | Action |
+            |------|--------|
+            | 🔴 Red | ${tddRed} |
+            | 🟢 Green | ${tddGreen} |
+            | 🔵 Refactor | Re-run full suite to check for regressions |
+
+            ### How to Continue
+            \`\`\`bash
+            # Run the full test suite
+            bash tests/run-all.sh
+
+            # See what's next
+            bash tests/identify-next-priority.sh
+
+            # Run specific phase tests
+            bash tests/verify-core-loop.sh          # Phase 1
+            bash tests/verify-memory-integration.sh  # Phase 2
+            bash tests/verify-dev-loop.sh            # Dev loop infra
+            \`\`\`
+
+            ### Priority JSON
+            \`\`\`json
+            ${{ steps.priority.outputs.json }}
+            \`\`\`
+
+            ---
+            *Generated by the Centaurion daily development loop at 6am CET.*
+            *Recursive TDD cycle: verify → identify priority → plan → (agent executes) → verify again.*`;
+
+            // Close older dev-loop issues
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'dev-loop',
+              state: 'open'
+            });
+
+            for (const issue of existingIssues.data) {
+              if (issue.title.startsWith('[dev-loop]') && issue.title !== title) {
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                  state_reason: 'not_planned'
+                });
+              }
+            }
+
+            // Create new issue
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: title,
+              body: body,
+              labels: ['dev-loop', 'automated']
+            });
