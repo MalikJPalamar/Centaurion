@@ -136,13 +136,19 @@ claude -p "$PROMPT" \
 CLAUDE_EXIT=$?
 log "Claude Code exited with: $CLAUDE_EXIT"
 
-# Step 4: Push if there are new commits
+# Step 4: Commit any uncommitted changes Claude left behind
+if [ -n "$(git status --porcelain)" ]; then
+  log "Claude left uncommitted changes. Committing..."
+  git add -A
+  git commit -m "fix(phase-$PHASE): dev loop auto-commit $(date +%Y-%m-%d)" >> "$LOG_FILE" 2>&1 || true
+fi
+
+# Step 5: Push if there are new commits
 COMMITS_AHEAD=$(git log origin/main..HEAD --oneline 2>/dev/null | wc -l)
 if [ "$COMMITS_AHEAD" -gt 0 ]; then
   log "Pushing $COMMITS_AHEAD new commit(s)..."
   git push origin main >> "$LOG_FILE" 2>&1 || {
-    log "ERROR: git push failed"
-    exit 1
+    log "ERROR: git push failed. Will retry on next run."
   }
   log "Pushed successfully."
 else
