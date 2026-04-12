@@ -59,11 +59,12 @@ After acting, assess:
 - What would you do differently?
 
 ### 7. REMEMBER
-Update shared memory:
-- Log the interaction context (Supermemory auto-capture if enabled)
-- Update wiki repos if new knowledge was generated
-- Note routing accuracy for threshold tuning
-- Capture any learnings for future reference
+Update shared memory (Supermemory + state files):
+- **Supermemory:** Auto-capture interaction context, tagged by venture (aob/builderbee/centaurion)
+- **Wiki repos:** Update `docs/centaurion-wiki/` if new knowledge was generated
+- **Routing log:** Append classification to `memory/state/routing-log.jsonl`
+- **Ratings:** If Malik provides a rating, append to `memory/state/ratings.jsonl`
+- See `workflows/feedback-capture.md` for the full feedback loop
 
 **This step is mandatory.** Every cycle leaves the system smarter.
 

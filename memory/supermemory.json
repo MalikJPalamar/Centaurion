@@ -1,6 +1,7 @@
 {
   "service": "supermemory",
   "description": "Layer 1: Shared memory bus — ambient, real-time capture and recall across all agents",
+  "status": "connected",
   "tier": "free",
   "limits": {
     "tokens": "1M",

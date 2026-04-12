@@ -1,0 +1,1 @@
+{"_schema": "centaurion-routing-v1", "_note": "Append-only. Each line: timestamp, task, novelty (0-1), stakes (0-1), reversibility (0-1), route (ai_autonomous|ai_with_review|surface_to_human), outcome_rating (null until rated), routing_correct (null until reviewed)"}

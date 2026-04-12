@@ -1,0 +1,1 @@
+{"_schema": "centaurion-rating-v1", "_note": "Append-only. Each line is a JSON object with: timestamp, task, venture, rating (1-5), routing_correct (bool), notes"}

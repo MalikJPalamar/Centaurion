@@ -15,7 +15,8 @@
     "centaurion-wiki": {
       "url": "https://github.com/MalikJPalamar/centaurion-wiki",
       "topics": ["FEP framework", "Three Laws", "agentic engineering", "Active Inference", "Markov Blankets", "11 Levels"],
-      "status": "planned"
+      "status": "active",
+      "local_path": "docs/centaurion-wiki"
     }
   },
   "sync": {

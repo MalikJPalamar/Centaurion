@@ -312,7 +312,7 @@ echo ""
 echo "═══ R10: Structural Integrity ═══"
 
 # R10.1: All paths in CLAUDE.md exist
-CLAUDE_PATHS=$(grep -oE '(identity|framework|agents|skills|memory|workflows)/[A-Za-z0-9_/-]+\.(md|json|yaml)' "$REPO_ROOT/CLAUDE.md" 2>/dev/null || true)
+CLAUDE_PATHS=$(grep -oE '(identity|framework|agents|skills|memory|workflows)/[A-Za-z0-9_/-]+\.(md|jsonl?|yaml)' "$REPO_ROOT/CLAUDE.md" 2>/dev/null || true)
 R10_1_OK=true
 for path in $CLAUDE_PATHS; do
   if [ ! -f "$REPO_ROOT/$path" ]; then
@@ -327,7 +327,7 @@ elif [ -z "$CLAUDE_PATHS" ]; then
 fi
 
 # R10.2: All paths in AGENTS.md exist
-AGENTS_PATHS=$(grep -oE '(identity|framework|agents|skills|memory|workflows)/[A-Za-z0-9_/-]+\.(md|json|yaml)' "$REPO_ROOT/AGENTS.md" 2>/dev/null || true)
+AGENTS_PATHS=$(grep -oE '(identity|framework|agents|skills|memory|workflows)/[A-Za-z0-9_/-]+\.(md|jsonl?|yaml)' "$REPO_ROOT/AGENTS.md" 2>/dev/null || true)
 R10_2_OK=true
 for path in $AGENTS_PATHS; do
   if [ ! -f "$REPO_ROOT/$path" ]; then

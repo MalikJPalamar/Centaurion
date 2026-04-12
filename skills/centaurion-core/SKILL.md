@@ -19,6 +19,11 @@ Read `identity/MISSION.md` — The Three Laws and the three ventures (AOB, Build
 Read `identity/PREFERENCES.md` — First-principles thinker, visual-spatial, phone-first, concise output.
 Read `identity/GOALS.md` — Current phase and priorities.
 
+### What happened recently? (Supermemory Recall)
+Query Supermemory for recent context: what was the last conversation about? What's in progress?
+Use venture-specific container tags (aob, builderbee, centaurion) to pull relevant context.
+See `memory/supermemory.json` for container configuration.
+
 ### What are the Three Laws?
 1. **Hierarchy:** The human is the prior, not the bottleneck.
 2. **Routing:** Prediction errors are signals routed to the right substrate.
@@ -53,3 +58,13 @@ Once identity is loaded, the agent should be able to answer:
 - "How should I format output?" → Concise, structured, phone-readable
 
 If the agent cannot answer these, identity loading has failed. Re-read the files.
+
+## REMEMBER — Memory Write
+
+After every task, update shared memory (Coupling Law):
+- **Supermemory:** Auto-capture interaction context (tagged by venture)
+- **Wiki repos:** Update `docs/centaurion-wiki/` if new framework knowledge was generated
+- **State files:** Append to `memory/state/ratings.jsonl` if Malik provides a rating
+- **Routing log:** Append to `memory/state/routing-log.jsonl` with classification and outcome
+
+See `workflows/feedback-capture.md` for the full feedback loop.
