@@ -1,0 +1,56 @@
+name: centaurion-iteration
+description: >
+  The daily Active Inference iteration cycle. Maps the seven-step loop
+  to concrete workflow phases with validation criteria.
+
+phases:
+  - name: sense
+    description: >
+      Load L0 identity + check L3 tripwires + pull Supermemory context.
+      Read identity/PURPOSE.md, identity/MISSION.md, identity/GOALS.md.
+      Check for active GitHub Issues (health alerts, gap analysis results).
+      Pull recent Supermemory context for current venture focus.
+    validation: >
+      Identity loaded (can answer: What are Malik's three ventures?).
+      No critical alerts unacknowledged.
+      Recent context retrieved from Supermemory.
+
+  - name: predict
+    description: >
+      Based on current state, predict what the most impactful work is today.
+      Consider: active goals (identity/GOALS.md), recent feedback (ratings),
+      open research questions (from gap analysis), and any alerts.
+      State confidence level for the prediction.
+    validation: >
+      Prediction documented with confidence score.
+      Prediction references specific goals or feedback.
+
+  - name: route
+    description: >
+      Classify predicted work items by novelty × stakes × reversibility.
+      Apply Routing Gate (skills/routing-gate/SKILL.md).
+      Surface high-stakes items to Malik. Queue routine items for execution.
+    validation: >
+      All items classified with routing scores.
+      Human-required items flagged with context and recommendation.
+      No items proceed unclassified.
+
+  - name: execute
+    description: >
+      Execute routed tasks using appropriate skills.
+      Follow identity/PREFERENCES.md for output style.
+      Tag all work by venture (aob, builderbee, centaurion).
+    validation: >
+      All tasks completed or explicitly deferred with reason.
+      Output follows phone-readable formatting.
+
+  - name: remember
+    description: >
+      Write outcomes to Supermemory (auto-capture).
+      Update wiki repos if new knowledge was generated.
+      Log routing decisions and their outcomes.
+      Update Graphiti if entity relationships changed (Month 2+).
+    validation: >
+      Memory updated (Supermemory entry created).
+      Wiki pages touched if relevant knowledge generated.
+      Routing log updated with outcome data.

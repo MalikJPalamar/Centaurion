@@ -1,0 +1,23 @@
+{
+  "service": "graphiti",
+  "description": "Layer 2b: Temporal knowledge graph — tracks how facts and relationships change over time",
+  "status": "planned_month_2",
+  "neo4j": {
+    "uri": "bolt://187.124.45.132:7687",
+    "user": "neo4j",
+    "password": "REPLACE_WITH_ACTUAL_PASSWORD",
+    "deployment": "docker",
+    "host": "VPS 1"
+  },
+  "mcp": {
+    "port": 8765,
+    "notes": "All agents (Claude Code, OpenClaw, pi) connect to same Neo4j instance via MCP"
+  },
+  "entities": {
+    "people": ["Malik", "Anthony", "Chrissy", "Anna", "Renārs", "Amy", "Tania", "Katerina", "Moni"],
+    "tools": ["GoHighLevel", "Ontraport", "Mighty Networks", "RetreatGuru", "Monday.com", "Zapier", "Stripe"],
+    "ventures": ["AOB", "BuilderBee", "Centaurion"],
+    "concepts": ["FEP", "Markov Blanket", "Active Inference", "Three Laws", "Routing Gate", "Fitness Equation"]
+  },
+  "purpose": "Answers questions the other tools can't: 'When did we first decide to migrate from Ontraport?' 'How has Anna's role evolved over the last 6 months?' 'What's the relationship between the GHL evaluation and the B2B pivot decision?'"
+}

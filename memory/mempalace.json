@@ -1,0 +1,18 @@
+{
+  "service": "mempalace",
+  "description": "Layer 3: Verbatim archive — raw conversation exports for exact recall",
+  "status": "planned_month_2",
+  "backend": {
+    "vector_store": "chromadb",
+    "database": "sqlite",
+    "host": "VPS 1",
+    "api_cost": "zero (self-hosted)"
+  },
+  "sources": [
+    "Claude conversation exports",
+    "Telegram conversation logs (via Nova/OpenClaw)",
+    "Agent session transcripts"
+  ],
+  "install": "pip install mempalace",
+  "purpose": "Purpose: 'Show me the raw 45-min debate about GHL migration.' When you need the exact words, not the summary."
+}

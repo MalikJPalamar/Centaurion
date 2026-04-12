@@ -1,0 +1,31 @@
+{
+  "service": "llm-wiki",
+  "description": "Layer 2a: Compiled knowledge — synthesized markdown pages organized by venture",
+  "repos": {
+    "aob-wiki": {
+      "url": "https://github.com/MalikJPalamar/aob-wiki",
+      "topics": ["breathwork education", "CRM", "facilitator certification", "Ontraport", "GHL migration", "Mighty Networks", "membership platform"],
+      "status": "planned"
+    },
+    "builderbee-wiki": {
+      "url": "https://github.com/MalikJPalamar/builderbee-wiki",
+      "topics": ["AI automation", "GoHighLevel", "client verticals", "programmatic ads", "fractional CEO", "client onboarding"],
+      "status": "planned"
+    },
+    "centaurion-wiki": {
+      "url": "https://github.com/MalikJPalamar/centaurion-wiki",
+      "topics": ["FEP framework", "Three Laws", "agentic engineering", "Active Inference", "Markov Blankets", "11 Levels"],
+      "status": "planned"
+    }
+  },
+  "sync": {
+    "method": "syncthing",
+    "devices": ["vps1", "vps2", "phone"],
+    "notes": "Continuous P2P sync. No manual git push/pull needed for live file access."
+  },
+  "infranodus": {
+    "purpose": "Topology analysis — gap detection, cluster identification, bridge opportunities",
+    "integration": "MCP server + Obsidian plugin",
+    "notes": "Purpose: 'What are we NOT seeing?' Identifies disconnected knowledge clusters."
+  }
+}

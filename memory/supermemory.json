@@ -1,0 +1,23 @@
+{
+  "service": "supermemory",
+  "description": "Layer 1: Shared memory bus — ambient, real-time capture and recall across all agents",
+  "tier": "free",
+  "limits": {
+    "tokens": "1M",
+    "queries_per_month": "10K"
+  },
+  "apiKey": "sm_REPLACE_WITH_ACTUAL_KEY",
+  "containers": {
+    "aob": "centaurion-aob",
+    "builderbee": "centaurion-builderbee",
+    "centaurion": "centaurion-framework",
+    "personal": "centaurion-malik"
+  },
+  "autoRecall": true,
+  "autoCapture": true,
+  "plugins": {
+    "claude_code": "supermemoryai/claude-supermemory",
+    "openclaw": "@supermemory/openclaw-supermemory"
+  },
+  "notes": "Purpose: 'What was I working on 5 minutes ago?' Real-time shared bus across all agents and runtimes."
+}
