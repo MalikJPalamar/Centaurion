@@ -1,43 +1,19 @@
-name: Daily Development Loop
+name: Daily Development Report
 
 on:
   schedule:
-    # 6am CEST (UTC+2 in summer) = 4am UTC
-    # 6am CET  (UTC+1 in winter) = 5am UTC
-    # Using 4am UTC to hit 6am during CEST (April-October)
-    - cron: '0 4 * * *'
+    # 6:15am CEST (UTC+2) = 4:15am UTC
+    # Runs AFTER the VPS1 dev loop (6am) to capture its results
+    - cron: '15 4 * * *'
   workflow_dispatch:
-    inputs:
-      skip_execution:
-        description: 'Skip autonomous execution (report only)'
-        required: false
-        type: boolean
-        default: false
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
   issues: write
 
 jobs:
-  # ── Job 1: Verify current state and identify priority ──────────
-  verify:
+  report:
     runs-on: ubuntu-latest
-    outputs:
-      status: ${{ steps.priority.outputs.status }}
-      phase: ${{ steps.priority.outputs.phase }}
-      phase_name: ${{ steps.priority.outputs.phase_name }}
-      first_fail: ${{ steps.priority.outputs.first_fail }}
-      tdd_red: ${{ steps.priority.outputs.tdd_red }}
-      tdd_green: ${{ steps.priority.outputs.tdd_green }}
-      priority_json: ${{ steps.priority.outputs.json }}
-      p1_pass: ${{ steps.phase1.outputs.pass }}
-      p1_fail: ${{ steps.phase1.outputs.fail }}
-      p2_pass: ${{ steps.phase2.outputs.pass }}
-      p2_fail: ${{ steps.phase2.outputs.fail }}
-      dl_pass: ${{ steps.devloop.outputs.pass }}
-      dl_fail: ${{ steps.devloop.outputs.fail }}
-      has_failures: ${{ steps.check.outputs.has_failures }}
     steps:
       - uses: actions/checkout@v4
 
@@ -50,21 +26,30 @@ jobs:
           echo "pass=$(echo "$OUTPUT" | grep -c "  ✓" || true)" >> $GITHUB_OUTPUT
           echo "fail=$(echo "$OUTPUT" | grep -c "  ✗" || true)" >> $GITHUB_OUTPUT
 
-      - name: Run Dev Loop self-test
-        id: devloop
-        continue-on-error: true
-        run: |
-          chmod +x tests/verify-dev-loop.sh
-          OUTPUT=$(bash tests/verify-dev-loop.sh 2>&1) || true
-          echo "pass=$(echo "$OUTPUT" | grep -c "  ✓" || true)" >> $GITHUB_OUTPUT
-          echo "fail=$(echo "$OUTPUT" | grep -c "  ✗" || true)" >> $GITHUB_OUTPUT
-
       - name: Run Phase 2 verification
         id: phase2
         continue-on-error: true
         run: |
           chmod +x tests/verify-memory-integration.sh
           OUTPUT=$(bash tests/verify-memory-integration.sh 2>&1) || true
+          echo "pass=$(echo "$OUTPUT" | grep -c "  ✓" || true)" >> $GITHUB_OUTPUT
+          echo "fail=$(echo "$OUTPUT" | grep -c "  ✗" || true)" >> $GITHUB_OUTPUT
+
+      - name: Run Phase 3 verification
+        id: phase3
+        continue-on-error: true
+        run: |
+          chmod +x tests/verify-multi-runtime.sh
+          OUTPUT=$(bash tests/verify-multi-runtime.sh 2>&1) || true
+          echo "pass=$(echo "$OUTPUT" | grep -c "  ✓" || true)" >> $GITHUB_OUTPUT
+          echo "fail=$(echo "$OUTPUT" | grep -c "  ✗" || true)" >> $GITHUB_OUTPUT
+
+      - name: Run Dev Loop self-test
+        id: devloop
+        continue-on-error: true
+        run: |
+          chmod +x tests/verify-dev-loop.sh
+          OUTPUT=$(bash tests/verify-dev-loop.sh 2>&1) || true
           echo "pass=$(echo "$OUTPUT" | grep -c "  ✓" || true)" >> $GITHUB_OUTPUT
           echo "fail=$(echo "$OUTPUT" | grep -c "  ✗" || true)" >> $GITHUB_OUTPUT
 
@@ -89,139 +74,44 @@ jobs:
           echo "tdd_red=$TDD_RED" >> $GITHUB_OUTPUT
           echo "tdd_green=$TDD_GREEN" >> $GITHUB_OUTPUT
 
-      - name: Check if there are failures to fix
-        id: check
-        run: |
-          P1_FAIL="${{ steps.phase1.outputs.fail }}"
-          P2_FAIL="${{ steps.phase2.outputs.fail }}"
-          if [ "${P1_FAIL:-0}" -gt 0 ] || [ "${P2_FAIL:-0}" -gt 0 ]; then
-            echo "has_failures=true" >> $GITHUB_OUTPUT
-          else
-            echo "has_failures=false" >> $GITHUB_OUTPUT
-          fi
-
-  # ── Job 2: Autonomous development via Claude Code ──────────────
-  develop:
-    needs: verify
-    if: needs.verify.outputs.has_failures == 'true' && inputs.skip_execution != true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Develop with Claude Code
-        uses: anthropics/claude-code-action@v1
-        with:
-          prompt: |
-            You are the Centaurion daily development loop. Read CLAUDE.md for your identity.
-
-            ## Current State
-            Priority JSON: ${{ needs.verify.outputs.priority_json }}
-
-            First failing test: ${{ needs.verify.outputs.first_fail }}
-            Phase: ${{ needs.verify.outputs.phase }} (${{ needs.verify.outputs.phase_name }})
-
-            ## Your Task (TDD Green Step)
-            1. Read the failing test file to understand EXACTLY what it checks
-            2. Read the relevant source file(s) that need to change
-            3. Make the MINIMUM change to turn the failing test green
-            4. Run the specific phase test to verify your fix works
-            5. Run `bash tests/run-all.sh` to check for regressions
-            6. If all Phase 1 + dev loop tests still pass, commit your changes
-            7. Do NOT fix more than 3 failing tests per run — leave the rest for tomorrow
-
-            ## Constraints
-            - All content is markdown + JSON. No TypeScript, no compilation.
-            - Follow the patterns in existing files (YAML frontmatter for skills, etc.)
-            - Do NOT commit API keys or secrets
-            - Do NOT modify test files — only modify implementation files
-            - Commit message format: "fix(phase-N): description"
-
-          claude_args: |
-            --max-turns 15
-            --model claude-sonnet-4-6
-            --allowedTools "Bash(bash tests/*)" "Bash(git add*)" "Bash(git commit*)" "Bash(git status)" "Bash(git diff*)" "Bash(ls*)" "Bash(cat*)" "Edit" "Read" "Write" "Glob" "Grep"
-            --disallowedTools "Bash(git push*)" "Bash(git reset*)" "Bash(rm -rf*)"
-
-          # Uses Claude Max subscription — no per-token API charges
-          # Generate token: run `claude setup-token` in Claude Code CLI
-          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-
-      - name: Push changes if any
-        run: |
-          git config user.email "cortex@centaurion.me"
-          git config user.name "Cortex (Centaurion Dev Loop)"
-          if [ -n "$(git status --porcelain)" ]; then
-            git add -A
-            git commit -m "fix(dev-loop): autonomous development pass $(date +%Y-%m-%d)" --allow-empty || true
-          fi
-          git push origin HEAD || echo "No changes to push"
-
-  # ── Job 3: Report results via GitHub Issue ─────────────────────
-  report:
-    needs: [verify, develop]
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Re-verify after development
-        id: post_verify
-        if: needs.develop.result == 'success'
-        continue-on-error: true
-        run: |
-          git pull origin $(git rev-parse --abbrev-ref HEAD) || true
-          chmod +x tests/identify-next-priority.sh
-          POST_JSON=$(bash tests/identify-next-priority.sh 2>/dev/null || echo '{}')
-          POST_FAIL=$(echo "$POST_JSON" | grep -o '"fail": *[0-9]*' | head -1 | sed 's/.*: *//' || echo "?")
-          echo "post_fail=$POST_FAIL" >> $GITHUB_OUTPUT
-
-      - name: Create development issue
+      - name: Create development report issue
         uses: actions/github-script@v7
         with:
           script: |
             const date = new Date().toISOString().split('T')[0];
-            const phase = '${{ needs.verify.outputs.phase }}';
-            const phaseName = '${{ needs.verify.outputs.phase_name }}';
-            const status = '${{ needs.verify.outputs.status }}';
-            const devResult = '${{ needs.develop.result }}';
-            const postFail = '${{ steps.post_verify.outputs.post_fail }}' || '?';
+            const phase = '${{ steps.priority.outputs.phase }}';
+            const phaseName = '${{ steps.priority.outputs.phase_name }}';
+            const status = '${{ steps.priority.outputs.status }}';
 
-            const p1Pass = '${{ needs.verify.outputs.p1_pass }}';
-            const p1Fail = '${{ needs.verify.outputs.p1_fail }}';
-            const p2Pass = '${{ needs.verify.outputs.p2_pass }}';
-            const p2Fail = '${{ needs.verify.outputs.p2_fail }}';
-            const dlPass = '${{ needs.verify.outputs.dl_pass }}';
-            const dlFail = '${{ needs.verify.outputs.dl_fail }}';
+            const p1Pass = '${{ steps.phase1.outputs.pass }}';
+            const p1Fail = '${{ steps.phase1.outputs.fail }}';
+            const p2Pass = '${{ steps.phase2.outputs.pass }}';
+            const p2Fail = '${{ steps.phase2.outputs.fail }}';
+            const p3Pass = '${{ steps.phase3.outputs.pass }}';
+            const p3Fail = '${{ steps.phase3.outputs.fail }}';
+            const dlPass = '${{ steps.devloop.outputs.pass }}';
+            const dlFail = '${{ steps.devloop.outputs.fail }}';
 
-            const totalPass = parseInt(p1Pass||0) + parseInt(p2Pass||0) + parseInt(dlPass||0);
-            const totalFail = parseInt(p1Fail||0) + parseInt(p2Fail||0) + parseInt(dlFail||0);
+            const totalPass = parseInt(p1Pass||0) + parseInt(p2Pass||0) + parseInt(p3Pass||0) + parseInt(dlPass||0);
+            const totalFail = parseInt(p1Fail||0) + parseInt(p2Fail||0) + parseInt(p3Fail||0) + parseInt(dlFail||0);
 
-            const firstFail = `${{ needs.verify.outputs.first_fail }}`;
-            const tddRed = `${{ needs.verify.outputs.tdd_red }}`;
-            const tddGreen = `${{ needs.verify.outputs.tdd_green }}`;
-
-            const devEmoji = devResult === 'success' ? '🤖✅' :
-                             devResult === 'skipped' ? '⏭️' : '🤖❌';
+            const firstFail = `${{ steps.priority.outputs.first_fail }}`;
+            const tddRed = `${{ steps.priority.outputs.tdd_red }}`;
+            const tddGreen = `${{ steps.priority.outputs.tdd_green }}`;
 
             const title = `[dev-loop] ${date} — Phase ${phase}: ${phaseName}`;
 
             const body = [
-              `## Daily Development Loop — ${date}`,
+              `## Daily Development Report — ${date}`,
               '',
-              '### Test Suite Status (pre-development)',
+              '### Test Suite Status',
               '| Phase | Pass | Fail | Status |',
               '|-------|------|------|--------|',
               `| Phase 1: Core Loop | ${p1Pass} | ${p1Fail} | ${parseInt(p1Fail||0) === 0 ? '✅' : '❌'} |`,
               `| Phase 2: Memory Integration | ${p2Pass} | ${p2Fail} | ${parseInt(p2Fail||0) === 0 ? '✅' : '⏳'} |`,
+              `| Phase 3: Multi-Runtime | ${p3Pass} | ${p3Fail} | ${parseInt(p3Fail||0) === 0 ? '✅' : '⏳'} |`,
               `| Dev Loop Infrastructure | ${dlPass} | ${dlFail} | ${parseInt(dlFail||0) === 0 ? '✅' : '❌'} |`,
               `| **Total** | **${totalPass}** | **${totalFail}** | |`,
-              '',
-              `### Autonomous Development ${devEmoji}`,
-              `**Result:** ${devResult}`,
-              devResult === 'success' ? `**Post-development failures:** ${postFail}` : '',
-              devResult === 'skipped' ? '_Skipped: no failures to fix or skip_execution was set_' : '',
               '',
               '### Next Priority',
               `**Phase ${phase}: ${phaseName}**`,
@@ -234,14 +124,12 @@ jobs:
               `| 🟢 Green | ${tddGreen} |`,
               '| 🔵 Refactor | Re-run full suite to check for regressions |',
               '',
-              '### Commands',
-              '```bash',
-              'bash tests/run-all.sh                    # Full suite',
-              'bash tests/identify-next-priority.sh     # Next priority',
-              '```',
+              '### Architecture',
+              '- **Development:** VPS1 cron → `claude -p` (Max subscription, 6:00am CET)',
+              '- **Reporting:** GitHub Actions (this workflow, 6:15am CET)',
               '',
               '---',
-              '*Centaurion daily dev loop — 6am CET — recursive TDD: verify → develop → verify → report*'
+              '*Centaurion daily dev loop — VPS1 develops, GitHub reports.*'
             ].join('\n');
 
             // Close older dev-loop issues
