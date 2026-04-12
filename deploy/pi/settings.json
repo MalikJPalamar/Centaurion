@@ -1,0 +1,26 @@
+{
+  "runtime": "raspberry-pi",
+  "agent": "Cortex",
+  "skills": [
+    "centaurion/skills/centaurion-core",
+    "centaurion/skills/routing-gate",
+    "centaurion/skills/sa-scan"
+  ],
+  "identity": {
+    "repo": "centaurion",
+    "load_on_start": [
+      "identity/PURPOSE.md",
+      "identity/MISSION.md",
+      "identity/GOALS.md"
+    ]
+  },
+  "memory": {
+    "state_dir": "memory/state",
+    "routing_log": "memory/state/routing-log.jsonl"
+  },
+  "schedule": {
+    "daily_health": "0 6 * * *",
+    "weekly_review": "0 9 * * 1"
+  },
+  "venture_tags": ["aob", "builderbee", "centaurion"]
+}
