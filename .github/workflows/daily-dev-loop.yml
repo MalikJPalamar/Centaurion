@@ -144,7 +144,9 @@ jobs:
             --allowedTools "Bash(bash tests/*)" "Bash(git add*)" "Bash(git commit*)" "Bash(git status)" "Bash(git diff*)" "Bash(ls*)" "Bash(cat*)" "Edit" "Read" "Write" "Glob" "Grep"
             --disallowedTools "Bash(git push*)" "Bash(git reset*)" "Bash(rm -rf*)"
 
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Uses Claude Max subscription — no per-token API charges
+          # Generate token: run `claude setup-token` in Claude Code CLI
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
       - name: Push changes if any
         run: |
