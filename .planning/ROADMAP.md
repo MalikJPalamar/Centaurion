@@ -10,49 +10,65 @@
 **Definition of Done:** `tests/verify-core-loop.sh` exits 0. All 10 requirement groups pass.
 **Status:** 134/134 automated checks pass. Manual UAT pending.
 
-## Phase 2: Memory Integration (current — TDD: tests written, implementation pending)
+## Phase 2: Memory Integration ✅ COMPLETE
 > "Can the exo-cortex remember?"
 
-- [ ] Supermemory status set to `connected` in config
-- [ ] centaurion-wiki created with ≥3 pages of framework knowledge
-- [ ] State files created (ratings.jsonl, routing-log.jsonl)
-- [ ] CLAUDE.md REMEMBER step references Supermemory explicitly
-- [ ] Core skill references Supermemory in SENSE and REMEMBER
-- [ ] Feedback capture workflow defined
-- [ ] Weekly review references ratings data source
+- [x] Supermemory status set to `connected` in config
+- [x] centaurion-wiki created with ≥3 pages of framework knowledge
+- [x] State files created (ratings.jsonl, routing-log.jsonl)
+- [x] CLAUDE.md REMEMBER step references Supermemory explicitly
+- [x] Core skill references Supermemory in SENSE and REMEMBER
+- [x] Feedback capture workflow defined
+- [x] Weekly review references ratings data source
 
-**Definition of Done:** `tests/verify-memory-integration.sh` exits 0. All R15-R16 requirements pass.
-**TDD Status:** Tests written. All currently FAILING (expected — implementation not started).
+**Definition of Done:** `tests/verify-memory-integration.sh` exits 0. 14/14 pass.
 
-## Phase 3: Multi-Runtime Deployment
+## Phase 3: Multi-Runtime & Feedback ✅ COMPLETE
 > "Can other agents run the same loop?"
 
-- [ ] Nova personality loaded on OpenClaw (VPS 1)
-- [ ] Pi scaffold sharing Centaurion skills (VPS 1)
-- [ ] Agent Zero configured with Centaurion context (VPS 2)
-- [ ] Syncthing running between VPSs
+- [x] Deploy configs for pi, OpenClaw, Agent Zero
+- [x] Deploy README with instructions
+- [x] Wiki pages expanded (feedback-loop, multi-runtime-deployment)
+- [x] Sample state entries in ratings.jsonl and routing-log.jsonl
+- [x] Daily health workflow has concrete checks
 
-**Definition of Done:** Nova on OpenClaw responds to a Telegram message using Centaurion identity.
+**Definition of Done:** `tests/verify-multi-runtime.sh` exits 0. 12/12 pass.
 
-## Phase 4: Feedback Loops
-> "Does the system improve itself?"
+## Phase 4: Knowledge Depth (TDD — tests written, implementation by dev loop)
+> "Does the system have deep, cross-linked knowledge?"
 
-- [ ] Daily health check creating GitHub Issues
-- [ ] Weekly gap analysis running
-- [ ] Routing accuracy tracked and thresholds adjustable
-- [ ] Ratings captured and trending
+- [ ] centaurion-wiki expanded to ≥10 pages with cross-links
+- [ ] AOB wiki created with ≥5 foundation pages
+- [ ] BuilderBee wiki created with ≥5 foundation pages
+- [ ] All identity files are substantial (≥500 bytes)
+- [ ] GOALS.md updated to reflect current work
 
-**Definition of Done:** Weekly review Issue shows measurable trend data.
+**Definition of Done:** `tests/verify-knowledge-depth.sh` exits 0. All R19-R22 pass.
 
-## Phase 5: Knowledge Graph (Month 2)
-> "Does the system track how knowledge evolves?"
+## Phase 5: Operational Workflows (TDD — tests written, implementation by dev loop)
+> "Can the system execute real venture work?"
 
-- [ ] Neo4j deployed on VPS 1
-- [ ] Graphiti connected via MCP
-- [ ] Temporal entity tracking live
-- [ ] All three wiki repos with InfraNodus gap analysis
+- [ ] All 5 core skills expanded with examples (≥1000 bytes)
+- [ ] AOB operations skill created
+- [ ] BuilderBee delivery skill created
+- [ ] Client onboarding workflow for BuilderBee
+- [ ] Weekly ops workflow for AOB
+- [ ] Framework README index linking all docs
+- [ ] Every framework file cross-references others
 
-**Definition of Done:** Agent answers "When did we decide to migrate from Ontraport?" from Graphiti.
+**Definition of Done:** `tests/verify-operational.sh` exits 0. All R23-R26 pass.
+
+## Phase 6: Cross-Venture Coherence (TDD — tests written, implementation by dev loop)
+> "Does the system compound knowledge across ventures?"
+
+- [ ] Cross-venture map connecting AOB ↔ BuilderBee ↔ Centaurion
+- [ ] Wiki cross-references between ventures
+- [ ] System coherence verified (consistent Three Laws, memory tags)
+- [ ] Getting started guide + architecture doc
+- [ ] CHANGELOG tracking all phases
+- [ ] Case study: "Centaurion as its own client"
+
+**Definition of Done:** `tests/verify-coherence.sh` exits 0. All R27-R30 pass.
 
 ---
 

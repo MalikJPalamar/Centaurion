@@ -134,10 +134,78 @@ The minimum viable exo-cortex. When a user opens this repo in Claude Code, the a
 - **R16.4:** A `workflows/feedback-capture.md` exists defining how ratings flow into state
 - **R16.5:** `framework/routing-gate.md` documents threshold adjustment procedure with examples
 
-## v0.3 Requirements (Future — Not in Scope)
+---
+
+## v0.3 Requirements — Knowledge Depth (Phase 4)
+
+### R19: Centaurion Wiki Depth (≥10 pages)
+- **R19.1:** `docs/centaurion-wiki/` has ≥10 markdown pages
+- **R19.2-R19.7:** Required pages: five-sensing-layers, markov-blanket, 11-levels, named-agents, memory-architecture, ventures
+- **R19.8-R19.9:** Wiki pages cross-link to each other
+
+### R20: AOB Wiki Foundation (≥5 pages)
+- **R20.1:** `docs/aob-wiki/README.md` exists
+- **R20.2:** `docs/aob-wiki/` has ≥5 pages
+- **R20.3-R20.6:** Required pages: crm-migration, team, facilitator-certification, tech-stack
+
+### R21: BuilderBee Wiki Foundation (≥5 pages)
+- **R21.1:** `docs/builderbee-wiki/README.md` exists
+- **R21.2:** `docs/builderbee-wiki/` has ≥5 pages
+- **R21.3-R21.6:** Required pages: ghl-playbook, client-onboarding, service-offerings, ai-automation-patterns
+
+### R22: Identity Depth
+- **R22.1:** All 10 identity files are ≥500 bytes each
+- **R22.2:** GOALS.md references current/upcoming work phases
+
+---
+
+## v0.4 Requirements — Operational Workflows (Phase 5)
+
+### R23: Skills Maturity
+- **R23.1:** All 5 core skills are ≥1000 bytes each
+- **R23.2:** All skills contain examples or usage scenarios
+
+### R24: Venture-Specific Skills
+- **R24.1-R24.3:** `skills/aob-ops/SKILL.md` exists with AOB-specific content
+- **R24.4-R24.6:** `skills/builderbee-delivery/SKILL.md` exists with BB-specific content
+
+### R25: Workflow Completeness
+- **R25.1-R25.3:** Existing workflows have concrete steps (not templates)
+- **R25.4-R25.5:** `workflows/client-onboarding.md` exists for BuilderBee
+- **R25.6-R25.7:** `workflows/aob-weekly-ops.md` exists for AOB operations
+
+### R26: Framework Cross-References
+- **R26.1:** Every framework file cross-references at least one other framework file
+- **R26.2-R26.3:** `framework/README.md` index exists linking all framework files
+
+---
+
+## v0.5 Requirements — Cross-Venture Coherence (Phase 6)
+
+### R27: Cross-Venture Connections
+- **R27.1-R27.3:** `docs/centaurion-wiki/cross-venture-map.md` maps connections between all three ventures
+- **R27.4:** AOB wiki references BuilderBee expertise where applicable
+- **R27.5:** BuilderBee wiki references Centaurion methodology
+
+### R28: System Coherence
+- **R28.1:** CLAUDE.md and AGENTS.md both reference all Three Laws
+- **R28.2:** All agent personalities reference the Three Laws
+- **R28.3-R28.4:** Memory configs tag all three ventures consistently
+
+### R29: Documentation & Onboarding
+- **R29.1-R29.2:** `docs/getting-started.md` with setup instructions
+- **R29.3-R29.5:** `docs/architecture.md` describing agent topology + memory layers
+- **R29.6-R29.7:** `CHANGELOG.md` tracking completed phases
+
+### R30: Case Study
+- **R30.1-R30.3:** `docs/case-studies/centaurion-as-client.md` — the system as its own proof
+
+---
+
+## Future (Not in Scope Yet)
 
 - Supermemory actually connected and capturing live conversations
-- Nova deployed on OpenClaw with Centaurion personality
+- Nova deployed on NanoClaw with Centaurion personality
 - Syncthing running between VPSs
 - Graphiti + Neo4j deployed and connected
 - Autoresearch overnight iteration running

@@ -1,143 +1,114 @@
 #!/usr/bin/env bash
 # Centaurion — Identify Next Development Priority
-# Reads verification results and outputs the highest-priority failing requirement.
-# Used by the daily dev loop to plan the next iteration.
-# Output: JSON with phase, requirement, description, test_file, tdd_plan
-# Exit 0 always (reports status even when everything passes)
+# Runs all phase verification scripts, finds the first failing phase,
+# and outputs JSON with the next priority + TDD plan.
+# Exit 0 always.
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
-# --- Run each phase's verification and capture results ---
+# --- Define phases ---
+PHASE_NAMES=(
+  "Core Loop"
+  "Memory Integration"
+  "Multi-Runtime and Feedback"
+  "Knowledge Depth"
+  "Operational Workflows"
+  "Cross-Venture Coherence"
+)
+PHASE_SCRIPTS=(
+  "tests/verify-core-loop.sh"
+  "tests/verify-memory-integration.sh"
+  "tests/verify-multi-runtime.sh"
+  "tests/verify-knowledge-depth.sh"
+  "tests/verify-operational.sh"
+  "tests/verify-coherence.sh"
+)
 
-# Phase 1: Core Loop
-P1_OUTPUT=""
-P1_EXIT=0
-P1_OUTPUT=$(bash "$REPO_ROOT/tests/verify-core-loop.sh" 2>&1) || P1_EXIT=$?
-P1_PASS=$(echo "$P1_OUTPUT" | grep -c "  ✓" || true)
-P1_FAIL=$(echo "$P1_OUTPUT" | grep -c "  ✗" || true)
-P1_TOTAL=$((P1_PASS + P1_FAIL))
+# --- Run all phases and collect results ---
+declare -a PASSES FAILS TOTALS OUTPUTS
+OVERALL_PASS=0
+OVERALL_FAIL=0
 
-# Phase 2: Memory Integration
-P2_OUTPUT=""
-P2_EXIT=0
-P2_OUTPUT=$(bash "$REPO_ROOT/tests/verify-memory-integration.sh" 2>&1) || P2_EXIT=$?
-P2_PASS=$(echo "$P2_OUTPUT" | grep -c "  ✓" || true)
-P2_FAIL=$(echo "$P2_OUTPUT" | grep -c "  ✗" || true)
-P2_TOTAL=$((P2_PASS + P2_FAIL))
+for i in "${!PHASE_SCRIPTS[@]}"; do
+  SCRIPT="$REPO_ROOT/${PHASE_SCRIPTS[$i]}"
+  if [ -f "$SCRIPT" ]; then
+    OUTPUT=$(bash "$SCRIPT" 2>&1) || true
+  else
+    OUTPUT=""
+  fi
+  P=$(echo "$OUTPUT" | grep -c "  ✓" || true)
+  F=$(echo "$OUTPUT" | grep -c "  ✗" || true)
+  PASSES[$i]=$P
+  FAILS[$i]=$F
+  TOTALS[$i]=$((P + F))
+  OUTPUTS[$i]="$OUTPUT"
+  OVERALL_PASS=$((OVERALL_PASS + P))
+  OVERALL_FAIL=$((OVERALL_FAIL + F))
+done
 
-# Phase 3: Multi-Runtime & Feedback
-P3_OUTPUT=""
-P3_EXIT=0
-P3_OUTPUT=$(bash "$REPO_ROOT/tests/verify-multi-runtime.sh" 2>&1) || P3_EXIT=$?
-P3_PASS=$(echo "$P3_OUTPUT" | grep -c "  ✓" || true)
-P3_FAIL=$(echo "$P3_OUTPUT" | grep -c "  ✗" || true)
-P3_TOTAL=$((P3_PASS + P3_FAIL))
+OVERALL_TOTAL=$((OVERALL_PASS + OVERALL_FAIL))
 
-# Overall
-TOTAL_PASS=$((P1_PASS + P2_PASS + P3_PASS))
-TOTAL_FAIL=$((P1_FAIL + P2_FAIL + P3_FAIL))
-TOTAL_ALL=$((TOTAL_PASS + TOTAL_FAIL))
+# --- Build phase stats JSON fragment ---
+PHASE_STATS=""
+for i in "${!PHASE_NAMES[@]}"; do
+  NUM=$((i + 1))
+  PHASE_STATS="$PHASE_STATS  \"phase${NUM}\": {\"pass\": ${PASSES[$i]}, \"fail\": ${FAILS[$i]}, \"total\": ${TOTALS[$i]}},"
+done
 
-# --- Determine next priority ---
+# --- Find first failing phase ---
+FOUND=false
+for i in "${!PHASE_NAMES[@]}"; do
+  NUM=$((i + 1))
+  if [ "${FAILS[$i]}" -gt 0 ]; then
+    FIRST_FAIL=$(echo "${OUTPUTS[$i]}" | grep "  ✗" | head -1 | sed 's/.*✗ //')
+    REQ_GROUP=$(echo "$FIRST_FAIL" | grep -oE 'R[0-9]+' | head -1 || echo "R?")
 
-if [ "$P1_FAIL" -gt 0 ]; then
-  # Phase 1 has failures — fix these first
-  FIRST_FAIL=$(echo "$P1_OUTPUT" | grep "  ✗" | head -1 | sed 's/.*✗ //')
-  REQ_ID=$(echo "$FIRST_FAIL" | grep -oE 'R[0-9]+\.[0-9]+' | head -1 || echo "R?")
-  REQ_GROUP=$(echo "$REQ_ID" | grep -oE 'R[0-9]+' | head -1 || echo "R?")
+    STATUS="progressing"
+    if [ "$NUM" -eq 1 ]; then STATUS="failing"; fi
 
-  cat <<PRIORITY_JSON
+    cat <<PRIORITY_JSON
 {
-  "status": "failing",
-  "phase": 1,
-  "phase_name": "Core Loop",
+  "status": "$STATUS",
+  "phase": $NUM,
+  "phase_name": "${PHASE_NAMES[$i]}",
   "requirement": "$REQ_GROUP",
   "first_failure": "$FIRST_FAIL",
-  "test_file": "tests/verify-core-loop.sh",
-  "phase1": {"pass": $P1_PASS, "fail": $P1_FAIL, "total": $P1_TOTAL},
-  "phase2": {"pass": $P2_PASS, "fail": $P2_FAIL, "total": $P2_TOTAL},
-  "overall": {"pass": $TOTAL_PASS, "fail": $TOTAL_FAIL, "total": $TOTAL_ALL},
+  "test_file": "${PHASE_SCRIPTS[$i]}",
+$PHASE_STATS
+  "overall": {"pass": $OVERALL_PASS, "fail": $OVERALL_FAIL, "total": $OVERALL_TOTAL},
   "tdd_plan": {
-    "red": "Phase 1 test failing: $FIRST_FAIL",
-    "green": "Fix the implementation to make this test pass",
-    "refactor": "Re-run full suite to check for regressions"
-  }
-}
-PRIORITY_JSON
-
-elif [ "$P2_FAIL" -gt 0 ]; then
-  FIRST_FAIL=$(echo "$P2_OUTPUT" | grep "  ✗" | head -1 | sed 's/.*✗ //')
-  REQ_ID=$(echo "$FIRST_FAIL" | grep -oE 'R[0-9]+\.[0-9]+' | head -1 || echo "R?")
-  REQ_GROUP=$(echo "$REQ_ID" | grep -oE 'R[0-9]+' | head -1 || echo "R?")
-
-  cat <<PRIORITY_JSON
-{
-  "status": "progressing",
-  "phase": 2,
-  "phase_name": "Memory Integration",
-  "requirement": "$REQ_GROUP",
-  "first_failure": "$FIRST_FAIL",
-  "test_file": "tests/verify-memory-integration.sh",
-  "phase1": {"pass": $P1_PASS, "fail": $P1_FAIL, "total": $P1_TOTAL},
-  "phase2": {"pass": $P2_PASS, "fail": $P2_FAIL, "total": $P2_TOTAL},
-  "phase3": {"pass": $P3_PASS, "fail": $P3_FAIL, "total": $P3_TOTAL},
-  "overall": {"pass": $TOTAL_PASS, "fail": $TOTAL_FAIL, "total": $TOTAL_ALL},
-  "tdd_plan": {
-    "red": "Phase 2 test failing: $FIRST_FAIL",
+    "red": "Phase $NUM test failing: $FIRST_FAIL",
     "green": "Implement the feature to make this test pass",
     "refactor": "Re-run full suite to check for regressions"
   }
 }
 PRIORITY_JSON
+    FOUND=true
+    break
+  fi
+done
 
-elif [ "$P3_FAIL" -gt 0 ]; then
-  FIRST_FAIL=$(echo "$P3_OUTPUT" | grep "  ✗" | head -1 | sed 's/.*✗ //')
-  REQ_ID=$(echo "$FIRST_FAIL" | grep -oE 'R[0-9]+\.[0-9]+' | head -1 || echo "R?")
-  REQ_GROUP=$(echo "$REQ_ID" | grep -oE 'R[0-9]+' | head -1 || echo "R?")
-
-  cat <<PRIORITY_JSON
-{
-  "status": "progressing",
-  "phase": 3,
-  "phase_name": "Multi-Runtime and Feedback",
-  "requirement": "$REQ_GROUP",
-  "first_failure": "$FIRST_FAIL",
-  "test_file": "tests/verify-multi-runtime.sh",
-  "phase1": {"pass": $P1_PASS, "fail": $P1_FAIL, "total": $P1_TOTAL},
-  "phase2": {"pass": $P2_PASS, "fail": $P2_FAIL, "total": $P2_TOTAL},
-  "phase3": {"pass": $P3_PASS, "fail": $P3_FAIL, "total": $P3_TOTAL},
-  "overall": {"pass": $TOTAL_PASS, "fail": $TOTAL_FAIL, "total": $TOTAL_ALL},
-  "tdd_plan": {
-    "red": "Phase 3 test failing: $FIRST_FAIL",
-    "green": "Implement the feature to make this test pass",
-    "refactor": "Re-run full suite to check for regressions"
-  }
-}
-PRIORITY_JSON
-
-else
+if [ "$FOUND" = false ]; then
+  NEXT=$((${#PHASE_NAMES[@]} + 1))
   cat <<PRIORITY_JSON
 {
   "status": "all_passing",
-  "phase": 4,
-  "phase_name": "Next: Knowledge Graph",
+  "phase": $NEXT,
+  "phase_name": "All phases complete — write Phase $NEXT tests",
   "requirement": "none_failing",
   "first_failure": null,
   "test_file": null,
-  "phase1": {"pass": $P1_PASS, "fail": $P1_FAIL, "total": $P1_TOTAL},
-  "phase2": {"pass": $P2_PASS, "fail": $P2_FAIL, "total": $P2_TOTAL},
-  "phase3": {"pass": $P3_PASS, "fail": $P3_FAIL, "total": $P3_TOTAL},
-  "overall": {"pass": $TOTAL_PASS, "fail": $TOTAL_FAIL, "total": $TOTAL_ALL},
+$PHASE_STATS
+  "overall": {"pass": $OVERALL_PASS, "fail": $OVERALL_FAIL, "total": $OVERALL_TOTAL},
   "tdd_plan": {
-    "red": "Write Phase 4 verification tests",
-    "green": "Implement Phase 4 requirements to make tests pass",
+    "red": "Write Phase $NEXT verification tests",
+    "green": "Implement Phase $NEXT requirements",
     "refactor": "Review and optimize existing implementations"
   }
 }
 PRIORITY_JSON
-
 fi
 
 exit 0
