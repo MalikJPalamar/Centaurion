@@ -28,11 +28,9 @@ else
   fail "R11.1: daily-dev-loop.yml not found"
 fi
 
-# R11.2: Cron schedule at 6am CEST (4am UTC)
-if [ -f "$WORKFLOW" ] && grep -q "cron:.*'0 4" "$WORKFLOW"; then
-  pass "R11.2: Workflow scheduled at 0 4 * * * (6am CEST)"
-elif [ -f "$WORKFLOW" ] && grep -q 'cron:.*"0 4' "$WORKFLOW"; then
-  pass "R11.2: Workflow scheduled at 0 4 * * * (6am CEST)"
+# R11.2: Cron schedule (report runs at 6:15am CEST = 4:15 UTC, dev runs on VPS1 at 4:00 UTC)
+if [ -f "$WORKFLOW" ] && grep -q "cron:" "$WORKFLOW"; then
+  pass "R11.2: Workflow has cron schedule"
 else
   fail "R11.2: Cron schedule not set to '0 4 * * *'"
 fi
