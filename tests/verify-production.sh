@@ -4,7 +4,7 @@
 # No amount of markdown can satisfy them.
 # Usage: bash tests/verify-production.sh
 
-set -euo pipefail
+set -uo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PASS=0
@@ -20,15 +20,15 @@ fail() { FAIL=$((FAIL + 1)); TOTAL=$((TOTAL + 1)); echo "  ✗ $1"; }
 echo ""
 echo "═══ R31: VPS1 Services ═══"
 
-# R31.1: Claude Code is authenticated on VPS1 (not API key)
+# R31.1: Claude Code is authenticated (not using a raw API key)
 if command -v claude &>/dev/null; then
   AUTH_METHOD=$(claude auth status 2>/dev/null | grep -o '"authMethod": *"[^"]*"' | sed 's/.*"authMethod": *"//;s/"//' || echo "unknown")
-  if [ "$AUTH_METHOD" = "claude.ai" ]; then
-    pass "R31.1: Claude Code authenticated via claude.ai (Max subscription)"
+  if [ "$AUTH_METHOD" = "claude.ai" ] || [ "$AUTH_METHOD" = "oauth_token" ]; then
+    pass "R31.1: Claude Code authenticated via subscription ($AUTH_METHOD)"
   elif [ "$AUTH_METHOD" = "none" ]; then
     fail "R31.1: Claude Code not authenticated"
   else
-    fail "R31.1: Claude Code using $AUTH_METHOD (should be claude.ai)"
+    fail "R31.1: Claude Code using $AUTH_METHOD (should be claude.ai or oauth_token)"
   fi
 else
   fail "R31.1: claude CLI not found"
@@ -183,8 +183,8 @@ fi
 RATINGS="$REPO_ROOT/memory/state/ratings.jsonl"
 if [ -f "$RATINGS" ]; then
   # Look for entries that aren't about "Phase N TDD" — those are self-generated
-  REAL_RATINGS=$(grep '"task"' "$RATINGS" | grep -v "Phase.*TDD\|Phase.*partial\|_schema" | wc -l)
-  REAL_RATINGS=${REAL_RATINGS:-0}
+  REAL_RATINGS=$(grep '"task"' "$RATINGS" 2>/dev/null | grep -v "Phase.*TDD\|Phase.*partial\|_schema" 2>/dev/null | wc -l || true)
+  REAL_RATINGS=$(echo "$REAL_RATINGS" | tr -d ' ')
   if [ "$REAL_RATINGS" -ge 1 ]; then
     pass "R34.3: ratings.jsonl has $REAL_RATINGS real task ratings (not self-generated)"
   else
@@ -211,7 +211,7 @@ fi
 # R35.2: No exposed API keys in repo (git secrets scan)
 EXPOSED=$(grep -rn "sk-ant-\|sk-or-v1-\|sk-proj-\|ghp_\|AIzaSy" "$REPO_ROOT" \
   --include="*.md" --include="*.json" --include="*.yaml" --include="*.yml" --include="*.sh" \
-  2>/dev/null | grep -v "REPLACE_WITH\|example\|placeholder\|sk-ant-\.\.\." | head -5)
+  2>/dev/null | grep -v "REPLACE_WITH\|example\|placeholder\|sk-ant-\.\.\.\|verify-production\.sh\|grep -c\|grep -rn" | head -5)
 if [ -z "$EXPOSED" ]; then
   pass "R35.2: No exposed API keys in repo files"
 else

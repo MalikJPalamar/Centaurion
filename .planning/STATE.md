@@ -1,37 +1,43 @@
 # STATE — Session Memory
 
 ## Current Phase
-Phase 2: Memory Integration (TDD — tests written, implementation pending)
+Phase 7: Production Deployment (requires real system access)
 
 ## Current Status
-Phase 1 COMPLETE (134/134 pass). Phase 2 tests written (expected to fail until implemented).
-Daily dev loop infrastructure built and ready to validate.
+Phases 1-6 COMPLETE (271/271 all green — structure, content, coherence verified).
+Phase 7 tests verify real deployment — 12 failures requiring actual systems.
+Dev loop runs 3x daily (6am, 2pm, 10pm CET) on VPS1 via Max subscription.
 
 ## Decisions Log
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
 | 2026-04-12 | Unified repo (exo-cortex + existing dashboard) | User preference. Don't split into separate repos. |
-| 2026-04-12 | Native build, not PAI fork | PAI's TypeScript/Bun assumptions don't fit phone-first, multi-runtime. Cherry-pick patterns only. |
+| 2026-04-12 | Native build, not PAI fork | PAI's TypeScript/Bun assumptions don't fit phone-first, multi-runtime. |
 | 2026-04-12 | All markdown + JSON, no TypeScript hooks | Portability across runtimes. Intelligence in prompts, not compiled code. |
-| 2026-04-12 | Course-corrected to GSD spec-driven approach | Initial implementation skipped specs/tests. Now adding verification before proceeding. |
-| 2026-04-12 | Prototype branch for GSD validation | Preserve Phase 0 work on feature branch, validate on prototype branch. |
-| 2026-04-12 | Phase 1 COMPLETE | 134/134 verification checks pass. |
-| 2026-04-12 | Added daily dev loop | 6am CET GitHub Actions workflow: verify → identify priority → create Issue with TDD plan. |
-| 2026-04-12 | TDD for Phase 2 | Tests written BEFORE implementation. All Phase 2 tests expected to fail until work is done. |
+| 2026-04-12 | GSD spec-driven TDD approach | Tests before implementation. Verification before expansion. |
+| 2026-04-12 | Renamed Fitness Equation → Precision Ratio | Avoid Darwinian/deterministic connotations. Active Inference native term. |
+| 2026-04-13 | Dev loop moved from GitHub Actions to VPS1 cron | Max subscription (zero API cost) vs API key billing. |
+| 2026-04-14 | 3x daily cadence (6am, 2pm, 10pm CET) | 30 turns, 10 fixes per run. Cleared Phases 4-6 in 12 hours. |
+| 2026-04-15 | Phase 7: production tests | Tests that require real deployment — agent routes to Malik what it can't fix. |
 
-## Blockers
-None currently.
+## Blockers — Items Requiring Malik's Input
+
+| Item | What's Needed | Priority |
+|------|--------------|----------|
+| **R32: NanoClaw/Nova** | Reconfigure NanoClaw to use free model (Qwen/MiniMax), restart container, deploy SOUL.md | High |
+| **R34.1: Supermemory** | Sign up for Supermemory, get API key, replace placeholder in memory/supermemory.json | Medium |
+| **R34.3: Real ratings** | Rate one real task output (not dev loop self-rating) | Low |
+| **R35.3: Git history** | API keys exposed in history from earlier session — needs BFG repo cleaner | Medium |
 
 ## Open Questions
-- Should CLAUDE.md be minimal (pointer to skills) or comprehensive (full loop inline)?
-  - Decision: Comprehensive. CLAUDE.md IS the execution schema. Skills provide detail.
-- How to test "agent behavior" from a markdown-only framework?
-  - Decision: Structural verification (files exist, content correct, cross-refs valid) + manual UAT.
+- NanoClaw vs OpenClaw: User confirmed it's NanoClaw, not OpenClaw. Update deploy/ references?
+  - Decision: Rename when NanoClaw config is confirmed working.
+- Coherence Equation: Noted for future — extend Precision Ratio to measure human-AI alignment.
 
 ## Branch Map
 | Branch | Purpose | Status |
 |--------|---------|--------|
-| `main` | Production (existing dashboard + exo-cortex) | Stable |
-| `claude/centaurion-pai-fork-g9XC7` | Phase 0 implementation | Complete, pushed |
-| `prototype/centaurion-core-loop` | GSD validation + verification | Active |
+| `main` | Production (all phases merged) | Active |
+| `claude/centaurion-pai-fork-g9XC7` | Phase 0 implementation | Merged to main |
+| `prototype/centaurion-core-loop` | GSD validation | Merged to main |
