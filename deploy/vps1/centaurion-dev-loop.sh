@@ -26,8 +26,8 @@ REPO_DIR="${CENTAURION_REPO:-$HOME/centaurion}"
 LOG_DIR="$REPO_DIR/logs"
 DATE=$(date +%Y-%m-%d)
 LOG_FILE="$LOG_DIR/dev-loop-$DATE.log"
-MAX_TURNS=15
-MAX_FIXES=3
+MAX_TURNS=30
+MAX_FIXES=10
 
 # ── Install mode ──────────────────────────────────────────
 if [ "${1:-}" = "--install" ]; then
