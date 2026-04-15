@@ -57,6 +57,10 @@ Format as a GitHub Issue titled: `[weekly-review] Week of {date}`
 - [Specific threshold changes, priority shifts, or process tweaks]
 ```
 
+## Example
+
+For example, a weekly review might surface: "AOB routing accuracy dropped from 85% to 70% — three community-management tasks were misclassified as routine when they required Malik's input on facilitator selection. Recommended adjustment: increase stakes weight for facilitator-related tasks."
+
 ## Frequency
 
 Weekly. Triggered by gh-aw scheduled workflow or manual invocation via `/weekly-review`.

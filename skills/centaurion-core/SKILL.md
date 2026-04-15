@@ -49,6 +49,16 @@ Apply this loop to every non-trivial task. See `framework/active-inference-loop.
 | Career history | `identity/HISTORY.md` |
 | Opinions and stances | `identity/OPINIONS.md` |
 
+## Usage Examples
+
+For example, when starting a new session about BuilderBee client work:
+
+1. **SENSE:** Load identity → recall recent BB context from Supermemory
+2. **PREDICT:** "This is likely a client delivery task, medium stakes, reversible"
+3. **ROUTE:** Novelty 0.3, stakes 0.4, reversibility 0.8 → auto-execute
+4. **ACT:** Execute the task using BuilderBee delivery patterns
+5. **REMEMBER:** Tag the interaction `builderbee`, update wiki if new knowledge generated
+
 ## After Loading
 
 Once identity is loaded, the agent should be able to answer:

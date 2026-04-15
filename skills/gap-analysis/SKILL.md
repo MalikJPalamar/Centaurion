@@ -69,6 +69,10 @@ For each identified gap, generate a research question:
 - [Specific wiki pages to create or update]
 ```
 
+## Example
+
+For example, gap analysis might reveal that the AOB wiki has a "facilitator onboarding" cluster and BuilderBee wiki has a "client onboarding" cluster, but they are disconnected. The bridge question: "Can the facilitator onboarding checklist pattern be reused for BuilderBee client onboarding?" — creating a cross-venture template.
+
 ## Frequency
 
 Weekly (automated via gh-aw). Monthly deep analysis as part of L4 closed-loop review.

@@ -54,6 +54,10 @@ For each ticker with activity:
 **Immediate alerts** (if threshold breached):
 Route to Malik via Telegram (Nova) with: ticker, current price, threshold breached, recommended action.
 
+## Example
+
+For example, if NVDA drops 8% on high volume while other semiconductor tickers (AMD, TSM) hold steady, this is a divergence signal — company-specific event, not macro. Classify as **Alert**, route to Malik with: "NVDA -8% on 2.3x avg volume, sector stable. Likely company-specific. Review position."
+
 ## Frequency
 
 Daily. Integrated into the `workflows/daily-health.md` workflow.
