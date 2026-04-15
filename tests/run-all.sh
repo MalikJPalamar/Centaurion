@@ -49,6 +49,7 @@ run_phase 3 "Multi-Runtime & Feedback" "tests/verify-multi-runtime.sh"
 run_phase 4 "Knowledge Depth" "tests/verify-knowledge-depth.sh"
 run_phase 5 "Operational Workflows" "tests/verify-operational.sh"
 run_phase 6 "Cross-Venture Coherence" "tests/verify-coherence.sh"
+run_phase 7 "Production Deployment" "tests/verify-production.sh"
 
 # Dev loop infrastructure (not a development phase, but a meta-test)
 echo ""
