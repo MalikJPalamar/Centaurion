@@ -4,7 +4,7 @@ Malik operates three ventures simultaneously. Centaurion exists to make this sus
 
 ## The Ventures
 
-### AOB — Art of Brilliance
+### AOB — Art of Breath
 
 - **Domain:** Personal development, facilitator training, corporate workshops
 - **Revenue model:** Certification programs, speaking engagements, corporate contracts

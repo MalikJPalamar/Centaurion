@@ -4,76 +4,103 @@
 # ═══════════════════════════════════════════════════════════
 #
 # Runs Claude Code against failing tests using Max subscription.
-# Scheduled via cron at 6am CET on VPS1.
+# Scheduled via cron (3x daily) on VPS1.
 #
 # Install:
-#   1. Clone repo:  git clone https://github.com/MalikJPalamar/Centaurion.git ~/centaurion
-#   2. Auth Claude:  claude auth login
-#   3. Install cron: bash deploy/vps1/centaurion-dev-loop.sh --install
-#   4. Done. Runs daily at 6am CET.
+#   CENTAURION_REPO=~/Centaurion bash deploy/vps1/centaurion-dev-loop.sh --install
 #
 # Manual run:
-#   bash deploy/vps1/centaurion-dev-loop.sh
+#   CENTAURION_REPO=~/Centaurion bash deploy/vps1/centaurion-dev-loop.sh
 #
-# Logs:
-#   ~/centaurion/logs/dev-loop-YYYY-MM-DD.log
+# Logs: ~/Centaurion/logs/dev-loop-YYYY-MM-DD.log
+# Status: memory/state/dev-loop-status.json
 #
 # ═══════════════════════════════════════════════════════════
 
 set -uo pipefail
 
-REPO_DIR="${CENTAURION_REPO:-$HOME/centaurion}"
+REPO_DIR="${CENTAURION_REPO:-$HOME/Centaurion}"
 LOG_DIR="$REPO_DIR/logs"
+LOCK_FILE="$REPO_DIR/logs/.dev-loop.lock"
+STATUS_FILE="$REPO_DIR/memory/state/dev-loop-status.json"
 DATE=$(date +%Y-%m-%d)
+TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 LOG_FILE="$LOG_DIR/dev-loop-$DATE.log"
 MAX_TURNS=30
 MAX_FIXES=10
+START_TIME=$(date +%s)
 
 # ── Install mode ──────────────────────────────────────────
 if [ "${1:-}" = "--install" ]; then
-  # 6am CET = 4am UTC (CEST, summer) or 5am UTC (CET, winter)
-  # Using 4am UTC for summer. Adjust if needed.
-  CRON_LINE="0 4 * * * cd $REPO_DIR && bash deploy/vps1/centaurion-dev-loop.sh >> $LOG_DIR/cron.log 2>&1"
-
   mkdir -p "$LOG_DIR"
+  CRON_BASE="cd $REPO_DIR && CENTAURION_REPO=$REPO_DIR bash deploy/vps1/centaurion-dev-loop.sh >> $LOG_DIR/cron.log 2>&1"
 
-  # Add to crontab if not already there
   if crontab -l 2>/dev/null | grep -q "centaurion-dev-loop"; then
-    echo "Cron job already installed. Current entry:"
+    echo "Cron jobs already installed:"
     crontab -l | grep "centaurion-dev-loop"
   else
-    (crontab -l 2>/dev/null; echo "$CRON_LINE") | crontab -
-    echo "Cron job installed:"
-    echo "  $CRON_LINE"
+    (crontab -l 2>/dev/null
+     echo "0 4 * * * $CRON_BASE"
+     echo "0 12 * * * $CRON_BASE"
+     echo "0 20 * * * $CRON_BASE"
+    ) | crontab -
+    echo "Cron jobs installed (3x daily: 6am, 2pm, 10pm CET):"
+    crontab -l | grep "centaurion-dev-loop"
   fi
-
-  echo ""
-  echo "Verify with: crontab -l | grep centaurion"
-  echo "Logs will be at: $LOG_DIR/"
-  echo ""
-  echo "Prerequisites:"
-  echo "  1. Claude Code authenticated: claude auth login"
-  echo "  2. Git push access: git push origin main (test it)"
-  echo "  3. Repo cloned at: $REPO_DIR"
   exit 0
 fi
 
 # ── Uninstall mode ────────────────────────────────────────
 if [ "${1:-}" = "--uninstall" ]; then
   crontab -l 2>/dev/null | grep -v "centaurion-dev-loop" | crontab -
-  echo "Cron job removed."
+  rm -f "$LOCK_FILE"
+  echo "Cron jobs removed."
   exit 0
 fi
 
-# ── Main execution ────────────────────────────────────────
+# ── Concurrency lock ──────────────────────────────────────
 mkdir -p "$LOG_DIR"
 
+if [ -f "$LOCK_FILE" ]; then
+  LOCK_PID=$(cat "$LOCK_FILE" 2>/dev/null)
+  if kill -0 "$LOCK_PID" 2>/dev/null; then
+    echo "[$(date '+%H:%M:%S')] Dev loop already running (PID $LOCK_PID). Skipping." | tee -a "$LOG_FILE"
+    exit 0
+  else
+    rm -f "$LOCK_FILE"
+  fi
+fi
+echo $$ > "$LOCK_FILE"
+trap 'rm -f "$LOCK_FILE"' EXIT
+
+# ── Helpers ───────────────────────────────────────────────
 log() {
   echo "[$(date '+%H:%M:%S')] $1" | tee -a "$LOG_FILE"
 }
 
+write_status() {
+  local status="$1" phase="${2:-0}" fixed="${3:-0}" remaining="${4:-0}" elapsed="${5:-0}"
+  cat > "$STATUS_FILE" <<STATUS_JSON
+{
+  "timestamp": "$TIMESTAMP",
+  "date": "$DATE",
+  "status": "$status",
+  "phase": $phase,
+  "tests_fixed": $fixed,
+  "tests_remaining": $remaining,
+  "elapsed_seconds": $elapsed,
+  "max_turns": $MAX_TURNS,
+  "max_fixes": $MAX_FIXES
+}
+STATUS_JSON
+}
+
+# ── Log rotation (keep last 14 days) ──────────────────────
+find "$LOG_DIR" -name "dev-loop-*.log" -mtime +14 -delete 2>/dev/null || true
+
+# ── Main execution ────────────────────────────────────────
 log "═══ Centaurion Dev Loop Starting ═══"
-log "Date: $DATE"
+log "Date: $DATE | Max turns: $MAX_TURNS | Max fixes: $MAX_FIXES"
 log "Repo: $REPO_DIR"
 
 # Step 1: Pull latest
@@ -81,6 +108,7 @@ log "Pulling latest from main..."
 cd "$REPO_DIR"
 git pull origin main >> "$LOG_FILE" 2>&1 || {
   log "ERROR: git pull failed"
+  write_status "error" 0 0 0 $(($(date +%s) - START_TIME))
   exit 1
 }
 
@@ -91,11 +119,13 @@ STATUS=$(echo "$PRIORITY_JSON" | grep -o '"status": *"[^"]*"' | head -1 | sed 's
 PHASE=$(echo "$PRIORITY_JSON" | grep -o '"phase": *[0-9]*' | head -1 | sed 's/.*: *//')
 FIRST_FAIL=$(echo "$PRIORITY_JSON" | grep -o '"first_failure": *"[^"]*"' | head -1 | sed 's/.*: *"//;s/"//')
 TOTAL_FAIL=$(echo "$PRIORITY_JSON" | grep -o '"fail": *[0-9]*' | tail -1 | sed 's/.*: *//')
+TOTAL_FAIL=${TOTAL_FAIL:-0}
 
-log "Status: $STATUS | Phase: $PHASE | Failures: ${TOTAL_FAIL:-0}"
+log "Status: $STATUS | Phase: $PHASE | Failures: $TOTAL_FAIL"
 
 if [ "$STATUS" = "all_passing" ]; then
   log "All tests passing. Nothing to develop."
+  write_status "all_passing" "$PHASE" 0 0 $(($(date +%s) - START_TIME))
   log "═══ Dev Loop Complete (no work needed) ═══"
   exit 0
 fi
@@ -118,6 +148,7 @@ $(echo "$PRIORITY_JSON")
 5. Run \`bash tests/run-all.sh\` to check for regressions
 6. If all earlier phase tests still pass, stage and commit your changes
 7. Do NOT fix more than $MAX_FIXES failing tests per run
+8. If a test requires VPS access, external APIs, or human input that you cannot provide, SKIP it and move to the next failing test
 
 ## Constraints
 - All content is markdown + JSON. No TypeScript, no compilation.
@@ -134,13 +165,14 @@ claude -p "$PROMPT" \
   >> "$LOG_FILE" 2>&1
 
 CLAUDE_EXIT=$?
-log "Claude Code exited with: $CLAUDE_EXIT"
+ELAPSED=$(($(date +%s) - START_TIME))
+log "Claude Code exited with: $CLAUDE_EXIT (elapsed: ${ELAPSED}s)"
 
 # Step 4: Commit any uncommitted changes Claude left behind
 if [ -n "$(git status --porcelain)" ]; then
   log "Claude left uncommitted changes. Committing..."
   git add -A
-  git commit -m "fix(phase-$PHASE): dev loop auto-commit $(date +%Y-%m-%d)" >> "$LOG_FILE" 2>&1 || true
+  git commit -m "fix(phase-$PHASE): dev loop auto-commit $DATE" >> "$LOG_FILE" 2>&1 || true
 fi
 
 # Step 5: Push if there are new commits
@@ -155,11 +187,17 @@ else
   log "No new commits to push."
 fi
 
-# Step 5: Post-development verification
+# Step 6: Post-development verification
 log "Running post-development verification..."
 POST_JSON=$(bash tests/identify-next-priority.sh 2>/dev/null)
 POST_FAIL=$(echo "$POST_JSON" | grep -o '"fail": *[0-9]*' | tail -1 | sed 's/.*: *//')
 POST_STATUS=$(echo "$POST_JSON" | grep -o '"status": *"[^"]*"' | head -1 | sed 's/.*: *"//;s/"//')
+POST_FAIL=${POST_FAIL:-0}
 
-log "Post-dev status: $POST_STATUS | Remaining failures: ${POST_FAIL:-0}"
+FIXED=$((TOTAL_FAIL - POST_FAIL))
+if [ "$FIXED" -lt 0 ]; then FIXED=0; fi
+
+ELAPSED=$(($(date +%s) - START_TIME))
+log "Post-dev status: $POST_STATUS | Fixed: $FIXED | Remaining: $POST_FAIL | Duration: ${ELAPSED}s"
+write_status "$POST_STATUS" "$PHASE" "$FIXED" "$POST_FAIL" "$ELAPSED"
 log "═══ Dev Loop Complete ═══"

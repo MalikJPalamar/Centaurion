@@ -70,6 +70,30 @@
 
 **Definition of Done:** `tests/verify-coherence.sh` exits 0. All R27-R30 pass.
 
+## Phase 7: Production Deployment (blocked on VPS access + API keys)
+> "Is the system actually running in production?"
+
+- [x] Claude Code authenticated on VPS1 (Max subscription)
+- [x] Dev loop cron installed (3x daily)
+- [x] GitHub report workflow operational
+- [x] No exposed secrets in repo
+- [ ] NanoClaw/Nova running with free model
+- [ ] Supermemory API key configured (real, not placeholder)
+- [ ] Real task ratings from Malik (not self-generated)
+
+**Definition of Done:** `tests/verify-production.sh` exits 0. All R31-R35 pass.
+
+## Phase 8: Operational Automation (TDD — implementation in progress)
+> "Do the automated workflows actually run?"
+
+- [x] Dev loop has lock file, log rotation, metrics, status file
+- [x] Weekly review runner script (deploy/vps1/weekly-review.sh)
+- [x] Health check runner script (deploy/vps1/health-check.sh)
+- [ ] First weekly review output generated
+- [ ] ROADMAP phases match test count
+
+**Definition of Done:** `tests/verify-automation.sh` exits 0. All R36-R40 pass.
+
 ---
 
 ## Meta: Daily Development Loop

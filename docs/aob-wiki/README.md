@@ -1,6 +1,6 @@
-# AOB Wiki — Art of Brilliance
+# AOB Wiki — Art of Breath
 
-Knowledge base for the Art of Brilliance venture. AOB delivers personal development through facilitator-led workshops, certification programs, and corporate engagements.
+Knowledge base for the Art of Breath venture. AOB delivers breathwork education through facilitator-led workshops, certification programs, and membership platforms.
 
 ## Pages
 

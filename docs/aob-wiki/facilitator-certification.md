@@ -2,7 +2,7 @@
 
 ## Overview
 
-The AOB facilitator certification program trains practitioners to deliver Art of Brilliance workshops independently. It is the primary growth lever for the venture — each certified facilitator expands delivery capacity without requiring Malik's direct involvement.
+The AOB facilitator certification program trains practitioners to deliver Art of Breath workshops independently. It is the primary growth lever for the venture — each certified facilitator expands delivery capacity without requiring Malik's direct involvement.
 
 ## Program Structure
 

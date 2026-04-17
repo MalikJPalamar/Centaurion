@@ -17,6 +17,7 @@ PHASE_NAMES=(
   "Operational Workflows"
   "Cross-Venture Coherence"
   "Production Deployment"
+  "Operational Automation"
 )
 PHASE_SCRIPTS=(
   "tests/verify-core-loop.sh"
@@ -26,6 +27,7 @@ PHASE_SCRIPTS=(
   "tests/verify-operational.sh"
   "tests/verify-coherence.sh"
   "tests/verify-production.sh"
+  "tests/verify-automation.sh"
 )
 
 # --- Run all phases and collect results ---
