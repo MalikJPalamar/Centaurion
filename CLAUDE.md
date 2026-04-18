@@ -84,6 +84,9 @@ Update shared memory (Supermemory + state files):
 - `skills/weekly-review/` — L2 structured weekly comparison
 - `skills/sa-scan/` — Situational Awareness stock scanning
 - `skills/gap-analysis/` — InfraNodus knowledge gap analysis
+- `skills/aob-ops/` — AOB operations (CRM, membership, facilitators)
+- `skills/builderbee-delivery/` — BuilderBee client delivery (GHL, onboarding)
+- `skills/autoresearch/` — Autonomous overnight research iteration
 
 ## Key Files
 
