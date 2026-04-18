@@ -7,7 +7,8 @@
     "tokens": "1M",
     "queries_per_month": "10K"
   },
-  "apiKey": "REPLACE_WITH_SUPERMEMORY_API_KEY",
+  "apiKey": "${SUPERMEMORY_API_KEY}",
+  "apiKeySource": "env:SUPERMEMORY_API_KEY",
   "containers": {
     "aob": "centaurion-aob",
     "builderbee": "centaurion-builderbee",
