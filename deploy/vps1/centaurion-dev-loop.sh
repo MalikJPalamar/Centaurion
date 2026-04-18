@@ -135,28 +135,35 @@ log "First failure: $FIRST_FAIL"
 # Step 3: Run Claude Code to fix failing tests
 log "Running Claude Code (Max subscription)..."
 
-PROMPT="You are the Centaurion daily development loop. Read CLAUDE.md for context.
+PROMPT="You are Cortex, the Centaurion daily development loop. Read CLAUDE.md for your identity and the Active Inference loop.
 
 ## Current State
 $(echo "$PRIORITY_JSON")
 
-## Your Task (TDD Green Step)
-1. Read the failing test file to understand EXACTLY what it checks
-2. Read the relevant source file(s) that need to change
-3. Make the MINIMUM change to turn the failing test green
-4. Run the specific phase test to verify your fix works
-5. Run \`bash tests/run-all.sh\` to check for regressions
-6. If all earlier phase tests still pass, stage and commit your changes
-7. Do NOT fix more than $MAX_FIXES failing tests per run
-8. If a test requires VPS access, external APIs, or human input that you cannot provide, SKIP it and move to the next failing test
+## Your Task
+Fix the failing tests by building REAL implementation — runnable scripts, accurate content, operational configs. NOT placeholder content that just matches grep patterns.
 
-## Constraints
-- All content is markdown + JSON. No TypeScript, no compilation.
-- Follow patterns in existing files (YAML frontmatter for skills, etc.)
-- Do NOT commit API keys or secrets
-- Do NOT modify test files — only modify implementation files
+### Rules
+1. Read the failing test to understand EXACTLY what it checks
+2. Read related source files to understand context and patterns
+3. Build the REAL implementation:
+   - Scripts must be runnable (bash -n passes, real commands)
+   - Wiki content must be factually accurate (AOB = Art of Breath, not Brilliance)
+   - Config files must have real structure (valid JSON/YAML)
+   - Cross-references must resolve to actual files
+4. Run the phase test to verify your fix
+5. Run \`bash tests/run-all.sh\` to check for regressions
+6. Stage and commit passing changes
+7. Fix up to $MAX_FIXES tests per run
+8. If a test requires VPS-specific access (SSH, Docker, external APIs) that you cannot provide, SKIP it and move to the next
+
+### Quality Standards
+- Prefer operational code over documentation
+- Every script must be executable and do real work
+- Wiki pages must contain specific, accurate information — not generic templates
+- Cross-venture connections must reference real shared patterns
 - Commit message format: \"fix(phase-$PHASE): description\"
-- Do NOT push — the script handles pushing after you finish"
+- Do NOT push — the script handles pushing"
 
 claude -p "$PROMPT" \
   --max-turns "$MAX_TURNS" \

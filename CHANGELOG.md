@@ -1,36 +1,77 @@
 # Changelog
 
-All notable changes to the Centaurion exo-cortex, organized by development phase.
+All changes to the Centaurion exo-cortex, with real dates and deliverables.
 
-## Phase 6 — Cross-Venture Coherence (In Progress)
-- Cross-venture map connecting AOB, BuilderBee, and Centaurion
-- System coherence checks across all config files
-- Documentation and onboarding guides
-- Case study: Centaurion as its own client
+## Phase 8 — Operational Automation (2026-04-16)
+- **deploy/vps1/centaurion-dev-loop.sh** rewritten: lock file prevents concurrent runs, log rotation (14 days), execution metrics, dev-loop-status.json output
+- **deploy/vps1/weekly-review.sh** created: L2 sensing runner, uses `claude -p`, generates structured weekly comparison, cron-installable (Mondays 7am CET)
+- **deploy/vps1/health-check.sh** created: checks disk/memory/docker/nanoclaw/claude-auth/git-status, outputs health-status.json
+- **install.sh** created: one-command VPS setup (clone, auth check, cron install, Nova deploy, health check, test suite)
+- First weekly review output generated (2026W16)
+- Tests: 18 checks (R36-R40)
 
-## Phase 5 — Skills Maturity
-- Skills framework index and maturity tracking
-- Venture-specific skills for AOB, BuilderBee, Centaurion
-- Workflow definitions for automated processes
+## Phase 7 — Production Deployment (2026-04-15)
+- VPS1: Claude Code authenticated via Max subscription (claude.ai)
+- VPS1: Dev loop cron running 3x daily (6am, 2pm, 10pm CET)
+- VPS1: NanoClaw running with free model, Nova SOUL.md deployed
+- GitHub Actions: report-only workflow (no API cost)
+- Exposed API keys scrubbed from repo files
+- Tests: 16 checks (R31-R35), 1 remaining (Supermemory API key)
 
-## Phase 4 — Wiki Expansion
-- Centaurion wiki: 11 levels, named agents, memory architecture, and more
-- AOB wiki: CRM migration, content strategy, community
-- BuilderBee wiki: service offerings, GHL patterns, client onboarding
+## Phase 6 — Cross-Venture Coherence (2026-04-15, autonomous)
+- `docs/centaurion-wiki/cross-venture-map.md`: AOB ↔ BuilderBee ↔ Centaurion connections
+- `docs/architecture.md`: agent topology + memory layer diagram
+- `docs/getting-started.md`: setup instructions for new sessions
+- `docs/case-studies/centaurion-as-client.md`: the system building itself
+- `CHANGELOG.md` created
+- Tests: 25 checks (R27-R30)
 
-## Phase 3 — Agent System
-- Cortex, Nova, Daemon agent personalities
-- Three Laws enforcement across all agents
-- AGENTS.md coordination file
+## Phase 5 — Operational Workflows (2026-04-15, autonomous)
+- `skills/aob-ops/SKILL.md`: AOB operations skill
+- `skills/builderbee-delivery/SKILL.md`: BuilderBee client delivery skill
+- `workflows/client-onboarding.md`: 5-day GHL onboarding workflow
+- `workflows/aob-weekly-ops.md`: Monday ops checklist
+- `framework/README.md`: index linking all framework files
+- All 5 core skills expanded with examples (≥1000 bytes each)
+- Tests: 26 checks (R23-R26)
 
-## Phase 2 — Framework & Identity
-- Active Inference Loop (7-step execution engine)
-- Three Laws: Hierarchy, Routing, Coupling
-- Precision Ratio framework
-- TELOS identity system (PURPOSE, MISSION, GOALS, PREFERENCES)
+## Phase 4 — Knowledge Depth (2026-04-14 – 04-15, autonomous)
+- centaurion-wiki expanded to 11 pages (five-sensing-layers, markov-blanket, 11-levels, named-agents, memory-architecture, ventures, glossary, free-energy-principle, feedback-loop, multi-runtime-deployment)
+- `docs/aob-wiki/` created: 5 pages (README, crm-migration, team, facilitator-certification, tech-stack)
+- `docs/builderbee-wiki/` created: 5 pages (README, ghl-playbook, client-onboarding, service-offerings, ai-automation-patterns)
+- Tests: 32 checks (R19-R22)
 
-## Phase 1 — Foundation
-- Repository structure and CLAUDE.md
-- Memory configuration (Supermemory, wiki repos, state files)
-- Initial skills directory
-- Test harness with TDD verification
+## Phase 3 — Multi-Runtime & Feedback (2026-04-12 – 04-13)
+- `deploy/pi/settings.json`: Pi coding-agent scaffold
+- `deploy/openclaw/SOUL.md`: Nova personality for OpenClaw/NanoClaw
+- `deploy/agent-zero/system-prompt.md`: Three Laws for Agent Zero
+- `deploy/README.md`: deployment instructions
+- `memory/state/ratings.jsonl` and `routing-log.jsonl`: sample entries
+- `workflows/feedback-capture.md`: rating + routing capture workflow
+- Tests: 12 checks (R17-R18)
+
+## Phase 2 — Memory Integration (2026-04-12)
+- Supermemory config: status set to `connected`, venture containers defined
+- centaurion-wiki: 4 initial pages (fitness-equation→precision-ratio, three-laws, active-inference-loop, routing-gate)
+- `memory/state/` directory: ratings.jsonl + routing-log.jsonl initialized
+- CLAUDE.md REMEMBER step references Supermemory explicitly
+- centaurion-core SKILL.md: Supermemory in SENSE + REMEMBER sections
+- Tests: 14 checks (R15-R16)
+
+## Phase 1 — Core Loop (2026-04-12)
+- CLAUDE.md: Active Inference execution schema (7-step loop)
+- AGENTS.md: multi-runtime schema for pi/OpenClaw/Codex/Agent Zero
+- `identity/`: 10 TELOS files (PURPOSE, MISSION, GOALS, CHALLENGES, CONTACTS, BELIEFS, MODELS, PREFERENCES, HISTORY, OPINIONS)
+- `framework/`: 7 theoretical core files (precision-ratio, three-laws, active-inference-loop, five-sensing-layers, markov-blanket, routing-gate, 11-levels)
+- `agents/`: Cortex.md, Nova.md, Daemon.md personalities
+- `skills/`: 5 SKILL.md files (centaurion-core, routing-gate, weekly-review, sa-scan, gap-analysis)
+- `memory/`: 4 config files (supermemory, wiki-repos, graphiti, mempalace)
+- GSD planning: .planning/ with PROJECT, REQUIREMENTS, ROADMAP, STATE
+- Test suite: verify-core-loop.sh (134 checks)
+- Tests: 134 checks (R1-R10)
+
+## Phase 0 — Architecture Decision (2026-04-12)
+- Decided: unified repo (exo-cortex alongside existing web dashboard)
+- Decided: native build, not PAI fork (markdown + JSON, no TypeScript hooks)
+- Decided: GSD spec-driven TDD approach (tests before implementation)
+- Renamed: Fitness Equation → Precision Ratio (avoid Darwinian connotations)
