@@ -37,13 +37,13 @@ check_file_exists "deploy/pi/settings.json" \
 check_file_contains "deploy/pi/settings.json" "centaurion" \
   "R17.2: Pi config references centaurion skills"
 
-# R17.3: OpenClaw deploy config exists
-check_file_exists "deploy/openclaw/SOUL.md" \
-  "R17.3: OpenClaw SOUL.md deploy config exists"
+# R17.3: NanoClaw deploy config exists
+check_file_exists "deploy/nanoclaw/SOUL.md" \
+  "R17.3: NanoClaw SOUL.md deploy config exists"
 
-# R17.4: OpenClaw SOUL.md matches Nova personality
-check_file_contains "deploy/openclaw/SOUL.md" "Nova" \
-  "R17.4: OpenClaw SOUL.md uses Nova personality"
+# R17.4: NanoClaw SOUL.md matches Nova personality
+check_file_contains "deploy/nanoclaw/SOUL.md" "Nova" \
+  "R17.4: NanoClaw SOUL.md uses Nova personality"
 
 # R17.5: Agent Zero config exists
 check_file_exists "deploy/agent-zero/system-prompt.md" \
