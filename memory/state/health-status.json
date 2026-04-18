@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-04-17T23:50:19Z",
+  "overall": "healthy",
+  "system": {
+    "disk_percent": 64,
+    "disk_status": "ok",
+    "memory_percent": 20,
+    "memory_status": "ok",
+    "uptime": "up 3 weeks, 4 days, 4 hours, 26 minutes"
+  },
+  "services": {
+    "docker_running": 7,
+    "docker_status": "ok",
+    "nanoclaw_up": true,
+    "claude_auth": "claude.ai"
+  },
+  "repo": {
+    "git_clean": true,
+    "commits_ahead": 0,
+    "last_dev_loop": "2026-04-17",
+    "last_dev_loop_ok": true
+  }
+}
