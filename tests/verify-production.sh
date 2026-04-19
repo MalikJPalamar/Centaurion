@@ -47,13 +47,20 @@ else
 fi
 
 # R31.3: Dev loop has run successfully at least once in the last 48 hours
+# Check ALL recent logs (not just first) because today's in-progress log won't
+# have the completion marker yet while the loop is running this very test.
 LOG_DIR="$REPO_ROOT/logs"
-RECENT_LOG=""
+RECENT_COMPLETED_LOG=""
 if [ -d "$LOG_DIR" ]; then
-  RECENT_LOG=$(find "$LOG_DIR" -name "dev-loop-*.log" -mtime -2 -type f | head -1)
+  while IFS= read -r log; do
+    if grep -q "Dev Loop Complete" "$log" 2>/dev/null; then
+      RECENT_COMPLETED_LOG="$log"
+      break
+    fi
+  done < <(find "$LOG_DIR" -name "dev-loop-*.log" -mtime -2 -type f)
 fi
-if [ -n "$RECENT_LOG" ] && grep -q "Dev Loop Complete" "$RECENT_LOG" 2>/dev/null; then
-  pass "R31.3: Dev loop ran successfully within last 48 hours"
+if [ -n "$RECENT_COMPLETED_LOG" ]; then
+  pass "R31.3: Dev loop ran successfully within last 48 hours ($(basename "$RECENT_COMPLETED_LOG"))"
 else
   fail "R31.3: No successful dev loop run in last 48 hours"
 fi
