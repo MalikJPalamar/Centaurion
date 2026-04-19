@@ -89,11 +89,14 @@ if [ "$NEEDS_INSTALL" = true ]; then
    echo "0 5 * * 1 $CRON_BASE deploy/vps1/weekly-review.sh >> $LOG_DIR/cron.log 2>&1"
    echo "# Centaurion Health Check — daily 5:55am CET (before dev loop)"
    echo "55 3 * * * $CRON_BASE deploy/vps1/health-check.sh >> $LOG_DIR/cron.log 2>&1"
+   echo "# Centaurion Private Data Sync — nightly 21:00 UTC (idempotent; skips when no changes)"
+   echo "0 21 * * * $CRON_BASE deploy/vps1/sync-private.sh >> $LOG_DIR/sync-private.log 2>&1"
   ) | crontab -
   echo "  ✓ Installed:"
   echo "    Dev loop:     6am, 2pm, 10pm CET (3x daily)"
   echo "    Weekly review: Monday 7am CET"
   echo "    Health check:  5:55am CET (daily, before dev loop)"
+  echo "    Private sync:  21:00 UTC daily (only commits when changes present)"
 else
   echo "  ✓ Cron jobs already installed"
 fi
