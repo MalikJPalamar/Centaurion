@@ -1,0 +1,27 @@
+{
+  "question": "What are the most valuable AQAL-aligned KPIs for a founder running three concurrent ventures (AOB, BuilderBee, Centaurion.me), and how should they map to the Centaurion Routing Gate thresholds?",
+  "venture": "centaurion",
+  "metric": "per-quadrant leading indicators + one composite Precision Ratio proxy",
+  "max_iterations": 5,
+  "max_turns_per_iteration": 12,
+  "deadline": "2026-04-26T06:00:00Z",
+  "sources": [
+    "Ken Wilber — A Theory of Everything (AQAL primary source)",
+    "Integral Institute — lines of development literature",
+    "Karl Friston — Free Energy Principle papers",
+    "Centaurion repo: identity/, framework/, skills/"
+  ],
+  "output": "memory/state/autoresearch-results.md",
+  "iteration_plan": [
+    "1. Map AQAL four quadrants to founder activities (UL/UR/LL/LR examples per venture)",
+    "2. Identify 3-5 measurable leading indicators per quadrant (12-20 total)",
+    "3. Weight indicators by novelty-of-signal and routing-relevance",
+    "4. Propose composite Precision Ratio proxy combining indicators",
+    "5. Draft instrumentation plan (where each KPI comes from: Outlook, Drive, CRM, git, self-report)"
+  ],
+  "ties_to": {
+    "phase": "Phase C — Integral-Theory Baseline Assessment",
+    "artifact": "identity/BASELINE-INTEGRAL.md",
+    "purpose": "Research feeds the quantitative scoring layer of the deep AQAL assessment"
+  }
+}

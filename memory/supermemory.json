@@ -9,6 +9,14 @@
   },
   "apiKey": "${SUPERMEMORY_API_KEY}",
   "apiKeySource": "env:SUPERMEMORY_API_KEY",
+  "apiKeyPath": "/root/Centaurion/.env (gitignored, 600 perms)",
+  "firstLiveCapture": "2026-04-19T18:56:15Z",
+  "firstLiveCaptureId": "PF1gaWe1rhggEJ6eLLwon8",
+  "endpoints": {
+    "write": "POST https://api.supermemory.ai/v3/documents",
+    "search": "POST https://api.supermemory.ai/v3/search"
+  },
+  "verifiedRoundTrip": true,
   "containers": {
     "aob": "centaurion-aob",
     "builderbee": "centaurion-builderbee",

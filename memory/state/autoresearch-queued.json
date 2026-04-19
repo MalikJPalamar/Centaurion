@@ -1,0 +1,60 @@
+{
+  "_schema": "centaurion-autoresearch-queue-v1",
+  "_note": "Briefs waiting for the active brief to complete. Pop index 0 and move to autoresearch-active.json when the current one archives.",
+  "queue": [
+    {
+      "queued_at": "2026-04-19T19:10:00Z",
+      "priority": 1,
+      "question": "What is the minimum-viable UR (Exterior-Individual) protocol for a Turquoise-vision founder operating with only 3 hours of uninterrupted deep work per day, chronic energy-demand mismatch (self-rated 2/5), and sub-24h execution weakness (self-rated 2/5)? Design a daily/weekly protocol that fits inside existing bandwidth (does not add net time) and is evidence-based across sleep, breath, movement, nutrition, and cognitive-load management. Acceptance criterion: the protocol is executable by someone whose body-line scores 3/10 and who currently does only strength 1x and breath 1x per week, without requiring willpower as the limiting resource.",
+      "venture": "centaurion",
+      "metric": "body-line delta (3→6) within 90 days; energy-demand match (2→4); 24h-execution (2→4) — using the same self-rating scale at 30/60/90 day checkpoints",
+      "max_iterations": 5,
+      "max_turns_per_iteration": 12,
+      "deadline": "2026-05-03T06:00:00Z",
+      "sources": [
+        "Wilber/Patten/Leonard/Morelli — Integral Life Practice (2008) — Body module protocols",
+        "Andrew Huberman podcast protocols (sleep, breath, light)",
+        "Peter Attia — Outlive (zone 2, strength, VO2max, stability)",
+        "Nick Littlehales — Sleep (R90 polyphasic method for high-demand operators)",
+        "Kelly McGonigal — The Upside of Stress / HeartMath — HRV protocols",
+        "James Nestor — Breath (Buteyko, nasal, box-breathing)",
+        "Matthew Walker — Why We Sleep",
+        "Centaurion identity/BASELINE-INTEGRAL.md (Light baseline, source of operator constraints)"
+      ],
+      "output": "memory/state/autoresearch-ur-protocol-results.md",
+      "iteration_plan": [
+        "1. Map current operator state (3 dw-hrs, 2/5 energy match, strength 1x + breath 1x, movement L8, meditation 3x/wk)",
+        "2. Identify the 3-5 highest-leverage evidence-based interventions that fit inside existing day (not ON TOP of it)",
+        "3. Design daily protocol (morning anchor + micro-protocols + evening wind-down) with total time budget < 60 min/day",
+        "4. Design weekly protocol (strength 2-3x, zone2 1-2x, 1 deload day, 1 shadow/integration block)",
+        "5. Define 30/60/90-day review cadence + measurable leading indicators (HRV, sleep score, subjective energy, deep-work hours achieved, 24h-execution rate)"
+      ],
+      "constraints": [
+        "MUST NOT require more than 60 min/day additional time",
+        "MUST NOT assume willpower as a limiting resource — protocol should be executable on low-energy days",
+        "MUST be compatible with European time zone and AOB/BuilderBee meeting loads",
+        "MUST preserve the 3 existing deep-work hours (non-negotiable)"
+      ],
+      "ties_to": {
+        "routing_adjustment": "R1 (lower UR autonomy threshold)",
+        "baseline_finding": "Leverage point: Somatic line 3/10 + AOB scope depleting UR capacity",
+        "artifact_on_completion": "skills/ur-protocol/SKILL.md + identity/UR-PROTOCOL.md"
+      }
+    },
+    {
+      "queued_at": "2026-04-19T19:10:00Z",
+      "priority": 2,
+      "question": "What is the minimum-viable Claude Code single-point-of-failure mitigation plan for an operator whose entire cognitive infrastructure depends on Claude Code being available? Evaluate: local Claude Code instance (if supported), Codex / GPT-5-Codex / Gemini CLI as redundant runtime, specification of a 'degraded mode' that continues with reduced capability if Claude is unreachable, and recommended trigger thresholds for switching modes.",
+      "venture": "centaurion",
+      "metric": "mean time to recovery if Claude Code is unreachable — target < 10 minutes to degraded mode, < 1 hour to full alternate runtime",
+      "max_iterations": 3,
+      "max_turns_per_iteration": 10,
+      "deadline": "2026-05-10T06:00:00Z",
+      "output": "memory/state/autoresearch-spof-mitigation-results.md",
+      "ties_to": {
+        "routing_adjustment": "R4",
+        "baseline_finding": "L18 — Claude Code = single point of failure"
+      }
+    }
+  ]
+}

@@ -56,3 +56,8 @@ frontend/node_modules/
 frontend/dist/
 *.pyc
 __pycache__/
+
+# Personal baseline data (private — do NOT commit to public repo)
+identity/BASELINE-*.md
+memory/state/baseline-*-in-progress.md
+memory/state/baseline-*-results.md
