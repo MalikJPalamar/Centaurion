@@ -15,11 +15,12 @@ Execute every task through this seven-step loop. Do not skip steps.
 
 ### 1. SENSE
 Before acting, load context:
-- **Identity:** Read `identity/PURPOSE.md`, `identity/MISSION.md`, `identity/GOALS.md`, `identity/PREFERENCES.md`
+- **Onboarding check:** Read `memory/state/onboarding-state.json`. If missing OR `onboarding_complete=false` → invoke `skills/onboarding/` BEFORE anything else. If `next_refresh_due` has passed → surface a gentle refresh prompt, continue normally. This runs once per install; the file persists, the flow does not repeat.
+- **Identity:** Read `identity/PURPOSE.md`, `identity/MISSION.md`, `identity/GOALS.md`, `identity/PREFERENCES.md`. If `identity/BASELINE-INTEGRAL.md` exists, load it too — it carries the operator's integral calibration + active routing-gate adjustments (R1, R2, …).
 - **Recent context:** What was the last conversation about? What's currently in progress?
 - **Alerts:** Any active issues or threshold breaches?
 
-You should know: Malik runs three ventures (AOB, BuilderBee, Centaurion.me). He reviews from his phone. He thinks in systems and metaphors.
+You should know: the operator runs three ventures (for Malik: AOB, BuilderBee, Centaurion.me). They review from their phone. They think in systems and metaphors.
 
 ### 2. PREDICT
 Form a hypothesis about the best approach:

@@ -1,0 +1,13 @@
+{
+  "$schema": "centaurion-onboarding-v1",
+  "_note": "Template. Real state lives at memory/state/onboarding-state.json (gitignored per-operator). If that file does not exist, Cortex invokes skills/onboarding/ on first session.",
+  "onboarding_complete": false,
+  "first_baseline_type": null,
+  "first_baseline_date": null,
+  "baseline_path": "identity/BASELINE-INTEGRAL.md",
+  "deep_reminder_scheduled": null,
+  "next_refresh_due": null,
+  "deferred_until": null,
+  "routing_adjustments_applied": [],
+  "operator_id": null
+}

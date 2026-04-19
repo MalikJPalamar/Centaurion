@@ -61,3 +61,4 @@ __pycache__/
 identity/BASELINE-*.md
 memory/state/baseline-*-in-progress.md
 memory/state/baseline-*-results.md
+memory/state/onboarding-state.json

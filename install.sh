@@ -150,3 +150,15 @@ echo "  1. Test dev loop:   CENTAURION_REPO=$REPO_DIR bash deploy/vps1/centaurio
 echo "  2. Test weekly:     CENTAURION_REPO=$REPO_DIR bash deploy/vps1/weekly-review.sh"
 echo "  3. Open in Claude:  cd $REPO_DIR && claude"
 echo ""
+
+# ── Onboarding check ──────────────────────────────────────
+if [ ! -f "$REPO_DIR/memory/state/onboarding-state.json" ]; then
+  echo "  ℹ First-time install detected."
+  echo "    When you open Claude Code for the first time, Cortex will run the"
+  echo "    AQAL + ILP baseline assessment (Light 25Q / Deep 75Q / Skip) to"
+  echo "    calibrate the system to you specifically. This runs ONCE —"
+  echo "    never again unless the 90-day refresh is due."
+  echo ""
+  echo "    Start: cd $REPO_DIR && claude"
+  echo ""
+fi
