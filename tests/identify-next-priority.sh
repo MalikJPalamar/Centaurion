@@ -18,6 +18,7 @@ PHASE_NAMES=(
   "Cross-Venture Coherence"
   "Production Deployment"
   "Operational Automation"
+  "Hermes Integration"
 )
 PHASE_SCRIPTS=(
   "tests/verify-core-loop.sh"
@@ -28,6 +29,7 @@ PHASE_SCRIPTS=(
   "tests/verify-coherence.sh"
   "tests/verify-production.sh"
   "tests/verify-automation.sh"
+  "tests/verify-hermes-integration.sh"
 )
 
 # --- Run all phases and collect results ---
