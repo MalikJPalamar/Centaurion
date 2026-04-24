@@ -8,10 +8,19 @@ set -uo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PASS=0
 FAIL=0
+SKIP=0
 TOTAL=0
+
+# VPS2 detection: explicit override, or hermes CLI on PATH, or marker file.
+# Off-VPS2 environments (dev loop, laptops) skip runtime checks instead of failing them.
+IS_VPS2=0
+if [ "${CENTAURION_VPS2:-}" = "1" ] || command -v hermes &>/dev/null || [ -f /etc/centaurion-vps2 ]; then
+  IS_VPS2=1
+fi
 
 pass() { PASS=$((PASS + 1)); TOTAL=$((TOTAL + 1)); echo "  ✓ $1"; }
 fail() { FAIL=$((FAIL + 1)); TOTAL=$((TOTAL + 1)); echo "  ✗ $1"; }
+skip() { SKIP=$((SKIP + 1)); TOTAL=$((TOTAL + 1)); echo "  ⊘ $1 (skipped — not on VPS2)"; }
 
 check_file_exists() {
   if [ -f "$REPO_ROOT/$1" ]; then pass "$2"; else fail "$2 — file not found: $1"; fi
@@ -63,48 +72,49 @@ check_file_contains "deploy/browser-harness/setup.sh" "pip install\|pip3 install
   "R42.3: Setup script installs Python dependencies"
 
 # ============================================================
-# R43: Hermes Runtime (VPS2-specific — will fail elsewhere)
+# R43: Hermes Runtime (VPS2-specific — skipped off-VPS2)
 # ============================================================
 echo ""
 echo "═══ R43: Hermes Runtime ═══"
 
-# R43.1: Hermes CLI available
-if command -v hermes &>/dev/null; then
-  pass "R43.1: hermes CLI found"
-else
-  fail "R43.1: hermes CLI not found (VPS2-specific)"
-fi
-
-# R43.2: Hermes config directory exists
 HERMES_DIR="${HERMES_DIR:-$HOME/.hermes}"
-if [ -d "$HERMES_DIR" ]; then
-  pass "R43.2: Hermes config directory exists ($HERMES_DIR)"
-else
-  fail "R43.2: Hermes config not found at $HERMES_DIR (VPS2-specific)"
-fi
-
-# R43.3: SOUL.md deployed to Hermes
-if [ -f "$HERMES_DIR/SOUL.md" ] 2>/dev/null && grep -qi "Cortex" "$HERMES_DIR/SOUL.md" 2>/dev/null; then
-  pass "R43.3: Cortex SOUL.md deployed to Hermes"
-else
-  fail "R43.3: SOUL.md not deployed (run: bash deploy/hermes/setup.sh)"
-fi
-
-# R43.4: Skills deployed to Hermes
 HERMES_SKILLS="$HERMES_DIR/skills"
-if [ -d "$HERMES_SKILLS" ] 2>/dev/null; then
-  SKILL_COUNT=$(find "$HERMES_SKILLS" -name "SKILL.md" -type f 2>/dev/null | wc -l)
-  if [ "$SKILL_COUNT" -ge 3 ]; then
-    pass "R43.4: $SKILL_COUNT skills deployed to Hermes"
-  else
-    fail "R43.4: Only $SKILL_COUNT skills in Hermes (need ≥3)"
-  fi
-else
-  fail "R43.4: No skills directory in Hermes (run: bash deploy/hermes/setup.sh)"
-fi
 
-# R43.5: Hermes can respond (quick test)
-if command -v hermes &>/dev/null; then
+if [ "$IS_VPS2" -eq 1 ]; then
+  # R43.1: Hermes CLI available
+  if command -v hermes &>/dev/null; then
+    pass "R43.1: hermes CLI found"
+  else
+    fail "R43.1: hermes CLI not found"
+  fi
+
+  # R43.2: Hermes config directory exists
+  if [ -d "$HERMES_DIR" ]; then
+    pass "R43.2: Hermes config directory exists ($HERMES_DIR)"
+  else
+    fail "R43.2: Hermes config not found at $HERMES_DIR"
+  fi
+
+  # R43.3: SOUL.md deployed to Hermes
+  if [ -f "$HERMES_DIR/SOUL.md" ] && grep -qi "Cortex" "$HERMES_DIR/SOUL.md" 2>/dev/null; then
+    pass "R43.3: Cortex SOUL.md deployed to Hermes"
+  else
+    fail "R43.3: SOUL.md not deployed (run: bash deploy/hermes/setup.sh)"
+  fi
+
+  # R43.4: Skills deployed to Hermes
+  if [ -d "$HERMES_SKILLS" ]; then
+    SKILL_COUNT=$(find "$HERMES_SKILLS" -name "SKILL.md" -type f 2>/dev/null | wc -l)
+    if [ "$SKILL_COUNT" -ge 3 ]; then
+      pass "R43.4: $SKILL_COUNT skills deployed to Hermes"
+    else
+      fail "R43.4: Only $SKILL_COUNT skills in Hermes (need ≥3)"
+    fi
+  else
+    fail "R43.4: No skills directory in Hermes (run: bash deploy/hermes/setup.sh)"
+  fi
+
+  # R43.5: Hermes can respond (quick test)
   RESPONSE=$(timeout 30 hermes -p "Respond with only: CORTEX_READY" 2>/dev/null || echo "TIMEOUT")
   if echo "$RESPONSE" | grep -qi "CORTEX_READY\|cortex\|ready"; then
     pass "R43.5: Hermes responds as Cortex"
@@ -112,35 +122,46 @@ if command -v hermes &>/dev/null; then
     fail "R43.5: Hermes did not respond as expected"
   fi
 else
-  fail "R43.5: Cannot test — hermes CLI not available"
+  skip "R43.1: hermes CLI presence"
+  skip "R43.2: Hermes config directory at $HERMES_DIR"
+  skip "R43.3: Cortex SOUL.md deployed to Hermes"
+  skip "R43.4: Skills deployed to Hermes"
+  skip "R43.5: Hermes responds as Cortex"
 fi
 
 # ============================================================
-# R44: Browser-Harness Runtime
+# R44: Browser-Harness Runtime (VPS2-specific — skipped off-VPS2)
 # ============================================================
 echo ""
 echo "═══ R44: Browser-Harness Runtime ═══"
 
-# R44.1: browser-harness directory exists
 BH_DIR="${BROWSER_HARNESS_DIR:-$HOME/browser-harness}"
-if [ -d "$BH_DIR" ]; then
-  pass "R44.1: browser-harness directory exists"
-else
-  fail "R44.1: browser-harness not found at $BH_DIR"
-fi
 
-# R44.2: Python dependencies installed
-if python3 -c "import browser_harness" 2>/dev/null || python3 -c "import cdp_use" 2>/dev/null; then
-  pass "R44.2: browser-harness Python dependencies installed"
-else
-  fail "R44.2: browser-harness dependencies not installed"
-fi
+if [ "$IS_VPS2" -eq 1 ]; then
+  # R44.1: browser-harness directory exists
+  if [ -d "$BH_DIR" ]; then
+    pass "R44.1: browser-harness directory exists"
+  else
+    fail "R44.1: browser-harness not found at $BH_DIR"
+  fi
 
-# R44.3: Chrome/Chromium available
-if command -v google-chrome &>/dev/null || command -v chromium-browser &>/dev/null || command -v chromium &>/dev/null; then
-  pass "R44.3: Chrome/Chromium available"
+  # R44.2: Python dependencies installed
+  if python3 -c "import browser_harness" 2>/dev/null || python3 -c "import cdp_use" 2>/dev/null; then
+    pass "R44.2: browser-harness Python dependencies installed"
+  else
+    fail "R44.2: browser-harness dependencies not installed"
+  fi
+
+  # R44.3: Chrome/Chromium available
+  if command -v google-chrome &>/dev/null || command -v chromium-browser &>/dev/null || command -v chromium &>/dev/null; then
+    pass "R44.3: Chrome/Chromium available"
+  else
+    fail "R44.3: No Chrome/Chromium found"
+  fi
 else
-  fail "R44.3: No Chrome/Chromium found"
+  skip "R44.1: browser-harness directory at $BH_DIR"
+  skip "R44.2: browser-harness Python dependencies"
+  skip "R44.3: Chrome/Chromium available"
 fi
 
 # ============================================================
@@ -180,11 +201,19 @@ check_file_contains "deploy/hermes/SOUL.md" "SENSE.*PREDICT\|PREDICT.*COMPARE\|A
 # ============================================================
 echo ""
 echo "════════════════════════════════════════"
-echo "  PHASE 10 RESULTS: $PASS passed, $FAIL failed ($TOTAL total)"
+if [ "$SKIP" -gt 0 ]; then
+  echo "  PHASE 10 RESULTS: $PASS passed, $FAIL failed, $SKIP skipped ($TOTAL total)"
+else
+  echo "  PHASE 10 RESULTS: $PASS passed, $FAIL failed ($TOTAL total)"
+fi
 echo "════════════════════════════════════════"
 
 if [ "$FAIL" -eq 0 ]; then
-  echo "  ✓ ALL PHASE 10 REQUIREMENTS PASS"
+  if [ "$SKIP" -gt 0 ]; then
+    echo "  ✓ ALL RUNNABLE PHASE 10 CHECKS PASS ($SKIP VPS2-only skipped)"
+  else
+    echo "  ✓ ALL PHASE 10 REQUIREMENTS PASS"
+  fi
   exit 0
 else
   echo "  ✗ $FAIL PHASE 10 REQUIREMENT(S) PENDING"
