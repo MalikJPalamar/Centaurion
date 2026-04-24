@@ -74,7 +74,7 @@ echo "▸ Step 3: Omega Extensions"
 EXT_DIR="$HERMES_DIR/extensions"
 mkdir -p "$EXT_DIR"
 
-for ext in centaurion_core routing_gate; do
+for ext in centaurion_core routing_gate memory_bridge venture_tagger dev_loop; do
   if [ -f "$REPO_DIR/omega/extensions/${ext}.py" ]; then
     cp "$REPO_DIR/omega/extensions/${ext}.py" "$EXT_DIR/${ext}.py"
     echo "  ✓ ${ext}.py"
@@ -97,15 +97,17 @@ for skill_dir in "$REPO_DIR"/skills/*/; do
 done
 echo ""
 
-# ── Step 5: Deploy Browser-Harness Tool ──────────────────
-echo "▸ Step 5: Browser-Harness"
+# ── Step 5: Deploy Tools ──────────────────────────────────
+echo "▸ Step 5: Omega Tools"
 TOOLS_DIR="$HERMES_DIR/tools"
 mkdir -p "$TOOLS_DIR"
 
-if [ -f "$REPO_DIR/omega/tools/browser_harness.py" ]; then
-  cp "$REPO_DIR/omega/tools/browser_harness.py" "$TOOLS_DIR/browser_harness.py"
-  echo "  ✓ browser_harness.py → $TOOLS_DIR/"
-fi
+for tool in browser_harness wiki_manager; do
+  if [ -f "$REPO_DIR/omega/tools/${tool}.py" ]; then
+    cp "$REPO_DIR/omega/tools/${tool}.py" "$TOOLS_DIR/${tool}.py"
+    echo "  ✓ ${tool}.py"
+  fi
+done
 
 if [ -d "$BH_DIR/.git" ]; then
   echo "  ✓ browser-harness already cloned at $BH_DIR"
