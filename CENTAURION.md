@@ -1,6 +1,6 @@
-# OMEGA — Centaurion Rebuilt
+# CENTAURION — Centaurion Rebuilt
 
-> Codename: Omega
+> Codename: Centaurion
 > What: Centaurion's identity + framework + routing, running on Hermes + browser-harness + Pi infrastructure
 > Why: Self-improving agent with principled decision architecture. No one else has this combination.
 
@@ -11,16 +11,16 @@
 │                    CENTAURION LAYER                       │
 │  Three Laws · Precision Ratio · Active Inference Loop    │
 │  TELOS Identity · Routing Gate · Cross-Venture Context   │
-│  This is what makes Omega different from every other     │
+│  This is what makes Centaurion different from every other     │
 │  agent — principled governance, not ad-hoc prompting.    │
 ├─────────────────────────────────────────────────────────┤
-│                    OMEGA BRIDGE                           │
-│  omega/extensions/centaurion-core.py  — Identity loader  │
-│  omega/extensions/routing-gate.py     — Classification   │
-│  omega/extensions/memory-bridge.py    — Supermemory sync │
-│  omega/extensions/venture-tagger.py   — AOB/BB/C tagging │
-│  omega/skills/                        — Centaurion skills │
-│  omega/SOUL.md                        — Cortex for Hermes│
+│                    CENTAURION BRIDGE                           │
+│  centaurion/extensions/centaurion-core.py  — Identity loader  │
+│  centaurion/extensions/routing-gate.py     — Classification   │
+│  centaurion/extensions/memory-bridge.py    — Supermemory sync │
+│  centaurion/extensions/venture-tagger.py   — AOB/BB/C tagging │
+│  centaurion/skills/                        — Centaurion skills │
+│  centaurion/SOUL.md                        — Cortex for Hermes│
 ├─────────────────────────────────────────────────────────┤
 │                    HERMES ENGINE                          │
 │  Self-improving skills · SQLite persistent memory        │
@@ -49,7 +49,7 @@
 - `skills/routing-gate/` → Becomes a Hermes extension (tool_call interceptor)
 - `CLAUDE.md` → Stays for Claude Code sessions (coexists)
 - Three Laws enforcement at every decision point
-- TDD test suite (keeps running, extended for Omega)
+- TDD test suite (keeps running, extended for Centaurion)
 
 ### Hermes (the engine — INTEGRATED)
 - Agent loop: synchronous orchestration with tool dispatch
@@ -77,7 +77,7 @@
 ```
 centaurion/                          # Existing repo
 ├── CLAUDE.md                        # Claude Code schema (kept)
-├── OMEGA.md                         # This file
+├── CENTAURION.md                         # This file
 ├── identity/                        # TELOS (kept, source of truth)
 ├── framework/                       # Theoretical core (kept)
 ├── agents/                          # Personalities (kept)
@@ -85,11 +85,11 @@ centaurion/                          # Existing repo
 ├── memory/                          # Config pointers (kept)
 ├── docs/                            # Wikis (kept)
 │
-├── omega/                           # NEW — The integration layer
+├── centaurion/                           # NEW — The integration layer
 │   ├── SOUL.md                      # Cortex personality for Hermes
 │   ├── MEMORY.md                    # Persistent facts for Hermes
 │   ├── USER.md                      # Malik profile for Hermes
-│   ├── config.yaml                  # Hermes config with Omega extensions
+│   ├── config.yaml                  # Hermes config with Centaurion extensions
 │   │
 │   ├── extensions/                  # Hermes extensions (Python)
 │   │   ├── centaurion_core.py       # Loads identity on session_start
@@ -108,7 +108,7 @@ centaurion/                          # Existing repo
 │   │   ├── browser_harness.py       # Registers browser-harness as tool
 │   │   └── wiki_manager.py          # CRUD for venture wikis
 │   │
-│   └── install.sh                   # One-command Omega setup
+│   └── install.sh                   # One-command Centaurion setup
 │
 ├── deploy/                          # Deployment configs (kept + extended)
 │   ├── vps1/                        # VPS1: dev loop, NanoClaw
@@ -116,25 +116,25 @@ centaurion/                          # Existing repo
 │   ├── hermes/                      # Hermes config
 │   └── browser-harness/             # Browser setup
 │
-└── tests/                           # TDD suite (extended for Omega)
+└── tests/                           # TDD suite (extended for Centaurion)
     ├── verify-core-loop.sh          # Phase 1 (kept)
     ├── ...                          # Phases 2-10 (kept)
-    └── verify-omega.sh              # Phase 11: Omega integration
+    └── verify-centaurion.sh              # Phase 11: Centaurion integration
 ```
 
 ## Implementation Plan
 
 ### Sprint 1: The Bridge (This Session)
-1. Create `omega/` directory structure
-2. Build `omega/SOUL.md` — Cortex for Hermes (enhanced from deploy/hermes/)
-3. Build `omega/extensions/centaurion_core.py` — loads identity on session_start
-4. Build `omega/extensions/routing_gate.py` — intercepts tool calls
-5. Build `omega/tools/browser_harness.py` — registers browser as Hermes tool
+1. Create `centaurion/` directory structure
+2. Build `centaurion/SOUL.md` — Cortex for Hermes (enhanced from deploy/hermes/)
+3. Build `centaurion/extensions/centaurion_core.py` — loads identity on session_start
+4. Build `centaurion/extensions/routing_gate.py` — intercepts tool calls
+5. Build `centaurion/tools/browser_harness.py` — registers browser as Hermes tool
 6. Write Phase 11 TDD tests
-7. Push to omega/rebuild branch
+7. Push to centaurion/rebuild branch
 
 ### Sprint 2: Engine Integration (Next Session)
-1. Deploy to VPS2: install Omega extensions in Hermes
+1. Deploy to VPS2: install Centaurion extensions in Hermes
 2. Test: `hermes` → responds as Cortex with Three Laws
 3. Test: Routing Gate intercepting tool calls
 4. Test: browser-harness accessible as a tool
@@ -152,14 +152,14 @@ centaurion/                          # Existing repo
 3. Enable skill improvement during use
 4. First autoresearch run through Hermes (not bash script)
 
-## What Makes Omega Different
+## What Makes Centaurion Different
 
 Every other agent framework is either:
 - **Powerful but unprincipled** (Hermes, AutoGPT) — acts without governance
 - **Principled but static** (Centaurion today) — governs but doesn't self-improve
 - **Capable but narrow** (browser-harness) — does one thing well
 
-Omega is the first system that combines:
+Centaurion is the first system that combines:
 1. **Principled governance** (Three Laws, Routing Gate, Precision Ratio)
 2. **Self-improving execution** (Hermes skill creation + improvement)
 3. **Persistent identity** (TELOS across all sessions and platforms)

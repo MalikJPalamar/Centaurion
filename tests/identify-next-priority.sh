@@ -18,7 +18,7 @@ PHASE_NAMES=(
   "Cross-Venture Coherence"
   "Production Deployment"
   "Operational Automation"
-  "Hermes Integration"
+  "Centaurion Integration"
 )
 PHASE_SCRIPTS=(
   "tests/verify-core-loop.sh"
