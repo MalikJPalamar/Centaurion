@@ -98,7 +98,7 @@ volumes:
 def get_setup_instructions():
     """Return setup instructions for Graphiti + Neo4j."""
     return """
-# Graphiti + Neo4j Setup for Centaurion Centaurion
+# Graphiti + Neo4j Setup for Centaurion
 
 ## Infrastructure Impact
   - RAM: ~512MB-1GB for Neo4j (your VPS2 has 56% memory used, should be fine)

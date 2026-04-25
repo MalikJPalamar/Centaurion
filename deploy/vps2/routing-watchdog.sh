@@ -82,9 +82,9 @@ alert() {
 kill_hermes() {
   log "⛔ KILLING HERMES — governance violation detected"
   # Kill all Hermes processes
-  pkill -f "hermes.*agent\|hermes_cli" 2>/dev/null || true
+  pkill -f "hermes.*agent" || pkill -f "hermes_cli" 2>/dev/null || true
   # Kill the gateway too
-  pkill -f "hermes.*gateway" 2>/dev/null || true
+  pkill -f "hermes.*gateway" || true 2>/dev/null || true
   alert "P0" "Hermes killed by watchdog. Routing Gate violation. Manual restart required after investigation."
 }
 
@@ -141,14 +141,14 @@ validate_entry() {
 # ── Heartbeat check ──────────────────────────────────────
 check_routing_gate_alive() {
   # If Hermes is running, routing-log should have entries from the last hour
-  if pgrep -f "hermes.*agent\|hermes_cli" >/dev/null 2>&1; then
+  if pgrep -f "hermes.*agent" || pgrep -f "hermes_cli" >/dev/null 2>&1; then
     if [ -f "$ROUTING_LOG" ]; then
       local last_entry_time=$(tail -1 "$ROUTING_LOG" 2>/dev/null | grep -o '"timestamp": *"[^"]*"' | sed 's/.*: *"//;s/"//')
       if [ -z "$last_entry_time" ]; then
         return 0  # No entries yet, that's ok on startup
       fi
       # Check if Hermes has been running >10 min without any routing log entry
-      local hermes_uptime=$(ps -o etimes= -p $(pgrep -f "hermes.*agent\|hermes_cli" | head -1) 2>/dev/null | tr -d ' ')
+      local hermes_uptime=$(ps -o etimes= -p $(pgrep -f "hermes.*agent" || pgrep -f "hermes_cli" | head -1) 2>/dev/null | tr -d ' ')
       if [ "${hermes_uptime:-0}" -gt 600 ]; then
         # Hermes running >10 min — check log freshness
         local log_age=$(( $(date +%s) - $(stat -c %Y "$ROUTING_LOG" 2>/dev/null || echo "0") ))
@@ -196,8 +196,9 @@ while true; do
           VIOLATION_COUNT=$((VIOLATION_COUNT + 1))
           log "Violation #$VIOLATION_COUNT detected"
 
-          # On first P0 violation: kill immediately
-          if echo "$entry" | grep -q "BLOCKED"; then
+          # On P0: blocked tool passed as autonomous → kill immediately
+          local task_field=$(echo "$entry" | grep -o '"task": *"[^"]*"' | sed 's/.*: *"//;s/"//')
+          if echo "$task_field" | grep -qiE "$BLOCKED_PATTERNS" && echo "$entry" | grep -q '"ai_autonomous"'; then
             kill_hermes
           fi
 

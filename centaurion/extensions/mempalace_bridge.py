@@ -129,7 +129,7 @@ def _detect_venture(text):
 
 def get_setup_instructions():
     return """
-# MemPalace Setup for Centaurion Centaurion
+# MemPalace Setup for Centaurion
 
 ## Already Done
   pip install mempalace ✓ (ChromaDB + SQLite included)
