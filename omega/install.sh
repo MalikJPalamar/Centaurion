@@ -74,7 +74,7 @@ echo "▸ Step 3: Omega Extensions"
 EXT_DIR="$HERMES_DIR/extensions"
 mkdir -p "$EXT_DIR"
 
-for ext in centaurion_core routing_gate memory_bridge venture_tagger dev_loop; do
+for ext in centaurion_core routing_gate memory_bridge venture_tagger dev_loop honcho_bridge graphiti_bridge infranodus_bridge; do
   if [ -f "$REPO_DIR/omega/extensions/${ext}.py" ]; then
     cp "$REPO_DIR/omega/extensions/${ext}.py" "$EXT_DIR/${ext}.py"
     echo "  ✓ ${ext}.py"
