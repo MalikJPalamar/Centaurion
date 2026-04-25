@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════
-# OMEGA Installer — Centaurion + Hermes + Browser-Harness
+# CENTAURION Installer — Centaurion + Hermes + Browser-Harness
 # ═══════════════════════════════════════════════════════════
 #
-# Deploys the Omega stack: Centaurion's identity layer on top of
+# Deploys the Centaurion stack: Centaurion's identity layer on top of
 # Hermes's self-improving engine with browser-harness automation.
 #
 # Prerequisites:
@@ -12,7 +12,7 @@
 #   - Centaurion repo cloned
 #
 # Usage:
-#   cd ~/Centaurion && bash omega/install.sh
+#   cd ~/Centaurion && bash centaurion/install.sh
 #
 # ═══════════════════════════════════════════════════════════
 
@@ -24,7 +24,7 @@ BH_REPO="https://github.com/MalikJPalamar/browser-harness.git"
 BH_DIR="${BROWSER_HARNESS_DIR:-$HOME/browser-harness}"
 
 echo "═══════════════════════════════════════════════════"
-echo "  OMEGA Installer — Centaurion × Hermes × Browser"
+echo "  CENTAURION Installer — Centaurion × Hermes × Browser"
 echo "═══════════════════════════════════════════════════"
 echo ""
 
@@ -48,11 +48,11 @@ echo ""
 
 # ── Step 2: Deploy Cortex Identity ────────────────────────
 echo "▸ Step 2: Cortex Identity (SOUL.md + MEMORY.md)"
-cp "$REPO_DIR/omega/SOUL.md" "$HERMES_DIR/SOUL.md"
+cp "$REPO_DIR/centaurion/SOUL.md" "$HERMES_DIR/SOUL.md"
 echo "  ✓ SOUL.md → $HERMES_DIR/SOUL.md"
 
-if [ -f "$REPO_DIR/omega/MEMORY.md" ]; then
-  cp "$REPO_DIR/omega/MEMORY.md" "$HERMES_DIR/MEMORY.md"
+if [ -f "$REPO_DIR/centaurion/MEMORY.md" ]; then
+  cp "$REPO_DIR/centaurion/MEMORY.md" "$HERMES_DIR/MEMORY.md"
 else
   cp "$REPO_DIR/deploy/hermes/MEMORY.md" "$HERMES_DIR/MEMORY.md"
 fi
@@ -70,13 +70,13 @@ echo "  ✓ USER.md → $HERMES_DIR/USER.md"
 echo ""
 
 # ── Step 3: Deploy Extensions ────────────────────────────
-echo "▸ Step 3: Omega Extensions"
+echo "▸ Step 3: Centaurion Extensions"
 EXT_DIR="$HERMES_DIR/extensions"
 mkdir -p "$EXT_DIR"
 
 for ext in centaurion_core routing_gate memory_bridge venture_tagger dev_loop honcho_bridge graphiti_bridge infranodus_bridge mempalace_bridge; do
-  if [ -f "$REPO_DIR/omega/extensions/${ext}.py" ]; then
-    cp "$REPO_DIR/omega/extensions/${ext}.py" "$EXT_DIR/${ext}.py"
+  if [ -f "$REPO_DIR/centaurion/extensions/${ext}.py" ]; then
+    cp "$REPO_DIR/centaurion/extensions/${ext}.py" "$EXT_DIR/${ext}.py"
     echo "  ✓ ${ext}.py"
   fi
 done
@@ -98,13 +98,13 @@ done
 echo ""
 
 # ── Step 5: Deploy Tools ──────────────────────────────────
-echo "▸ Step 5: Omega Tools"
+echo "▸ Step 5: Centaurion Tools"
 TOOLS_DIR="$HERMES_DIR/tools"
 mkdir -p "$TOOLS_DIR"
 
 for tool in browser_harness wiki_manager; do
-  if [ -f "$REPO_DIR/omega/tools/${tool}.py" ]; then
-    cp "$REPO_DIR/omega/tools/${tool}.py" "$TOOLS_DIR/${tool}.py"
+  if [ -f "$REPO_DIR/centaurion/tools/${tool}.py" ]; then
+    cp "$REPO_DIR/centaurion/tools/${tool}.py" "$TOOLS_DIR/${tool}.py"
     echo "  ✓ ${tool}.py"
   fi
 done
@@ -127,7 +127,7 @@ echo "▸ Step 6: Environment"
 ENVFILE="$HERMES_DIR/.env"
 if [ ! -f "$ENVFILE" ]; then
   cat > "$ENVFILE" << 'ENVEOF'
-# Omega Environment
+# Centaurion Environment
 CENTAURION_REPO=$HOME/Centaurion
 BROWSER_HARNESS_DIR=$HOME/browser-harness
 ENVEOF
@@ -168,7 +168,7 @@ echo "    ✓ $SKILL_COUNT skills deployed"
 
 echo ""
 echo "═══════════════════════════════════════════════════"
-echo "  OMEGA Installed ($PASS/$CHECKS core files)"
+echo "  CENTAURION Installed ($PASS/$CHECKS core files)"
 echo "═══════════════════════════════════════════════════"
 echo ""
 echo "  Test it:"

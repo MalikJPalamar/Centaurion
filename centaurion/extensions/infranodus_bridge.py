@@ -137,7 +137,7 @@ def get_mcp_config():
 def get_setup_instructions():
     """Return setup instructions for InfraNodus."""
     return """
-# InfraNodus Setup for Centaurion Omega
+# InfraNodus Setup for Centaurion
 
 ## Option A: Cloud (Fastest)
   1. Sign up at infranodus.com (free tier: 3 graphs)

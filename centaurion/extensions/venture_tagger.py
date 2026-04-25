@@ -36,7 +36,7 @@ VENTURE_KEYWORDS = {
     "centaurion": [
         "centaurion", "exo-cortex", "three laws", "precision ratio",
         "active inference", "routing gate", "free energy", "markov",
-        "cortex", "nova", "daemon", "omega", "telos", "hermes agent",
+        "cortex", "nova", "daemon", "telos", "hermes agent",
         "dev loop", "framework", "11 levels",
     ],
 }
