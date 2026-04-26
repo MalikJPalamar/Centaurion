@@ -479,7 +479,217 @@ The single most future-proof thing about Centaurion is the **Routing Gate as cod
 
 ---
 
+# Part 3 · Rubric unpacking + Comet & Kimi K2.6 comparison
+
+> Follow-up requests: (a) define the agency and future-proofing axes operationally and show the evidence behind each score; (b) examine Agent Zero's "computer-as-tool + Docker" pattern and compare it to Perplexity Comet and Moonshot Kimi K2.6, which appear to offer superior agentic execution while preserving safety.
+
+---
+
+## 15 · Agency rubric — 8 axes unpacked
+
+**Scoring scale (0–3):**
+- **0** = Absent. Capability not present.
+- **1** = Reactive / shallow. Capability present but only when explicitly invoked, narrow, or stub-quality.
+- **2** = Operational. Capability present with depth; recognizable as a real feature.
+- **3** = First-class / structural. Capability is core to the design and used by default.
+
+| # | Axis | Operational definition |
+|---|---|---|
+| A1 | **Reactivity** | Can it respond meaningfully to a user-issued task? |
+| A2 | **Proactivity** | Does it initiate work without an immediate user prompt (cron, watchers, scheduled scans)? |
+| A3 | **Autonomy** | Can it complete tasks end-to-end without human-in-the-loop confirmation? |
+| A4 | **Self-improvement** | Does the system get measurably better over time from outcome data, not from re-prompting? |
+| A5 | **Self-modification** | Can it write/modify executable code that becomes part of its own runtime? |
+| A6 | **Goal-orientation** | Does it pursue long-horizon objectives across many sessions, not just single-task scope? |
+| A7 | **Multi-agent coordination** | Does it coordinate with other agents to solve sub-tasks? |
+| A8 | **Embodiment** | How many distinct execution substrates can it run on? |
+
+### 15.1 Per-axis evidence
+
+| Axis | Centaurion | score | Agent Zero | score |
+|---|---|:-:|---|:-:|
+| A1 Reactivity | Cortex/Nova/Daemon respond to task instructions; full SKILL.md library invoked on demand | **3** | Agent 0 responds to chat; tools invoked dynamically | **3** |
+| A2 Proactivity | `skills/autoresearch/` runs overnight; `skills/sa-scan/` scheduled stock scans; `skills/weekly-review/`; `dev_loop.py` is a Hermes cron task; `workflows/feedback-capture.md` automation | **2** | No scheduler in stock framework; agent waits for user input. Subordinate spawning is reactive not proactive | **1** |
+| A3 Autonomy | Bounded by Routing Gate. Most tasks (low-stakes/reversible) execute end-to-end without surfacing | **2** | Unbounded — explicit "Can be dangerous!" warning. Agent acts until user intervenes | **3** |
+| A4 Self-improvement | `memory/state/ratings.jsonl` + `routing-log.jsonl` feed threshold tuning; outcome data → policy update; documented in `framework/routing-gate.md` | **3** | Memorizes prior solutions for faster recall on similar tasks; no closed-loop policy update | **2** |
+| A5 Self-modification | None today (skills are hand-authored). Becomes **3** after §11 (dynamic tool forge with sandbox + promotion) | **0 → 3** | Writes Python at runtime via terminal tool; no formal lifecycle but unlimited surface | **3** |
+| A6 Goal-orientation | `identity/GOALS.md` + `identity/MISSION.md` loaded every session; venture tagging persists context across tasks; long-horizon TELOS pursuit is L0 prior | **3** | Task-scoped; no persistent goal model across sessions beyond memorized solutions | **1** |
+| A7 Multi-agent | Federated: Cortex (reasoning) ↔ Nova (sensing) ↔ Daemon (memory) across runtimes; coordinated via shared memory | **3** | Recursive: Agent N spawns Agent N+1 for sub-tasks; parent-child message passing. Deep but homogeneous | **3** |
+| A8 Embodiment | Verified runtimes: Claude Code, OpenClaw, Hermes, Pi, Agent Zero (`deploy/agent-zero/`), browser-harness — 6 substrates with same SKILL.md | **3** | Docker container only | **1** |
+
+### 15.2 Totals
+
+| | Today | After §11 ships |
+|---|:-:|:-:|
+| Centaurion | 19 | **22** |
+| Agent Zero | 17 | 17 |
+
+Centaurion's *bounded* autonomy (A3=2 vs A2.AZ=3) is intentional, not a deficit. Agent Zero's high autonomy carries the explicit cost it acknowledges: it can be dangerous.
+
+---
+
+## 16 · Future-proofing rubric — 10 axes unpacked
+
+**Scoring:** Winner per axis (Centaurion / Agent Zero / tie). Reasoning shows the durability mechanism.
+
+| # | Axis | Operational definition | Why it matters in 2027–2030 |
+|---|---|---|---|
+| F1 | **LLM provider lock-in** | How tightly is the system bound to one provider? | Provider economics + capability rankings shift constantly |
+| F2 | **Standards alignment** | How many open standards does it adopt (MCP, SKILL.md, OpenAI API shape, etc.)? | Standards reduce migration cost when ecosystem shifts |
+| F3 | **Substrate portability** | How many execution targets work without code change? | Edge agents, mobile, embedded — substrate diversity is growing |
+| F4 | **Theoretical durability** | Is the foundation a principle that survives model generations? | Ad-hoc patterns rot; principles compound |
+| F5 | **Capability-shift adaptation** | When models get smarter, does the system absorb the gain or get bypassed? | Each generation reshapes "what's worth automating" |
+| F6 | **Memory portability** | Can memory move between deployments without loss? | Lock-in to a memory store is silent vendor capture |
+| F7 | **Spec robustness** | Is there a fixed spec that can be audited/versioned? | Required for regulated deployments + reproducibility |
+| F8 | **Community resilience** | Does the project survive its lead maintainer leaving? | Bus-factor risk |
+| F9 | **Documentation maturity** | Can a stranger onboard from docs alone? | Predicts adoption + contribution |
+| F10 | **Vendor lock-in risk** | Aggregate of F1+F3+F6 — how trapped are users? | Strategic optionality |
+
+### 16.1 Per-axis evidence
+
+| Axis | Centaurion evidence | Agent Zero evidence | Winner |
+|---|---|---|---|
+| F1 LLM lock-in | `OPENAI_API_KEY`, `ANTHROPIC_API_KEY` env-var swappable; SKILL.md is provider-agnostic | Multi-provider via config; provider-agnostic | **tie** |
+| F2 Standards | SKILL.md (Anthropic) + MCP server (Daemon) + JSON memory pointers + Three Laws as informal spec | SKILL.md (Anthropic) + Docker + Playwright | **Centaurion** (more standards) |
+| F3 Substrate portability | 6 verified runtimes (Claude Code, OpenClaw, Hermes, Pi, Agent Zero, browser-harness) | Docker only (1) | **Centaurion** |
+| F4 Theoretical durability | Free Energy Principle is 20+ years old, generation-independent | "Organic"/prompt-driven — depends on current model behavior | **Centaurion** |
+| F5 Capability-shift adaptation | Skill auto-creation (after §11) + threshold tuning absorb new capability | Dynamic tool creation absorbs new capability natively (today) | **tie after §11** |
+| F6 Memory portability | JSON-config service swap; memory layers are pointers not data | Internal contextual store; harder to extract | **Centaurion** |
+| F7 Spec robustness | Three Laws + Routing Gate inequality + 7-step loop = auditable contract | No fixed spec by design — emergent from prompts | **Centaurion** |
+| F8 Community resilience | Single-author bus factor | 17.3k★ but lead-maintainer bus factor too | **Agent Zero** |
+| F9 Documentation maturity | Internal-density; assumes reader knows TELOS / FEP / AQAL | Public install guides, troubleshooting, video tutorials | **Agent Zero** |
+| F10 Vendor lock-in | Low (open standards + multi-runtime + portable memory) | Low (open-source, but Docker-coupled and single-runtime) | **Centaurion** |
+
+### 16.2 Totals
+
+| | Wins | Ties |
+|---|:-:|:-:|
+| Centaurion | **7** | 2 |
+| Agent Zero | **2** | 2 |
+
+The single most future-proof property is **F4 + F7 + F10 combined**: theoretical foundation + auditable spec + low lock-in. That cluster is what makes a system survive an ecosystem shift, not just a model upgrade.
+
+---
+
+## 17 · Agent Zero's "computer as tool" pattern — concrete unpacking
+
+> User intuition: Comet and Kimi seem superior for agentic execution while still safe through Docker. Let's verify this claim against what each system actually does.
+
+### 17.1 What Agent Zero actually does
+
+From the README + architecture investigation:
+
+```
+┌────────────────────────────────────────────────────────────┐
+│  HOST MACHINE                                              │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  DOCKER CONTAINER  (agent0ai/agent-zero image)       │  │
+│  │  ┌────────────────────────────────────────────────┐  │  │
+│  │  │  Agent Zero framework (Python)                 │  │  │
+│  │  │  ├── Web UI (port 80)                          │  │  │
+│  │  │  ├── Prompt loader → LLM provider              │  │  │
+│  │  │  ├── Tool: code_execution → exec'd IN-CONTAINER│  │  │
+│  │  │  ├── Tool: terminal     → bash IN-CONTAINER    │  │  │
+│  │  │  ├── Tool: browser      → Playwright Chromium  │  │  │
+│  │  │  └── Subordinate agents → spawned IN-CONTAINER │  │  │
+│  │  └────────────────────────────────────────────────┘  │  │
+│  └──────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────┘
+```
+
+**Key fact:** the Docker container is the *whole framework's* runtime, not a separate per-task sandbox. Code the agent writes runs in the **same** container as the agent itself — there is no inner sandbox boundary. Isolation is a single, coarse host-vs-container line.
+
+**Implications:**
+- **Pro:** Simple, explicit, easy to reason about. The host is safe.
+- **Con:** A compromised tool can compromise the agent (within-container blast radius is total). Memory + credentials + browser cookies all share the same trust domain.
+- **Con:** Persistence: anything the agent installs/writes persists in the container. Useful, but also means a poisoned step poisons future steps.
+
+### 17.2 Perplexity Comet — different pattern
+
+| Component | Where it runs |
+|---|---|
+| Perplexity backend | Perplexity cloud (Opus 4.5 reasoning) |
+| Browser UI | Local Chromium fork |
+| Browser automation | Custom Chrome Extension(s) controlling the actual browser |
+| Communication | SSE (sidepanel) + WebSocket (automation) |
+
+**Comet is not Docker-based.** It runs the agent inside the user's *real* browser, with the user's real cookies and sessions. This is the source of both its power (can do real shopping/checkout/email tasks) and its danger.
+
+**Verified safety profile (2026):** Comet has had visible security stumbles — the [Zenity reverse-engineering analysis](https://labs.zenity.io/p/perplexity-comet-a-reversing-story) and [coverage of 2026-Q1 instability](https://mwm.ai/articles/comet-ai-browser-viral-sensation-2026-03-23) show prompt-injection and session-hijack vectors because there is **no sandbox layer** between the agentic intent and the user's authenticated browser session.
+
+**Verdict on the user's intuition:** Comet is *not* safer than Agent Zero through "Docker containers" — it doesn't use Docker at all. Its execution power comes from running directly in the user's authenticated browser, which is **less** safe than Agent Zero's container, not more. Comet is more capable for browser tasks; Agent Zero is more isolated.
+
+### 17.3 Moonshot Kimi K2.6 — yet another pattern
+
+Kimi K2.6 (released 2026-04-20) is fundamentally a **model + coordination protocol**, not a runtime. It provides:
+
+- 1T-param MoE backbone (32B active, 384 experts, 8 activated/token, MLA attention)
+- Agent swarm scaling: 300 sub-agents, 4,000 coordinated steps
+- **Claw Groups** (research preview): heterogeneous external agents/humans collaborate as peers in a shared operational space — each carrying its own toolkits, skills, persistent memory contexts, deployable on laptops, mobile, or cloud
+
+**Where the sandbox is:** wherever the user puts it. Each Claw Group participant brings its own execution substrate. Kimi itself is BYO-runtime — it doesn't ship a Docker isolation layer the way Agent Zero does. Safety is the deployer's responsibility.
+
+**Verdict on the user's intuition:** Kimi K2.6's agentic execution power is real (300-agent swarm is genuinely impressive), but the safety story is **"bring your own sandbox"**, not "Docker container included." Where users wrap Kimi in Docker, isolation is comparable to Agent Zero. Where they don't, it's worse.
+
+### 17.4 Side-by-side — execution & safety
+
+| Property | Centaurion | Agent Zero | Comet | Kimi K2.6 |
+|---|---|---|---|---|
+| Where the agent runs | 6 runtimes (skill-portable) | Docker container | User's actual Chromium | BYO substrate (laptop/mobile/cloud) |
+| Code execution sandbox | None today; Docker after §11 | Docker (same as agent) | None — runs in real browser | BYO |
+| Browser execution | `browser-harness` (self-healing) | Playwright in container | Native Chromium (user's actual session) | BYO |
+| Network isolation | Per-runtime | Container-level | None — uses user's real network/cookies | BYO |
+| Per-task isolation | No (shared agent state) | No (shared container) | No (shared browser session) | No (BYO) |
+| Safety primitive | **Routing Gate (code)** | Container boundary | Verification-first prompts | None built-in |
+| Worst-case blast radius | Bounded by Gate refusal | Within-container | User's full digital identity | Wherever deployed |
+
+### 17.5 Reframing the user's claim
+
+> *"Perplexity Comet and Kimi computer seem superior for agentic execution while still safe through docker containers"*
+
+This claim conflates three things. Disentangling:
+
+| Claim | Reality |
+|---|---|
+| "Superior for agentic execution" | **Partly true.** Comet wins on browser tasks because it's *in* the browser. Kimi wins on parallel sub-agent throughput (300 agents). Agent Zero is more general-purpose than either. |
+| "Safe through Docker containers" | **False for Comet** (no Docker). **Conditional for Kimi** (BYO). **True for Agent Zero** (Docker is the safety primitive). |
+| "Superior to Centaurion + Agent Zero" | **No** — they're different design centers. Centaurion + Agent Zero is constitution + runtime. Comet is a browser-embedded agent. Kimi is a model + swarm protocol. |
+
+### 17.6 What Centaurion can actually borrow
+
+| From | What | How |
+|---|---|---|
+| Agent Zero | Docker-based code-execution sandbox | Adopt for §11 dynamic tool forge tier 2 (already recommended in §11.5) |
+| Comet | In-browser execution model | Already partial via `browser-harness` (`deploy/browser-harness/`) — could extend to authenticated sessions for specific high-value workflows, *with* Routing Gate surfacing for any cookie-using action |
+| Kimi K2.6 | Agent-swarm pattern (N sub-agents, coordinated) | Cortex's federation is currently 3 named roles. A swarm pattern could decompose research/codegen/ops into parallel sub-agents — but only worth it once dynamic tool creation lands. Sequence: §11 first, swarm later |
+| Kimi K2.6 | **Claw Groups protocol** | Most interesting borrow. Heterogeneous agents + humans as peers in a shared operational space maps almost directly onto the Centaurion Coupling Law. Worth tracking as a potential interop standard. |
+
+---
+
+## 18 · Updated open questions
+
+7. After §11 ships (dynamic tool forge with Docker sandbox), is it worth exploring a **swarm pattern** (Kimi-style sub-agent decomposition) for Cortex, or does the federated Cortex/Nova/Daemon model already cover that need? *(Recommendation: ship §11 first, gather operational data for 60 days, then evaluate. The federated model may already be sufficient at single-operator scale.)*
+8. Should Centaurion track **Claw Groups** (Kimi K2.6's interop protocol) as a potential future integration target? *(Recommendation: yes — the principle (heterogeneous agents/humans as peers in shared operational space) is structurally compatible with the Coupling Law.)*
+
+---
+
 ## Sources
 
-- Centaurion: `CENTAURION.md`, `README.md`, `framework/three-laws.md`, `framework/active-inference-loop.md`, `framework/routing-gate.md`, `agents/Cortex.md`, `skills/*/SKILL.md`, `centaurion/extensions/routing_gate.py`, `memory/*.json`, `deploy/agent-zero/system-prompt.md`
-- Agent Zero: <https://github.com/agent0ai/agent-zero> (README, repo metadata as of 2026-04-26)
+### Centaurion (local)
+- `CENTAURION.md`, `README.md`, `framework/three-laws.md`, `framework/active-inference-loop.md`, `framework/routing-gate.md`, `agents/Cortex.md`, `skills/*/SKILL.md`, `centaurion/extensions/routing_gate.py`, `memory/*.json`, `deploy/agent-zero/system-prompt.md`
+
+### Agent Zero
+- [agent0ai/agent-zero — README](https://github.com/agent0ai/agent-zero) (repo metadata as of 2026-04-26)
+
+### Perplexity Comet
+- [Comet Browser: a Personal AI Assistant](https://www.perplexity.ai/comet)
+- [Introducing Comet: Browse at the speed of thought](https://www.perplexity.ai/hub/blog/introducing-comet)
+- [Perplexity Comet 2026 Review — security and stability of the verification-first agentic browser (FlowFi, Medium)](https://medium.com/@FlowFi/perplexity-comet-2026-review-is-it-safe-enough-for-daily-use-agentic-browser-7c5aed839bd3)
+- [Perplexity Comet: A Reversing Story (Zenity Labs)](https://labs.zenity.io/p/perplexity-comet-a-reversing-story)
+- [Perplexity AI's Comet Browser Plummets from #3 to 'Not Ranked' Amid Security Flaws and Instability (MWM)](https://mwm.ai/articles/comet-ai-browser-viral-sensation-2026-03-23)
+
+### Kimi K2.6
+- [Moonshot AI Releases Kimi K2.6 with Long-Horizon Coding, Agent Swarm Scaling (MarkTechPost)](https://www.marktechpost.com/2026/04/20/moonshot-ai-releases-kimi-k2-6-with-long-horizon-coding-agent-swarm-scaling-to-300-sub-agents-and-4000-coordinated-steps/)
+- [Kimi K2.6 Officially Released: The Agentic Coding Era Enters Production](https://kimi-k2.org/blog/24-kimi-k2-6-release)
+- [Kimi K2.6 Has Arrived: An Open-Weight Powerhouse for Agentic Work (Kilo blog)](https://blog.kilo.ai/p/kimi-k26-has-arrived-an-open-weight)
+- [Moonshot AI releases Kimi-K2.6 model with 1T parameters (SiliconANGLE)](https://siliconangle.com/2026/04/20/moonshot-ai-releases-kimi-k2-6-model-1t-parameters-attention-optimizations/)
