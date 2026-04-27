@@ -118,8 +118,13 @@ echo "═══ F6: Pytest suite ═══"
 
 if command -v python3 >/dev/null 2>&1; then
   if python3 -m pytest --version >/dev/null 2>&1; then
-    if (cd "$REPO_ROOT" && python3 -m pytest tests/test_sandbox.py tests/test_tool_forge.py tests/test_routing_gate.py -q --no-header 2>&1 | tail -5 | grep -qE "passed"); then
-      pass "F6.1: pytest suite green (test_sandbox + test_tool_forge + test_routing_gate)"
+    if (cd "$REPO_ROOT" && python3 -m pytest \
+          tests/test_sandbox.py \
+          tests/test_tool_forge.py \
+          tests/test_routing_gate.py \
+          tests/test_routing_gate_interfaces.py \
+          -q --no-header 2>&1 | tail -5 | grep -qE "passed"); then
+      pass "F6.1: pytest suite green (sandbox + tool_forge + routing_gate + RG interfaces)"
     else
       fail "F6.1: pytest suite has failures"
     fi
@@ -128,6 +133,22 @@ if command -v python3 >/dev/null 2>&1; then
   fi
 else
   fail "F6.1: python3 not available"
+fi
+
+# §14.4 interface contracts
+if grep -q "class StorageBackend" "$REPO_ROOT/centaurion/extensions/routing_gate.py" \
+   && grep -q "class OperatorProfile" "$REPO_ROOT/centaurion/extensions/routing_gate.py" \
+   && grep -q "class ThresholdPolicy" "$REPO_ROOT/centaurion/extensions/routing_gate.py" \
+   && grep -q "class EscalationChannel" "$REPO_ROOT/centaurion/extensions/routing_gate.py"; then
+  pass "F6.2: §14.4 — four pluggable interfaces present in routing_gate.py"
+else
+  fail "F6.2: §14.4 — missing one of StorageBackend/OperatorProfile/ThresholdPolicy/EscalationChannel"
+fi
+
+if grep -q "class RoutingGate" "$REPO_ROOT/centaurion/extensions/routing_gate.py"; then
+  pass "F6.3: §14.4 — composed RoutingGate class present"
+else
+  fail "F6.3: §14.4 — RoutingGate composition class missing"
 fi
 
 # ============================================================

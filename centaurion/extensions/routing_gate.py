@@ -1,128 +1,418 @@
 """
-Routing Gate — Hermes Extension
+Routing Gate — Hermes Extension + composable core.
 
-Intercepts tool calls and classifies them through the Centaurion
-Routing Gate before execution. High novelty + high stakes + low
-reversibility → blocks execution and surfaces to human.
+The Centaurion Routing Law made operational: every non-trivial action is
+classified through (novelty × stakes × reversibility) and either auto-executed,
+flagged for review, or surfaced to the operator.
 
-This IS the Routing Law made operational inside Hermes.
+This module exposes both:
 
-Install: copy to ~/.hermes/extensions/routing_gate.py
+  - **Top-level functions** (`classify_tool_call`, `classify_tool_creation`,
+    `log_classification`, `RoutingGateExtension`) — backward-compatible API
+    used by Hermes and the dev_loop.
+  - **Composable core** (§14.4 refactor) — four ABCs that make every dimension
+    swappable:
+        * `StorageBackend`     — where decisions are persisted
+        * `OperatorProfile`    — operator-specific calibration vector
+        * `ThresholdPolicy`    — base + calibrated thresholds
+        * `EscalationChannel`  — surfaces decisions when route == surface_to_human
+    Composed together by `RoutingGate(...)`.
+
+The top-level functions delegate to a default `RoutingGate` instance with
+sensible defaults: JsonlFileBackend(memory/state/routing-log.jsonl),
+DefaultOperatorProfile, StaticThresholdPolicy(0.7, 0.5, 0.3), NullEscalationChannel.
+
+Install (Hermes): copy to ~/.hermes/extensions/routing_gate.py
 """
+
+from __future__ import annotations
 
 import json
 import os
-from pathlib import Path
+import re
+import sys
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Optional
 
 
-CENTAURION_REPO = os.environ.get("CENTAURION_REPO", os.path.expanduser("~/Centaurion"))
+# ─── Paths ──────────────────────────────────────────────────────────
+
+
+CENTAURION_REPO = os.environ.get(
+    "CENTAURION_REPO", os.path.expanduser("~/Centaurion")
+)
 STATE_DIR = Path(CENTAURION_REPO) / "memory" / "state"
 
-# Default thresholds (adjustable via framework/routing-gate.md)
-NOVELTY_THRESHOLD = 0.7
-STAKES_THRESHOLD = 0.5
-REVERSIBILITY_THRESHOLD = 0.3
 
-# Tools that are always safe (low novelty, high reversibility)
+# ─── Tool taxonomy (legacy, retained) ──────────────────────────────
+
+
 SAFE_TOOLS = {
     "read", "Read", "cat", "ls", "grep", "Grep", "Glob",
     "search", "screenshot", "page_info", "current_tab",
 }
 
-# Tools that require routing check
 SENSITIVE_TOOLS = {
     "Bash", "bash", "Write", "Edit", "http_post", "http_put",
     "send_message", "send_email", "create_issue", "deploy",
     "delete", "drop", "rm",
 }
 
-# Tools that should ALWAYS surface to human
 BLOCKED_TOOLS = {
     "git push --force", "rm -rf", "drop database",
     "send_email_to_client", "publish", "deploy_production",
 }
 
 
-def classify_tool_call(tool_name, tool_args):
-    """
-    Classify a tool call through the Routing Gate.
+# ─── Tool-creation events (forge integration) ───────────────────────
 
-    Returns: (route, novelty, stakes, reversibility)
-    route: "ai_autonomous" | "ai_with_review" | "surface_to_human"
+TOOL_CREATION_EVENTS = {
+    "scaffold",
+    "sandbox_exec",
+    "promote",
+    "promote_blocked",
+    "approve",
+    "reject",
+}
+
+
+# ═══════════════════════════════════════════════════════════════════
+#                       §14.4 — INTERFACES
+# ═══════════════════════════════════════════════════════════════════
+
+
+# ─── Thresholds value object ──────────────────────────────────────
+
+
+@dataclass(frozen=True)
+class Thresholds:
+    """Immutable threshold tuple. The Routing Gate inequality reads:
+
+        novelty > T.novelty ∧ stakes > T.stakes ∧ reversibility < T.reversibility
+            ⇒ surface_to_human
     """
 
-    # Always-safe tools
+    novelty: float = 0.7
+    stakes: float = 0.5
+    reversibility: float = 0.3
+
+    def adjusted(self, calibration: dict) -> "Thresholds":
+        """Return a new Thresholds offset by `calibration` and clamped to [0, 1]."""
+        def _clamp(x: float) -> float:
+            return max(0.0, min(1.0, x))
+        return Thresholds(
+            novelty=_clamp(self.novelty + calibration.get("novelty", 0.0)),
+            stakes=_clamp(self.stakes + calibration.get("stakes", 0.0)),
+            reversibility=_clamp(self.reversibility + calibration.get("reversibility", 0.0)),
+        )
+
+
+# ─── StorageBackend ────────────────────────────────────────────────
+
+
+class StorageBackend(ABC):
+    """Persists routing-classification entries."""
+
+    @abstractmethod
+    def append(self, entry: dict) -> None: ...
+
+    @abstractmethod
+    def read_all(self) -> list[dict]: ...
+
+
+@dataclass
+class JsonlFileBackend(StorageBackend):
+    """JSONL on disk. Default backend for production."""
+
+    path: Path
+
+    def __init__(self, path):
+        self.path = Path(path)
+
+    def append(self, entry: dict) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        with self.path.open("a") as f:
+            f.write(json.dumps(entry) + "\n")
+
+    def read_all(self) -> list[dict]:
+        if not self.path.exists():
+            return []
+        return [
+            json.loads(line)
+            for line in self.path.read_text().splitlines()
+            if line.strip()
+        ]
+
+
+@dataclass
+class InMemoryBackend(StorageBackend):
+    """In-process backend for tests and short-lived processes."""
+
+    _entries: list[dict] = field(default_factory=list)
+
+    def append(self, entry: dict) -> None:
+        self._entries.append(dict(entry))
+
+    def read_all(self) -> list[dict]:
+        return list(self._entries)
+
+
+# ─── OperatorProfile ───────────────────────────────────────────────
+
+
+class OperatorProfile(ABC):
+    """Operator-specific threshold calibration.
+
+    Returns a dict with optional keys 'novelty', 'stakes', 'reversibility'
+    that adjust the base thresholds (positive = more conservative for novelty
+    and stakes; positive = require more reversibility before surfacing).
+    """
+
+    @abstractmethod
+    def calibration(self) -> dict[str, float]: ...
+
+
+class DefaultOperatorProfile(OperatorProfile):
+    """No calibration — uses base thresholds verbatim."""
+
+    def calibration(self) -> dict[str, float]:
+        return {}
+
+
+_BASELINE_LINE = re.compile(
+    r"^\s*[-*]\s*(novelty|stakes|reversibility)\s*:\s*([+-]?\d*\.?\d+)\s*$",
+    re.IGNORECASE,
+)
+
+
+@dataclass
+class TelosOperatorProfile(OperatorProfile):
+    """Reads `BASELINE-INTEGRAL.md` from a TELOS identity directory.
+
+    Adjustments are parsed from list items under the heading
+    `## Routing Gate Adjustments`, e.g.::
+
+        ## Routing Gate Adjustments
+        - novelty: -0.1
+        - stakes: +0.05
+        - reversibility: 0
+    """
+
+    identity_dir: Path
+
+    def __init__(self, identity_dir):
+        self.identity_dir = Path(identity_dir)
+
+    def calibration(self) -> dict[str, float]:
+        baseline = self.identity_dir / "BASELINE-INTEGRAL.md"
+        if not baseline.exists():
+            return {}
+        adjustments: dict[str, float] = {}
+        in_section = False
+        for raw in baseline.read_text().splitlines():
+            stripped = raw.strip()
+            if stripped.startswith("##"):
+                in_section = "routing gate adjustments" in stripped.lower()
+                continue
+            if not in_section:
+                continue
+            match = _BASELINE_LINE.match(raw)
+            if match:
+                key = match.group(1).lower()
+                adjustments[key] = float(match.group(2))
+        return adjustments
+
+
+# ─── ThresholdPolicy ──────────────────────────────────────────────
+
+
+class ThresholdPolicy(ABC):
+    """Returns the active Thresholds tuple."""
+
+    @abstractmethod
+    def thresholds(self) -> Thresholds: ...
+
+
+@dataclass
+class StaticThresholdPolicy(ThresholdPolicy):
+    """Fixed Thresholds — no calibration."""
+
+    _t: Thresholds = field(default_factory=Thresholds)
+
+    def __init__(self, thresholds: Optional[Thresholds] = None):
+        self._t = thresholds if thresholds is not None else Thresholds()
+
+    def thresholds(self) -> Thresholds:
+        return self._t
+
+
+@dataclass
+class CalibratedThresholdPolicy(ThresholdPolicy):
+    """Composes a base ThresholdPolicy with an OperatorProfile's calibration."""
+
+    base: ThresholdPolicy
+    operator: OperatorProfile
+
+    def thresholds(self) -> Thresholds:
+        return self.base.thresholds().adjusted(self.operator.calibration())
+
+
+# ─── EscalationChannel ────────────────────────────────────────────
+
+
+class EscalationChannel(ABC):
+    """Surfaces a classification when route == surface_to_human."""
+
+    @abstractmethod
+    def escalate(self, classification: dict) -> None: ...
+
+
+@dataclass
+class NullEscalationChannel(EscalationChannel):
+    """No-op escalation that records what would have been surfaced.
+
+    Useful in tests, in dry-run modes, and when escalation happens via a
+    separate channel (e.g., a chatbot that already shows the classification).
+    """
+
+    escalations: list[dict] = field(default_factory=list)
+
+    def escalate(self, classification: dict) -> None:
+        self.escalations.append(dict(classification))
+
+
+class StderrEscalationChannel(EscalationChannel):
+    """Prints surfaced decisions to stderr — for terminal/CLI agents."""
+
+    def escalate(self, classification: dict) -> None:
+        task = classification.get("task", classification.get("tool_name", "?"))
+        n = classification.get("novelty", "?")
+        s = classification.get("stakes", "?")
+        r = classification.get("reversibility", "?")
+        print(
+            f"[ROUTING GATE] surface to operator: {task} "
+            f"(n={n}, s={s}, r={r})",
+            file=sys.stderr,
+        )
+
+
+# ═══════════════════════════════════════════════════════════════════
+#                  Composed RoutingGate (§14.4)
+# ═══════════════════════════════════════════════════════════════════
+
+
+@dataclass
+class RoutingGate:
+    """Composes the four interfaces into a working Routing Gate.
+
+    All dependencies are optional — sensible defaults are wired up if absent.
+    """
+
+    storage: StorageBackend
+    operator: OperatorProfile
+    policy: ThresholdPolicy
+    escalation: EscalationChannel
+
+    def __init__(
+        self,
+        *,
+        storage: Optional[StorageBackend] = None,
+        operator: Optional[OperatorProfile] = None,
+        policy: Optional[ThresholdPolicy] = None,
+        escalation: Optional[EscalationChannel] = None,
+    ):
+        self.storage = storage if storage is not None else JsonlFileBackend(
+            STATE_DIR / "routing-log.jsonl"
+        )
+        self.operator = operator if operator is not None else DefaultOperatorProfile()
+        self.policy = (
+            policy if policy is not None
+            else CalibratedThresholdPolicy(StaticThresholdPolicy(), self.operator)
+        )
+        self.escalation = (
+            escalation if escalation is not None else NullEscalationChannel()
+        )
+
+    # ── Classification ────────────────────────────────────────────
+
+    def classify_tool_call(self, tool_name: str, tool_args: Any):
+        return _classify_tool_call(tool_name, tool_args, self.policy.thresholds())
+
+    def classify_tool_creation(
+        self, *, event: str, tool_name: str, sandboxed: bool,
+    ):
+        return _classify_tool_creation(
+            event=event, tool_name=tool_name, sandboxed=sandboxed,
+            thresholds=self.policy.thresholds(),
+        )
+
+    # ── Logging + escalation ─────────────────────────────────────
+
+    def log_and_maybe_escalate(self, entry: dict) -> None:
+        """Persist `entry` and surface it if route == surface_to_human."""
+        self.storage.append(entry)
+        if entry.get("route") == "surface_to_human":
+            self.escalation.escalate(entry)
+
+
+# ═══════════════════════════════════════════════════════════════════
+#                Pure classification (uses Thresholds)
+# ═══════════════════════════════════════════════════════════════════
+
+
+def _classify_tool_call(tool_name, tool_args, thresholds: Thresholds):
+    """Classify a tool call. Returns (route, novelty, stakes, reversibility)."""
+
     if tool_name in SAFE_TOOLS:
         return "ai_autonomous", 0.1, 0.1, 0.9
 
-    # Always-blocked tools
     args_str = json.dumps(tool_args) if tool_args else ""
     for blocked in BLOCKED_TOOLS:
         if blocked in tool_name or blocked in args_str:
             return "surface_to_human", 0.9, 0.9, 0.1
 
-    # Sensitive tools get scored
     if tool_name in SENSITIVE_TOOLS:
-        novelty = 0.4  # Base: somewhat familiar
-        stakes = 0.4   # Base: moderate
-        reversibility = 0.6  # Base: somewhat reversible
+        novelty = 0.4
+        stakes = 0.4
+        reversibility = 0.6
 
-        # Adjust based on args
         if tool_args:
             args_str_lower = args_str.lower()
-
-            # Higher stakes for production/client/external actions
-            if any(w in args_str_lower for w in ["production", "client", "external", "public"]):
+            if any(w in args_str_lower for w in
+                   ["production", "client", "external", "public"]):
                 stakes += 0.3
-            if any(w in args_str_lower for w in ["delete", "remove", "drop", "force"]):
+            if any(w in args_str_lower for w in
+                   ["delete", "remove", "drop", "force"]):
                 reversibility -= 0.3
                 stakes += 0.2
-            if any(w in args_str_lower for w in ["email", "message", "post", "publish"]):
+            if any(w in args_str_lower for w in
+                   ["email", "message", "post", "publish"]):
                 reversibility -= 0.4
 
-        # Apply thresholds
-        if novelty > NOVELTY_THRESHOLD and stakes > STAKES_THRESHOLD and reversibility < REVERSIBILITY_THRESHOLD:
+        if (
+            novelty > thresholds.novelty
+            and stakes > thresholds.stakes
+            and reversibility < thresholds.reversibility
+        ):
             return "surface_to_human", novelty, stakes, reversibility
-        elif stakes > STAKES_THRESHOLD:
+        if stakes > thresholds.stakes:
             return "ai_with_review", novelty, stakes, reversibility
 
     return "ai_autonomous", 0.2, 0.2, 0.8
 
 
-# ─── Tool-creation events (forge integration) ───────────────────────
-#
-# The Tool Forge (centaurion/extensions/tool_forge.py) emits a fixed taxonomy
-# of events as it walks each tool through scaffold → sandbox_exec → promote.
-# Each event is classified here so the routing log captures the full lifecycle.
-#
-# Design rule (omega paradigm): scaffold and sandbox_exec are autonomous
-# (low stakes, fully reversible — files live in an isolated worktree until
-# promotion). Promotion ALWAYS surfaces to the operator: writing executable
-# code into canonical skills/ is high-stakes and only partially reversible.
+def _classify_tool_creation(
+    *, event: str, tool_name: str, sandboxed: bool, thresholds: Thresholds,
+):
+    """Classify a tool-forge lifecycle event.
 
-TOOL_CREATION_EVENTS = {
-    "scaffold",        # Tier 1: write tool stub into isolated worktree
-    "sandbox_exec",    # Tier 2: run test inside Sandbox
-    "promote",         # Tier 3: surface diff for operator review
-    "promote_blocked", # Tier 3 short-circuit: execution failed, no surface
-    "approve",         # Operator decision — merges into _promoted/
-    "reject",          # Operator decision — archives to _failed/
-}
-
-
-def classify_tool_creation(*, event, tool_name, sandboxed):
-    """
-    Classify a tool-forge lifecycle event.
-
-    Args:
-        event: one of TOOL_CREATION_EVENTS.
-        tool_name: the candidate tool's name (str).
-        sandboxed: whether this event happened inside the sandbox (bool).
-            Currently informational; affects only the audit log.
-
-    Returns: (route, novelty, stakes, reversibility) — same shape as
-        classify_tool_call(...).
+    `thresholds` is currently informational for the tool_creation taxonomy —
+    routes are determined by event type because the lifecycle is fixed.
+    Operators can later use thresholds to nudge promote-tier sensitivity if
+    the auto-pruning of low-quality scaffolds becomes desired.
     """
     if event not in TOOL_CREATION_EVENTS:
         raise ValueError(
@@ -130,37 +420,62 @@ def classify_tool_creation(*, event, tool_name, sandboxed):
             f"Expected one of {sorted(TOOL_CREATION_EVENTS)}."
         )
 
-    # Operator decisions and pre-execution scaffolding stay autonomous —
-    # the gate already surfaced (or will surface) at the promote step.
     if event == "scaffold":
-        # Worktree-isolated, no execution yet.
         return "ai_autonomous", 0.3, 0.2, 0.95
     if event == "sandbox_exec":
-        # Runs in an isolated container with no network; container is destroyed
-        # on completion. Reversibility is high: nothing escapes the sandbox.
         return "ai_autonomous", 0.4, 0.3, 0.9
     if event == "promote_blocked":
-        # Execution failed; nothing surfaced. Audit-only.
         return "ai_autonomous", 0.4, 0.2, 0.95
     if event == "approve":
-        # Operator already approved; this is a logged side effect.
         return "ai_autonomous", 0.2, 0.5, 0.6
     if event == "reject":
-        # Operator already rejected; archive is reversible.
         return "ai_autonomous", 0.2, 0.2, 0.95
 
-    # event == "promote": ALWAYS surfaces.
-    # Writing executable code into canonical skills/ is novel-enough,
-    # high-stakes, and only partially reversible.
-    novelty, stakes, reversibility = 0.75, 0.65, 0.4
-    return "surface_to_human", novelty, stakes, reversibility
+    # event == "promote": ALWAYS surfaces (high stakes, partial reversibility).
+    return "surface_to_human", 0.75, 0.65, 0.4
+
+
+# ═══════════════════════════════════════════════════════════════════
+#       Module-level functions (backward-compat — Hermes/dev_loop)
+# ═══════════════════════════════════════════════════════════════════
+
+
+# Default thresholds (kept as module constants for legacy callers).
+NOVELTY_THRESHOLD = 0.7
+STAKES_THRESHOLD = 0.5
+REVERSIBILITY_THRESHOLD = 0.3
+
+
+_default_gate: Optional[RoutingGate] = None
+
+
+def _gate() -> RoutingGate:
+    global _default_gate
+    if _default_gate is None:
+        _default_gate = RoutingGate()
+    return _default_gate
+
+
+def reset_default_gate() -> None:
+    """Reset the module-level singleton (test hygiene)."""
+    global _default_gate
+    _default_gate = None
+
+
+def classify_tool_call(tool_name, tool_args):
+    """Classify a tool call through the default Routing Gate."""
+    return _gate().classify_tool_call(tool_name, tool_args)
+
+
+def classify_tool_creation(*, event, tool_name, sandboxed):
+    """Classify a tool-forge lifecycle event through the default Routing Gate."""
+    return _gate().classify_tool_creation(
+        event=event, tool_name=tool_name, sandboxed=sandboxed,
+    )
 
 
 def log_classification(tool_name, route, novelty, stakes, reversibility):
-    """Log the routing decision."""
-    STATE_DIR.mkdir(parents=True, exist_ok=True)
-    log_file = STATE_DIR / "routing-log.jsonl"
-
+    """Legacy logger used by Hermes extension. Routes via the default gate."""
     entry = {
         "timestamp": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "task": f"tool_call: {tool_name}",
@@ -171,21 +486,14 @@ def log_classification(tool_name, route, novelty, stakes, reversibility):
         "outcome_rating": None,
         "routing_correct": None,
     }
-
-    with open(log_file, "a") as f:
-        f.write(json.dumps(entry) + "\n")
+    _gate().log_and_maybe_escalate(entry)
 
 
-# ── Hermes Extension Interface ────────────────────────────
+# ─── Hermes Extension Interface (unchanged behaviour) ──────────────
+
 
 class RoutingGateExtension:
-    """
-    Hermes extension that intercepts tool calls and applies
-    the Centaurion Routing Gate classification.
-
-    Blocks high-risk tool calls and surfaces them to the human
-    instead of auto-executing.
-    """
+    """Hermes extension that applies the Routing Gate to every tool call."""
 
     def __init__(self, agent):
         self.agent = agent
@@ -193,13 +501,6 @@ class RoutingGateExtension:
         self.auto_count = 0
 
     def on_tool_call(self, tool_name, tool_args, context=None):
-        """
-        Called before every tool execution.
-
-        Returns:
-            None — proceed with execution
-            {"block": True, "reason": "..."} — block execution
-        """
         route, novelty, stakes, reversibility = classify_tool_call(tool_name, tool_args)
         log_classification(tool_name, route, novelty, stakes, reversibility)
 
@@ -213,23 +514,53 @@ class RoutingGateExtension:
                     f"reversibility={reversibility:.1f}. "
                     f"This requires Malik's review. "
                     f"Describe what you want to do and wait for approval."
-                )
+                ),
             }
 
         if route == "ai_with_review":
-            # Don't block, but flag for post-execution review
-            pass
+            pass  # Don't block, but flag for post-execution review.
 
         self.auto_count += 1
-        return None  # Proceed
+        return None
 
     def on_session_end(self, session):
-        """Log routing stats for the session."""
         if self.blocked_count > 0 or self.auto_count > 0:
-            total = self.blocked_count + self.auto_count
             pass
 
 
 def create_extension(agent):
     """Factory function for Hermes extension loading."""
     return RoutingGateExtension(agent)
+
+
+__all__ = [
+    # Legacy / top-level API
+    "BLOCKED_TOOLS",
+    "NOVELTY_THRESHOLD",
+    "REVERSIBILITY_THRESHOLD",
+    "RoutingGateExtension",
+    "SAFE_TOOLS",
+    "SENSITIVE_TOOLS",
+    "STAKES_THRESHOLD",
+    "TOOL_CREATION_EVENTS",
+    "classify_tool_call",
+    "classify_tool_creation",
+    "create_extension",
+    "log_classification",
+    "reset_default_gate",
+    # §14.4 interfaces
+    "CalibratedThresholdPolicy",
+    "DefaultOperatorProfile",
+    "EscalationChannel",
+    "InMemoryBackend",
+    "JsonlFileBackend",
+    "NullEscalationChannel",
+    "OperatorProfile",
+    "RoutingGate",
+    "StaticThresholdPolicy",
+    "StderrEscalationChannel",
+    "StorageBackend",
+    "TelosOperatorProfile",
+    "ThresholdPolicy",
+    "Thresholds",
+]
