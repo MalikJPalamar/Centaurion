@@ -673,6 +673,81 @@ This claim conflates three things. Disentangling:
 
 ---
 
+# Part 4 · Implementation status (closing the loop)
+
+> Per Malik's directive ("Yes to all three. Do not stop until done in TDD style and ready for production"), §11 and §14.4 are now shipped on this branch. Below is the audit of what was built.
+
+## 19 · §11 Tool Forge — shipped
+
+**Commit:** `d024509`
+
+| Artifact | Path | Notes |
+|---|---|---|
+| Sandbox primitives | `centaurion/extensions/sandbox.py` | `Worktree`, `Sandbox` ABC, `DockerSandbox` (cap-drop ALL · network none · read-only root · memory cap · pids-limit · ephemeral), `MockSandbox` |
+| Forge orchestrator | `centaurion/extensions/tool_forge.py` | scaffold → execute → propose_promotion → approve / reject |
+| RG event taxonomy | `centaurion/extensions/routing_gate.py` | `TOOL_CREATION_EVENTS` + `classify_tool_creation(...)` |
+| End-to-end demo | `centaurion/extensions/forge_demo.py` | `python3 -m centaurion.extensions.forge_demo` |
+| Spec | `framework/tool-forge.md` | omega-paradigm rationale + Phase 1→2 upgrade path |
+| Skill scaffolding | `skills/auto-generated/{_staging,_promoted,_failed,.template,README.md}` | tracked subdirs with `.gitkeep` |
+| Bash phase verify | `tests/verify-tool-forge.sh` | 31 checks |
+| Pytest suites | `tests/test_sandbox.py`, `tests/test_tool_forge.py`, `tests/test_routing_gate.py` | 35 tests (4 live-Docker skip cleanly) |
+
+**Three-tier flow** (matches §11 design exactly):
+
+```
+Tier 1: SCAFFOLD       → write tool stub into auto/<job_id> worktree   [autonomous]
+Tier 2: SANDBOX EXEC   → run python test.py in hardened Docker          [autonomous]
+Tier 3: PROMOTE        → git diff main..auto/<job_id> → operator        [SURFACE]
+        ├─ approve     → copy into skills/auto-generated/_promoted/<tool>
+        └─ reject      → archive to skills/auto-generated/_failed/<job-tool>/REASON.txt
+```
+
+Worktrees live at `$TMPDIR/centaurion-forge/<repo_name>/job-<id>` — outside the main checkout. `main` is never touched until operator approval.
+
+## 20 · §14.4 Routing Gate refactor — shipped
+
+**Commit:** `7314f27`
+
+The Routing Gate is now decomposed into four pluggable interfaces. Calling code (Hermes, dev_loop, tool_forge) is unchanged thanks to a backward-compatible singleton default.
+
+| Interface | Default impl | Alternative impls |
+|---|---|---|
+| `StorageBackend` | `JsonlFileBackend(path)` | `InMemoryBackend()` |
+| `OperatorProfile` | `DefaultOperatorProfile()` | `TelosOperatorProfile(identity_dir)` — parses `BASELINE-INTEGRAL.md` § "Routing Gate Adjustments" |
+| `ThresholdPolicy` | `CalibratedThresholdPolicy(StaticThresholdPolicy(), operator)` | `StaticThresholdPolicy(t)` |
+| `EscalationChannel` | `NullEscalationChannel()` | `StderrEscalationChannel()` |
+
+Composed by `RoutingGate(*, storage, operator, policy, escalation)`. All deps optional. `.log_and_maybe_escalate(entry)` is the single write path: it persists to storage and surfaces to escalation when `route == "surface_to_human"`.
+
+This is the seam that lets the Gate ship later as a portable plugin — but it is **good architecture regardless**. No release commitment was made.
+
+## 21 · Verification matrix
+
+| Suite | Result |
+|---|---|
+| `pytest tests/` | **63 passed**, 4 skipped (Docker unavailable in sandbox env) |
+| `bash tests/verify-tool-forge.sh` (Phase 14) | **31 / 31 pass** |
+| `python3 -m centaurion.extensions.forge_demo` | **green** — full lifecycle scaffold→exec→promote→approve, all 4 events logged with correct RG routing |
+| `bash tests/verify-core-loop.sh` | 133 / 135 (2 pre-existing failures unrelated: `onboarding-state.json` and `BASELINE-INTEGRAL.md` install-time files) |
+
+## 22 · What is intentionally deferred
+
+| §14.5 | Sandbox tech | **Phase 1 = Docker** shipped. Phase 2 (Firecracker microVM) is a class swap behind the same `Sandbox` ABC; no caller changes when the time comes. |
+| §14.6 | Cortex chat surface gap | Deferred per recommendation — tool creation is more leveraged than UI; chat already exists via Claude Code/Hermes. |
+| §18.7 | Kimi-style swarm pattern | Deferred — gather 60 days of operational data on the federated 3-role model first. |
+| §18.8 | Claw Groups interop | Watch-only. Track upstream developments. |
+
+## 23 · Routing-Gate self-classification of this work
+
+| Phase | Novelty | Stakes | Reversibility | Route |
+|---|---|---|---|---|
+| §11 build | 0.7 | 0.6 | 0.6 | `ai_with_review` (pre-authorized by operator) |
+| §14.4 refactor | 0.4 | 0.4 | 0.8 | `ai_autonomous` |
+
+Both logged. Surface to Malik for **rating**, not approval. If the Tier-3 promotion-surface event from your first real forge run feels right (fast enough, informative enough), keep current thresholds. If too noisy or too quiet, adjust via `BASELINE-INTEGRAL.md` § "Routing Gate Adjustments" — the seam is wired in.
+
+---
+
 ## Sources
 
 ### Centaurion (local)
