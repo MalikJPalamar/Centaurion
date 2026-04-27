@@ -1,0 +1,59 @@
+---
+import Wordmark from "./svg/Wordmark.astro";
+---
+<footer class="hairline-top mt-section">
+  <div class="container-page py-24 grid gap-16 md:grid-cols-[1.5fr_1fr_1fr]">
+    <div class="space-y-6">
+      <Wordmark height={20} ariaLabel="Centaurion" />
+      <p class="text-mercury max-w-prose text-body">
+        The exo-cortex for organizations that intend to survive the next decade.
+      </p>
+      <form
+        action="/api/subscribe"
+        method="POST"
+        class="flex items-stretch max-w-md hairline rounded-none"
+        aria-label="Subscribe to the Centaurion Brief"
+      >
+        <label for="footer-email" class="sr-only">Email</label>
+        <input
+          id="footer-email"
+          type="email"
+          name="email"
+          required
+          placeholder="you@company.com"
+          class="flex-1 bg-transparent px-4 py-3 text-mercury placeholder:text-mist focus:outline-none"
+        />
+        <button type="submit" class="px-5 text-mercury hover:text-platinum-from transition-colors duration-hover" aria-label="Subscribe">
+          →
+        </button>
+      </form>
+    </div>
+
+    <nav aria-label="Sections">
+      <p class="eyebrow mb-4">Sections</p>
+      <ul class="space-y-3">
+        <li><a href="/method" class="text-mercury hover:text-platinum-from transition-colors duration-hover">Method</a></li>
+        <li><a href="/levels" class="text-mercury hover:text-platinum-from transition-colors duration-hover">Levels</a></li>
+        <li><a href="/engage" class="text-mercury hover:text-platinum-from transition-colors duration-hover">Engage</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="Tools">
+      <p class="eyebrow mb-4">Tools</p>
+      <ul class="space-y-3">
+        <li>
+          <a href="/strategic-foresight-dashboard" class="text-mercury hover:text-platinum-from transition-colors duration-hover">
+            Strategic Foresight Dashboard
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="hairline-top">
+    <div class="container-page py-8 flex flex-col md:flex-row justify-between gap-4">
+      <p class="text-mist text-caption font-mono uppercase tracking-[0.08em]">© 2026 Centaurion</p>
+      <p class="text-mist text-caption font-mono uppercase tracking-[0.08em]">Operating from Spain · Built for the decade ahead</p>
+    </div>
+  </div>
+</footer>

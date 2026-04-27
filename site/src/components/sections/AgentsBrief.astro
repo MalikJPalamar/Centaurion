@@ -1,0 +1,25 @@
+---
+import { namedAgents } from "../../content/agents";
+---
+<section class="section" aria-labelledby="agents-heading">
+  <div class="container-page grid gap-12">
+    <div class="space-y-6 max-w-3xl">
+      <p class="eyebrow reveal">The Exo-Cortex</p>
+      <h2 id="agents-heading" class="text-display-3 text-platinum reveal">
+        Two agents. One architecture.
+      </h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-12 hairline-top pt-12">
+      {namedAgents.map((a) => (
+        <article class="reveal space-y-4">
+          <p class="eyebrow">{a.role}</p>
+          <h3 class="text-display-3 text-platinum">{a.name}.</h3>
+          <p class="text-body max-w-prose text-mercury">{a.description}</p>
+        </article>
+      ))}
+    </div>
+    <p class="text-body text-mist max-w-3xl reveal pt-8">
+      Together they form the exo-cortex: the predictive layer your organization is currently trying to grow on its own, slowly, at high cost.
+    </p>
+  </div>
+</section>

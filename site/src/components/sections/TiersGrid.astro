@@ -1,0 +1,48 @@
+---
+const tiers = [
+  {
+    name: "The Brief",
+    body: "A weekly intelligence dispatch. The signals worth your attention, with the reasoning shown.",
+    cta: "Subscribe →",
+    href: "#brief",
+    variant: "hairline" as const,
+  },
+  {
+    name: "The Method",
+    body: "The framework as a working document. Equation, Laws, Sensing Layers, Loop, Roadmap.",
+    cta: "Download →",
+    href: "/engage#method",
+    variant: "platinum" as const,
+  },
+  {
+    name: "Advisory",
+    body: "A six-week minimum engagement. Sensing Stack audit, Predictive Layer design, 11-Levels assessment.",
+    cta: "Request a conversation →",
+    href: "/engage",
+    variant: "signal" as const,
+  },
+];
+---
+<section class="section" aria-labelledby="tiers-heading">
+  <div class="container-page grid gap-12">
+    <div class="space-y-6 max-w-3xl">
+      <p class="eyebrow reveal">Engage</p>
+      <h2 id="tiers-heading" class="text-display-3 text-platinum reveal">
+        Three ways in. Each one earns the next.
+      </h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      {tiers.map((t) => (
+        <article class="reveal hairline bg-carbon p-8 flex flex-col gap-6">
+          <h3 class="text-display-3 text-platinum">{t.name}</h3>
+          <p class="text-body text-mercury flex-1">{t.body}</p>
+          <a href={t.href} class:list={[
+            t.variant === "hairline" && "btn-hairline self-start",
+            t.variant === "platinum" && "btn-platinum self-start",
+            t.variant === "signal" && "btn-signal self-start",
+          ]}>{t.cta}</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

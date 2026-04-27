@@ -1,0 +1,75 @@
+---
+// Active Inference Loop: seven nodes in a circle, directional arcs between them.
+type Props = { class?: string };
+const { class: className = "" } = Astro.props as Props;
+
+const labels = ["Sense", "Predict", "Act", "Observe", "Update", "Re-route", "Re-couple"];
+const radius = 150;
+const cx = 220;
+const cy = 220;
+const nodes = labels.map((label, i) => {
+  const angle = -Math.PI / 2 + (i * 2 * Math.PI) / labels.length;
+  return {
+    label,
+    x: cx + radius * Math.cos(angle),
+    y: cy + radius * Math.sin(angle),
+  };
+});
+---
+<svg
+  class={className}
+  viewBox="0 0 440 440"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Active Inference Loop: Sense, Predict, Act, Observe, Update, Re-route, Re-couple"
+>
+  <defs>
+    <linearGradient id="loop-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--color-platinum-from)" />
+      <stop offset="50%" stop-color="var(--color-platinum-via)" />
+      <stop offset="100%" stop-color="var(--color-platinum-to)" />
+    </linearGradient>
+    <marker id="loop-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="url(#loop-stroke)" />
+    </marker>
+  </defs>
+  <circle cx={cx} cy={cy} r={radius} stroke="url(#loop-stroke)" stroke-width="1" stroke-opacity="0.35" fill="none" stroke-dasharray="4 6" />
+  {nodes.map((n) => (
+    <circle cx={n.x} cy={n.y} r="8" fill="var(--color-obsidian)" stroke="url(#loop-stroke)" stroke-width="1.5" />
+  ))}
+  {nodes.map((n, i) => {
+    const next = nodes[(i + 1) % nodes.length];
+    if (!next) return null;
+    return (
+      <line
+        x1={n.x}
+        y1={n.y}
+        x2={next.x}
+        y2={next.y}
+        stroke="url(#loop-stroke)"
+        stroke-width="1"
+        stroke-opacity="0.6"
+        marker-end="url(#loop-arrow)"
+      />
+    );
+  })}
+  {nodes.map((n) => {
+    const dx = n.x - cx;
+    const dy = n.y - cy;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    const lx = n.x + (dx / len) * 28;
+    const ly = n.y + (dy / len) * 28;
+    return (
+      <text
+        x={lx}
+        y={ly}
+        font-family="'JetBrains Mono', monospace"
+        font-size="11"
+        fill="var(--color-mercury)"
+        text-anchor="middle"
+        dominant-baseline="middle"
+        letter-spacing="0.06em"
+      >{n.label.toUpperCase()}</text>
+    );
+  })}
+</svg>
