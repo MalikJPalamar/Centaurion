@@ -90,6 +90,72 @@ def classify_tool_call(tool_name, tool_args):
     return "ai_autonomous", 0.2, 0.2, 0.8
 
 
+# ─── Tool-creation events (forge integration) ───────────────────────
+#
+# The Tool Forge (centaurion/extensions/tool_forge.py) emits a fixed taxonomy
+# of events as it walks each tool through scaffold → sandbox_exec → promote.
+# Each event is classified here so the routing log captures the full lifecycle.
+#
+# Design rule (omega paradigm): scaffold and sandbox_exec are autonomous
+# (low stakes, fully reversible — files live in an isolated worktree until
+# promotion). Promotion ALWAYS surfaces to the operator: writing executable
+# code into canonical skills/ is high-stakes and only partially reversible.
+
+TOOL_CREATION_EVENTS = {
+    "scaffold",        # Tier 1: write tool stub into isolated worktree
+    "sandbox_exec",    # Tier 2: run test inside Sandbox
+    "promote",         # Tier 3: surface diff for operator review
+    "promote_blocked", # Tier 3 short-circuit: execution failed, no surface
+    "approve",         # Operator decision — merges into _promoted/
+    "reject",          # Operator decision — archives to _failed/
+}
+
+
+def classify_tool_creation(*, event, tool_name, sandboxed):
+    """
+    Classify a tool-forge lifecycle event.
+
+    Args:
+        event: one of TOOL_CREATION_EVENTS.
+        tool_name: the candidate tool's name (str).
+        sandboxed: whether this event happened inside the sandbox (bool).
+            Currently informational; affects only the audit log.
+
+    Returns: (route, novelty, stakes, reversibility) — same shape as
+        classify_tool_call(...).
+    """
+    if event not in TOOL_CREATION_EVENTS:
+        raise ValueError(
+            f"Unknown tool_creation event: {event!r}. "
+            f"Expected one of {sorted(TOOL_CREATION_EVENTS)}."
+        )
+
+    # Operator decisions and pre-execution scaffolding stay autonomous —
+    # the gate already surfaced (or will surface) at the promote step.
+    if event == "scaffold":
+        # Worktree-isolated, no execution yet.
+        return "ai_autonomous", 0.3, 0.2, 0.95
+    if event == "sandbox_exec":
+        # Runs in an isolated container with no network; container is destroyed
+        # on completion. Reversibility is high: nothing escapes the sandbox.
+        return "ai_autonomous", 0.4, 0.3, 0.9
+    if event == "promote_blocked":
+        # Execution failed; nothing surfaced. Audit-only.
+        return "ai_autonomous", 0.4, 0.2, 0.95
+    if event == "approve":
+        # Operator already approved; this is a logged side effect.
+        return "ai_autonomous", 0.2, 0.5, 0.6
+    if event == "reject":
+        # Operator already rejected; archive is reversible.
+        return "ai_autonomous", 0.2, 0.2, 0.95
+
+    # event == "promote": ALWAYS surfaces.
+    # Writing executable code into canonical skills/ is novel-enough,
+    # high-stakes, and only partially reversible.
+    novelty, stakes, reversibility = 0.75, 0.65, 0.4
+    return "surface_to_human", novelty, stakes, reversibility
+
+
 def log_classification(tool_name, route, novelty, stakes, reversibility):
     """Log the routing decision."""
     STATE_DIR.mkdir(parents=True, exist_ok=True)
