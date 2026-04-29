@@ -1,0 +1,33 @@
+---
+// Centaurion Equation rendered as SVG so the platinum gradient applies to text.
+// Sized via parent; viewBox preserves typography hierarchy.
+type Props = { class?: string };
+const { class: className = "" } = Astro.props as Props;
+---
+<svg
+  class={className}
+  viewBox="0 0 720 220"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Fitness equals predictive order over thermodynamic cost"
+>
+  <defs>
+    <linearGradient id="eq-fill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--color-platinum-from)" />
+      <stop offset="50%" stop-color="var(--color-platinum-via)" />
+      <stop offset="100%" stop-color="var(--color-platinum-to)" />
+    </linearGradient>
+  </defs>
+  <g font-family="'JetBrains Mono', ui-monospace, monospace" font-weight="400">
+    <text x="0" y="120" font-size="56" fill="url(#eq-fill)">Fitness</text>
+    <text x="220" y="120" font-size="56" fill="var(--color-mercury)">=</text>
+    <g>
+      <text x="280" y="92" font-size="44" fill="url(#eq-fill)">Predictive Order</text>
+      <line
+        x1="280" y1="116" x2="700" y2="116"
+        stroke="var(--color-mercury)" stroke-width="1.5"
+      />
+      <text x="280" y="160" font-size="44" fill="url(#eq-fill)">Thermodynamic Cost</text>
+    </g>
+  </g>
+</svg>

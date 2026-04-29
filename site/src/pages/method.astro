@@ -1,0 +1,145 @@
+---
+import Base from "../layouts/Base.astro";
+import EquationGlyph from "../components/svg/EquationGlyph.astro";
+import LoopDiagram from "../components/svg/LoopDiagram.astro";
+import { threeLaws, sensingLayers, loopSteps, roadmap } from "../content/brand";
+---
+<Base
+  title="The Centaurion Method — Friston, deployed."
+  description="The Centaurion Equation, Three Laws, Five Sensing Layers, and Active Inference Loop, written for operators."
+  path="/method"
+>
+  <section class="container-page section">
+    <p class="eyebrow reveal">The Centaurion Method</p>
+    <h1 class="text-display-2 text-platinum mt-6 max-w-4xl reveal">Friston, deployed.</h1>
+    <p class="text-body-lg max-w-prose text-mercury mt-8 reveal">
+      The free energy principle says any system that persists must minimize
+      surprise. We made it executable for organizations.
+    </p>
+  </section>
+
+  <section class="container-page section" aria-labelledby="equation-heading">
+    <p class="eyebrow reveal">The Equation</p>
+    <h2 id="equation-heading" class="sr-only">The Centaurion Equation</h2>
+    <div class="reveal mt-12">
+      <EquationGlyph class="w-full max-w-3xl" />
+    </div>
+    <p class="text-body-lg max-w-prose text-mercury mt-12 reveal">
+      Karl Friston's free energy principle states that self-organizing systems
+      — cells, brains, ecologies — survive by minimizing the difference between
+      what they predict and what they sense. The cost of that minimization is
+      energetic. Translate this from biology to enterprise: an organization
+      survives by predicting its environment well enough, fast enough, at a
+      metabolic cost it can pay. AI augmentation increases the numerator. Bad
+      AI implementation inflates the denominator. Most enterprises today are
+      doing both at once and wondering why the ratio worsens.
+    </p>
+    <p class="text-body-lg max-w-prose text-platinum mt-6 reveal">
+      Centaurion engineers the ratio. That is the entire practice.
+    </p>
+  </section>
+
+  <section class="container-page section" aria-labelledby="laws-deeper-heading">
+    <p class="eyebrow reveal">Architecture</p>
+    <h2 id="laws-deeper-heading" class="text-display-3 text-platinum mt-6 reveal">The Three Laws.</h2>
+    <ol class="grid gap-12 mt-12">
+      {threeLaws.map((law) => (
+        <li class="grid md:grid-cols-[120px_1fr] gap-8 reveal hairline-top pt-8">
+          <p class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Law {law.number}</p>
+          <div class="space-y-4">
+            <h3 class="text-display-3 text-platinum">{law.name}</h3>
+            <p class="text-body-lg max-w-prose text-mercury">{law.long}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="container-page section" aria-labelledby="sensing-heading">
+    <p class="eyebrow reveal">Perception</p>
+    <h2 id="sensing-heading" class="text-display-3 text-platinum mt-6 reveal">The Five Sensing Layers.</h2>
+    <p class="text-body-lg max-w-prose text-mercury mt-6 reveal">
+      A complete sensing stack reads at five depths. Most organizations read at
+      one or two and call it strategy.
+    </p>
+    <ul class="grid gap-0 mt-12 hairline-top">
+      {sensingLayers.map((layer) => (
+        <li class="grid md:grid-cols-[80px_1.5fr_1fr] gap-6 py-6 border-b border-graphite reveal items-baseline">
+          <p class="font-mono text-caption uppercase tracking-[0.08em] text-mist">L0{layer.id}</p>
+          <p class="text-body-lg text-platinum">{layer.name}</p>
+          <p class="text-body text-mercury">{layer.example}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container-page section" aria-labelledby="loop-heading">
+    <p class="eyebrow reveal">Execution</p>
+    <h2 id="loop-heading" class="text-display-3 text-platinum mt-6 reveal">The Active Inference Loop.</h2>
+    <div class="grid md:grid-cols-2 gap-16 items-center mt-12">
+      <ol class="grid gap-4 reveal">
+        {loopSteps.map((step) => (
+          <li class="grid grid-cols-[60px_1fr] gap-4 py-3 border-b border-graphite items-baseline">
+            <p class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Step {step.id}</p>
+            <div>
+              <p class="text-body-lg text-platinum">{step.name}</p>
+              <p class="text-body text-mercury">{step.note}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <div class="reveal">
+        <LoopDiagram class="w-full max-w-lg mx-auto" />
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page section" aria-labelledby="roadmap-heading">
+    <p class="eyebrow reveal">Trajectory</p>
+    <h2 id="roadmap-heading" class="text-display-3 text-platinum mt-6 reveal">The Roadmap.</h2>
+    <ul class="grid gap-0 mt-12 hairline-top">
+      {roadmap.map((p) => (
+        <li class="grid md:grid-cols-[120px_120px_1fr] gap-6 py-6 border-b border-graphite reveal items-baseline">
+          <p class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Phase {p.phase}</p>
+          <p class="font-mono text-caption uppercase tracking-[0.08em] text-mercury">{p.window}</p>
+          <p class="text-body text-mercury">{p.focus}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container-page section" aria-labelledby="method-cta-heading">
+    <div class="hairline bg-carbon p-12 grid gap-6 max-w-3xl reveal">
+      <p class="eyebrow">Tier 2</p>
+      <h2 id="method-cta-heading" class="text-display-3 text-platinum">Take the Method with you.</h2>
+      <p class="text-body-lg text-mercury max-w-prose">
+        The full framework as a working document. Equation, Laws, Sensing
+        Layers, Loop, Roadmap. Built to be read once, then referenced for a
+        year.
+      </p>
+      <form
+        action="/api/method-download"
+        method="POST"
+        class="grid gap-4 mt-4"
+        aria-label="Download the Method"
+        id="method"
+      >
+        <label class="grid gap-2">
+          <span class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Email</span>
+          <input class="input-hairline" type="email" name="email" required placeholder="you@company.com" />
+        </label>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <label class="grid gap-2">
+            <span class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Role</span>
+            <input class="input-hairline" type="text" name="role" required />
+          </label>
+          <label class="grid gap-2">
+            <span class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Company</span>
+            <input class="input-hairline" type="text" name="company" required />
+          </label>
+        </div>
+        <button type="submit" class="btn-platinum self-start">Download the Method →</button>
+      </form>
+    </div>
+  </section>
+</Base>

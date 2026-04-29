@@ -1,0 +1,29 @@
+---
+import Wordmark from "./svg/Wordmark.astro";
+const path = Astro.url.pathname;
+const links = [
+  { href: "/method", label: "Method" },
+  { href: "/levels", label: "Levels" },
+  { href: "/engage", label: "Engage" },
+];
+---
+<header class="sticky top-0 z-40 w-full backdrop-blur-sm bg-obsidian/70 border-b border-graphite">
+  <nav class="container-page flex items-center justify-between h-16" aria-label="Primary">
+    <a href="/" class="inline-flex items-center" aria-label="Centaurion home">
+      <Wordmark height={20} />
+    </a>
+    <ul class="flex items-center gap-8">
+      {links.map((l) => (
+        <li>
+          <a
+            href={l.href}
+            class:list={[
+              "font-mono text-caption uppercase tracking-[0.08em] transition-colors duration-hover",
+              path.startsWith(l.href) ? "text-platinum-from" : "text-mercury hover:text-platinum-from",
+            ]}
+          >{l.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>

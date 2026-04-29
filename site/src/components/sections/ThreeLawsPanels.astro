@@ -1,0 +1,35 @@
+---
+import { threeLaws } from "../../content/brand";
+import LawHierarchy from "../svg/LawHierarchy.astro";
+import LawRouting from "../svg/LawRouting.astro";
+import LawCoupling from "../svg/LawCoupling.astro";
+
+const diagrams = {
+  hierarchy: LawHierarchy,
+  routing: LawRouting,
+  coupling: LawCoupling,
+} as const;
+---
+<section aria-labelledby="laws-heading">
+  <div class="container-page section">
+    <p class="eyebrow reveal">The Three Laws</p>
+    <h2 id="laws-heading" class="sr-only">The Three Laws</h2>
+  </div>
+  {threeLaws.map((law) => {
+    const Diagram = diagrams[law.id as keyof typeof diagrams];
+    return (
+      <article class="min-h-[80vh] flex items-center" aria-labelledby={`law-${law.id}-heading`}>
+        <div class="container-page grid md:grid-cols-2 gap-16 items-center">
+          <div class="space-y-8 reveal">
+            <p class="eyebrow">{law.number}</p>
+            <h3 id={`law-${law.id}-heading`} class="text-display-2 text-platinum">{law.name}.</h3>
+            <p class="text-body-lg max-w-prose text-mercury">{law.long}</p>
+          </div>
+          <div class="reveal">
+            <Diagram class="w-full max-w-md mx-auto" />
+          </div>
+        </div>
+      </article>
+    );
+  })}
+</section>

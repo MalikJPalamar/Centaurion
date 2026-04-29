@@ -1,0 +1,38 @@
+---
+// Source node, three diverging paths to agent endpoints; middle path bolded.
+type Props = { class?: string };
+const { class: className = "" } = Astro.props as Props;
+---
+<svg
+  class={className}
+  viewBox="0 0 360 360"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Routing diagram: signal source diverging to multiple agents"
+>
+  <defs>
+    <linearGradient id="lr-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--color-platinum-from)" />
+      <stop offset="50%" stop-color="var(--color-platinum-via)" />
+      <stop offset="100%" stop-color="var(--color-platinum-to)" />
+    </linearGradient>
+    <marker id="lr-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="url(#lr-stroke)" />
+    </marker>
+  </defs>
+  <g stroke="url(#lr-stroke)" fill="none">
+    <circle cx="60" cy="180" r="14" stroke-width="1.5" />
+    <line x1="74" y1="180" x2="280" y2="80" stroke-width="1" stroke-opacity="0.5" marker-end="url(#lr-arrow)" />
+    <line x1="74" y1="180" x2="280" y2="180" stroke-width="2.5" marker-end="url(#lr-arrow)" />
+    <line x1="74" y1="180" x2="280" y2="280" stroke-width="1" stroke-opacity="0.5" marker-end="url(#lr-arrow)" />
+    <circle cx="296" cy="80" r="10" stroke-width="1" stroke-opacity="0.5" />
+    <circle cx="296" cy="180" r="14" stroke-width="2" />
+    <circle cx="296" cy="280" r="10" stroke-width="1" stroke-opacity="0.5" />
+  </g>
+  <g font-family="'JetBrains Mono', monospace" font-size="10" fill="var(--color-mist)" letter-spacing="0.08em">
+    <text x="40" y="148">SIGNAL</text>
+    <text x="316" y="84">A</text>
+    <text x="316" y="184" fill="var(--color-mercury)">B</text>
+    <text x="316" y="284">C</text>
+  </g>
+</svg>
