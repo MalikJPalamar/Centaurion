@@ -107,9 +107,12 @@ Connect the Pages project to GitHub once the first deploy is verified:
 - Dashboard → Pages → centaurion-site → Settings → Builds & deployments → Connect to Git
 - Repository: `MalikJPalamar/Centaurion`
 - Production branch: `main`
-- Build command: `cd site && npm install && npm run build`
-- Build output directory: `site/dist`
-- Root directory: `/` (leave default)
+- **Root directory: `site`** *(critical — must be `site`, not `/`. Cloudflare Pages
+  looks for `functions/` relative to the root directory; the form endpoints
+  live at `site/functions/` and would be skipped if root is left at the repo
+  root, leaving every form silently broken in production.)*
+- Build command: `npm install && npm run build`
+- Build output directory: `dist`
 
 Pull-request previews are automatic.
 
@@ -122,13 +125,30 @@ weight < 250KB).
 
 ## 8. Rollback
 
+Cloudflare Pages does not expose a CLI command that promotes a previous
+deployment to production — the dashboard is the supported path:
+
+1. **Dashboard → Pages → centaurion-site → Deployments**
+2. Find the last good deployment in the list.
+3. Click the `…` menu → **Rollback to this deployment**.
+
+For visibility into what's currently live and what came before:
+
 ```bash
-# List recent deployments.
+# List recent deployments (read-only — useful for picking a rollback target).
 wrangler pages deployment list --project-name centaurion-site
 
-# Promote a previous deployment back to production.
-wrangler pages deployment tail <deployment-id>
-# Or use Dashboard → Pages → Deployments → Rollback.
+# Tail Functions logs for a specific deployment (debugging only — does NOT promote).
+wrangler pages deployment tail <deployment-id> --project-name centaurion-site
+```
+
+If the dashboard is unavailable, the CLI fallback is to redeploy the previous
+commit's build artifact:
+
+```bash
+git checkout <last-good-sha>
+cd site && npm install && npm run build
+wrangler pages deploy dist --project-name centaurion-site --branch main
 ```
 
 ## 9. DNS sanity check (post-deploy)
