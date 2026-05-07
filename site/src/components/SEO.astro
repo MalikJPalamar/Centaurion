@@ -4,7 +4,7 @@ type Props = {
   title: string;
   description: string;
   path: string;
-  ogImage?: string;
+  ogImage?: string | undefined;
 };
 const { title, description, path, ogImage = "/og-default.svg" } = Astro.props as Props;
 const canonical = new URL(path, "https://centaurion.me").toString();

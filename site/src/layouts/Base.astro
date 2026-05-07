@@ -9,7 +9,7 @@ type Props = {
   title: string;
   description: string;
   path: string;
-  ogImage?: string;
+  ogImage?: string | undefined;
 };
 const { title, description, path, ogImage } = Astro.props as Props;
 ---
