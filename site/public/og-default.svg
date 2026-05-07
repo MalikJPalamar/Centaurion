@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E5E4E2"/>
+      <stop offset="50%" stop-color="#B7B5B2"/>
+      <stop offset="100%" stop-color="#8C8A87"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#050505"/>
+  <text x="80" y="280" font-family="'Inter Display', Inter, sans-serif" font-weight="800" font-size="120" fill="url(#g)" letter-spacing="-0.03em">CENTAURION</text>
+  <text x="80" y="360" font-family="'JetBrains Mono', monospace" font-size="32" fill="#C0C0C0">Predictive order, per unit thermodynamic cost.</text>
+  <text x="80" y="560" font-family="'JetBrains Mono', monospace" font-size="22" fill="#6B6B6B" letter-spacing="0.08em">CENTAURION.ME</text>
+</svg>

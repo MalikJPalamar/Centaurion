@@ -1,0 +1,75 @@
+---
+import Base from "../layouts/Base.astro";
+import StickyAdvisoryCTA from "../components/StickyAdvisoryCTA.astro";
+import { levels } from "../content/levels";
+---
+<Base
+  title="The 11 Levels of Agentic Engineering — Centaurion"
+  description="The full taxonomy of agentic engineering, with Centaurion's three-level extension beyond human review."
+  path="/levels"
+>
+  <section class="container-page section">
+    <p class="eyebrow reveal">Agentic Engineering</p>
+    <h1 class="text-display-2 text-platinum mt-6 max-w-4xl reveal">
+      Eleven levels. Most teams ship at three.
+    </h1>
+    <p class="text-body-lg max-w-prose text-mercury mt-8 reveal">
+      The first eight levels are the canonical taxonomy. The last three are
+      where Centaurion lives.
+    </p>
+  </section>
+
+  <section class="container-page" aria-labelledby="levels-table-heading">
+    <h2 id="levels-table-heading" class="sr-only">The 11 Levels</h2>
+    <ul class="grid gap-0 hairline-top">
+      {levels.map((l) => (
+        <li class:list={[
+          "grid md:grid-cols-[100px_1.4fr_2fr_1fr] gap-6 py-8 border-b border-graphite items-baseline reveal",
+          l.isCentaurionExtension && "bg-carbon px-6 -mx-6"
+        ]}>
+          <p class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Level {l.number}</p>
+          <h3 class:list={[
+            "text-display-3",
+            l.isCentaurionExtension ? "text-platinum" : "text-mercury"
+          ]}>{l.name}</h3>
+          <p class="text-body text-mercury max-w-prose">{l.definition}</p>
+          <p class:list={[
+            "font-mono text-caption uppercase tracking-[0.08em]",
+            l.isCentaurionExtension ? "text-platinum-from" : "text-mist"
+          ]}>{l.adoption}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container-page section" aria-labelledby="implication-heading">
+    <div class="max-w-3xl space-y-6">
+      <p class="eyebrow reveal">The implication</p>
+      <h2 id="implication-heading" class="text-display-3 text-platinum reveal">
+        A serious AI strategy names the level it is targeting.
+      </h2>
+      <p class="text-body-lg text-mercury max-w-prose reveal">
+        Most enterprise plans declare an AI ambition without naming a level.
+        That is the failure mode. A real plan says: we are at Level 4, we are
+        targeting Level 7 in 18 months, and here is what each step costs in
+        predictive order and thermodynamic cost.
+      </p>
+      <p class="text-body-lg text-platinum reveal">Centaurion does that work.</p>
+    </div>
+  </section>
+
+  <section class="container-page section" aria-labelledby="levels-cta-heading">
+    <div class="hairline bg-carbon p-12 grid gap-6 max-w-3xl reveal">
+      <p class="eyebrow">Tier 3</p>
+      <h2 id="levels-cta-heading" class="text-display-3 text-platinum">
+        Where is your organization on this scale?
+      </h2>
+      <p class="text-body-lg text-mercury max-w-prose">
+        A 30-minute conversation will tell you. The next six weeks will move you a level.
+      </p>
+      <a href="/engage" class="btn-signal self-start">Request an Advisory Conversation →</a>
+    </div>
+  </section>
+
+  <StickyAdvisoryCTA />
+</Base>

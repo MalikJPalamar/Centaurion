@@ -1,0 +1,29 @@
+---
+import { brandColors } from "../content/brand-colors";
+type Props = {
+  title: string;
+  description: string;
+  path: string;
+  ogImage?: string | undefined;
+};
+const { title, description, path, ogImage = "/og-default.svg" } = Astro.props as Props;
+const canonical = new URL(path, "https://centaurion.me").toString();
+const ogUrl = new URL(ogImage, "https://centaurion.me").toString();
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogUrl} />
+<meta property="og:site_name" content="Centaurion" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogUrl} />
+
+<meta name="theme-color" content={brandColors.obsidian} />

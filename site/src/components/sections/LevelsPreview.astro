@@ -1,0 +1,31 @@
+---
+import { levels } from "../../content/levels";
+const extensions = levels.filter((l) => l.isCentaurionExtension);
+---
+<section class="section" aria-labelledby="levels-preview-heading">
+  <div class="container-page grid gap-12">
+    <div class="space-y-6 max-w-3xl">
+      <p class="eyebrow reveal">Agentic Engineering</p>
+      <h2 id="levels-preview-heading" class="text-display-3 text-platinum reveal">
+        The taxonomy ends at eight. We extend it to eleven.
+      </h2>
+      <p class="text-body-lg text-mercury max-w-prose reveal">
+        Levels 1 through 8 describe what most teams ship today: from
+        prompt-tuned assistants to multi-agent workflows under human review.
+        Centaurion's extension begins where human review ends.
+      </p>
+    </div>
+    <ul class="hairline-top grid divide-y divide-graphite">
+      {extensions.map((l) => (
+        <li class="grid md:grid-cols-[120px_1fr_auto] gap-6 py-8 items-baseline reveal">
+          <p class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Level {l.number}</p>
+          <h3 class="text-display-3 text-platinum">{l.name}</h3>
+          <p class="font-mono text-caption uppercase tracking-[0.08em] text-mercury">{l.adoption}</p>
+        </li>
+      ))}
+    </ul>
+    <a href="/levels" class="reveal inline-flex items-center gap-2 self-start font-mono text-caption uppercase tracking-[0.08em] text-mercury hover:text-platinum-from transition-colors duration-hover">
+      See the full taxonomy →
+    </a>
+  </div>
+</section>
