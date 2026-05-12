@@ -3,8 +3,7 @@ name: llm-council
 description: >-
   Run any question, idea, or decision through a council of five AI advisors who
   answer independently, peer-review each other anonymously, and produce a single
-  verdict with one concrete next step. Designed for Claude Desktop / Cowork so
-  non-technical team members can pressure-test decisions without touching code.
+  verdict with one concrete next step.
   MANDATORY TRIGGERS (always invoke on these exact phrases): "council this",
   "run the council", "convene the council", "war-room this", "pressure-test
   this", "stress-test this", "debate this". STRONG TRIGGERS (invoke when the
