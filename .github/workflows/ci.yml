@@ -74,6 +74,7 @@ jobs:
         with:
           context: ./Cognitive-Company/CI-CD-automations/Docker-containerization
           push: false
+          load: true
           tags: centaurion:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
