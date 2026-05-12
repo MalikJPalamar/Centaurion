@@ -9,8 +9,10 @@ RUN pip install --no-cache-dir \
     requests \
     beautifulsoup4
 
-# Copy all files from repo root
+# Copy the build context (this directory) into /app
 COPY . .
 
+EXPOSE 8000
+
 # Default command
-CMD ["python", "Cognitive-Company/CI-CD-automations/Docker-containerization/main.py"]
+CMD ["python", "main.py"]
