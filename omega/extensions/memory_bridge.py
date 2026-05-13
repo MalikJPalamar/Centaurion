@@ -18,6 +18,8 @@ import urllib.error
 from pathlib import Path
 from datetime import datetime
 
+from centaurion_core import detect_venture
+
 
 CENTAURION_REPO = os.environ.get("CENTAURION_REPO", os.path.expanduser("~/Centaurion"))
 SUPERMEMORY_API_KEY = os.environ.get("SUPERMEMORY_API_KEY", "")
@@ -134,10 +136,11 @@ class MemoryBridgeExtension:
     Captures session summaries on end, recalls context on start.
     """
 
-    def __init__(self, agent):
+    def __init__(self, agent, classify=detect_venture):
         self.agent = agent
         self.session_venture = "general"
         self.recalled_context = None
+        self._classify = classify
 
     def on_session_start(self, session):
         """Recall recent context from Supermemory."""
@@ -156,8 +159,7 @@ class MemoryBridgeExtension:
     def on_message(self, message):
         """Detect venture from message content."""
         if hasattr(message, "content"):
-            from centaurion_core import detect_venture
-            self.session_venture = detect_venture(message.content)
+            self.session_venture = self._classify(message.content)
 
     def on_session_end(self, session):
         """Capture session summary to Supermemory."""
