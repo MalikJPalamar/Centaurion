@@ -1,165 +1,190 @@
 # Centaurion — Product Description for roxx.ai
 
-> Prepared for **roxx.ai** as a product-development partner. This document describes what Centaurion is today, the model it runs on, its current architecture and capabilities, and where external product work would add the most leverage. It is grounded in the actual repository contents, not aspiration; where something is planned-but-not-built, it is flagged as such.
+> Prepared for **roxx.ai** as an external product-development partner. This document describes what Centaurion is today, the model it runs on, its architecture and current capabilities, and where product work would add the most leverage. It is grounded in the actual repository contents. Where something is planned-but-not-yet-built, it is flagged as an assumption or gap rather than presented as shipped.
 
 ---
 
 ## 1. Executive Summary
 
-Centaurion is an **exo-cortex** — a composite human-AI operating system designed to let a single founder run multiple ventures with less cognitive load, not more. It pairs a human operator (who supplies values, taste, and strategic direction) with a set of AI agents (who supply analysis, memory, and tireless execution). The product is currently implemented as a **markdown-and-JSON instruction layer that runs inside an agentic harness** (primarily Claude Code, with portability to other agent runtimes). Every task is executed through a seven-step "active inference" loop and gated by a routing rule that decides whether the AI proceeds autonomously or surfaces the decision to the human. The organizing first principle is the **Precision Ratio** — get better at predicting what the operator needs while spending less time, money, and attention doing it.
+Centaurion is an **exo-cortex** — a composite human-AI operating system that lets a single founder run multiple ventures with *less* cognitive load, not more. It pairs a human operator (who supplies values, taste, and strategic direction) with a set of named AI agents (who supply analysis, memory, and tireless execution). The product is currently implemented as a **markdown-and-JSON instruction layer that runs inside an agentic harness** — primarily Claude Code, with a portable schema (`AGENTS.md`) for other runtimes. Every task is executed through a seven-step "active inference" loop and gated by a routing rule that decides whether the AI proceeds autonomously or escalates the decision to the human. The organizing first principle is the **Precision Ratio**: get better at predicting what the operator needs while spending less time, money, and attention doing it.
 
 ---
 
 ## 2. The Problem & The Operator Persona
 
-**The problem:** A founder running several businesses at once is the bottleneck. Context lives in their head, decisions queue behind them, and the cost of staying coordinated across ventures grows faster than the value created. Most "AI assistant" products make this worse — they require the human to be present, re-explain context every session, and review everything.
+**The problem.** A founder running several businesses at once *is* the bottleneck. Context lives in their head, decisions queue behind them, and the cost of staying coordinated across ventures grows faster than the value created. Most "AI assistant" products make this worse — they require the human to be present, re-explain context every session, and review everything the assistant does.
 
-**The operator persona (the design target):** A founder operating three ventures simultaneously — in the reference instance: AOB (breathwork education / CRM + membership ops), BuilderBee (an AI-automation consultancy on GoHighLevel), and Centaurion.me (the framework itself, as thought leadership). Key behavioral facts that drive the product:
+**The operator persona.** Centaurion is built for and around one operator (Malik Palamar) running three ventures:
 
-- **Reviews from a phone.** Output must be scannable on a small screen. GitHub Issues and chat/Telegram are the primary review surfaces, not a desktop dashboard.
-- **Thinks in systems and metaphors.** First-principles, visual-spatial, prefers tradeoffs over single recommendations.
-- **Batches direction, expects async execution.** Sets priorities in a focused morning session; agents work in the background; the operator rates outputs rather than writing reviews.
+| Venture | Operator Role | Focus |
+|---|---|---|
+| **AOB (Art of Breath)** | Head of IT & Applied Intelligence | Breathwork education; CRM migration (Ontraport → GoHighLevel); facilitator certification; membership ops |
+| **BuilderBee** | Fractional CEO | AI-automation consultancy; GoHighLevel implementations; client delivery |
+| **Centaurion.me** | Founder | The framework itself — methodology, thought leadership, advisory |
 
-Centaurion is built so this operator can act as the *prior* (the calibrating intelligence) without being the *throughput limit*.
+Operator characteristics (from `identity/PREFERENCES.md`): first-principles thinker, visual-spatial, metaphor-driven, **reviews work from a phone** (Telegram, GitHub mobile, Claude app), prefers concise structured output over prose, batches direction in focused sessions rather than reacting in real time, and gives **1–5 ratings instead of written reviews**.
 
----
-
-## 3. Core Concept: The Exo-Cortex & The Active Inference Loop
-
-Centaurion frames the human + AI pair as a single cognitive system ("a centaur"). It borrows vocabulary from the Free Energy Principle / active inference, but for a product team the important part is the **execution loop every task runs through**:
-
-| Step | What happens | Product implication |
-|------|--------------|---------------------|
-| **1. SENSE** | Load context: operator identity, recent memory, active alerts, the request itself | The system always starts grounded in who the operator is and what's in progress |
-| **2. PREDICT** | State the intended approach and a confidence level | Outputs are transparent about certainty |
-| **3. COMPARE** | Identify prediction error — is this routine or novel? | Drives the routing decision |
-| **4. ROUTE** | Apply the Routing Gate (see below) — proceed autonomously or escalate | The core safety/trust mechanism |
-| **5. ACT** | Execute using skills and tools | The work product |
-| **6. OBSERVE** | Did the outcome match the prediction? Was routing correct? | Generates the learning signal |
-| **7. REMEMBER** | Write to shared memory; log the routing decision; capture ratings | Makes the system compound over time |
-
-The loop is **continuous, multi-agent, and async-friendly**: routine tasks can run steps 1–5 unattended, and the human's input is only structurally required at step 4 for genuinely novel/high-stakes work.
+The product is operator-specific today, but the architecture is generic: the `skills/onboarding/` flow exists to calibrate *any* new operator who clones the repo. This is the seam where Centaurion becomes a product for more than one person.
 
 ---
 
-## 4. The Three Laws (and what they imply for UX)
+## 3. Core Concept: The Exo-Cortex & the Active Inference Loop
 
-Centaurion's behavior is constrained by three "laws" that are always in effect. Each one has a direct product consequence:
+Centaurion frames the human and the AI as two halves of a single cognitive system — a "centaur." The human is the slow, high-judgment half; the AI is the fast, tireless half. The point of contention every other AI tool gets wrong: **the human is the prior, not the bottleneck.**
 
-1. **Hierarchy Law — "The human is the prior, not the bottleneck."** The operator's identity loads every session; the AI proposes and executes but never overrides high-stakes judgment. *UX implication:* identity/context must be cheap to load and always present; if the operator feels like an approval queue, that's a product failure (a routing mis-tune), not a human failure.
+Every non-trivial task runs through a fixed seven-step loop (defined in `CLAUDE.md` and `framework/active-inference-loop.md`):
 
-2. **Routing Law — "Prediction errors are routed to the right substrate."** Every task is classified before execution. *UX implication:* the product needs a clear, low-friction escalation surface and a visible classification, so the operator trusts that the right things — and only the right things — reach them.
+1. **SENSE** — Load context: operator identity (`identity/`), recent memory, active alerts, onboarding/calibration state.
+2. **PREDICT** — State the intended approach, a confidence level (high/medium/low), and what could go wrong.
+3. **COMPARE** — Identify prediction error: is this routine or novel? Does the model fit?
+4. **ROUTE** — Apply the Routing Gate (see §4). Decide: act autonomously or escalate to the human.
+5. **ACT** — Execute using the relevant skill(s) and tools.
+6. **OBSERVE OUTCOME** — Compare result to prediction; assess whether routing was correct.
+7. **REMEMBER** — Write the interaction to shared memory; update wikis; log the routing decision; capture any rating.
 
-3. **Coupling Law — "The exo-cortex maintains shared model state between human and AI."** All agents read/write the same memory. *UX implication:* memory must be observable and correctable; "I already told you that" is the canonical failure to design against.
+For a product team, the loop is effectively a **state machine with a mandatory human-escalation branch and a mandatory memory-write step.** Steps 4 and 7 are where the product's differentiation lives — and where most of the UX and observability surface area sits.
+
+---
+
+## 4. The Three Laws (and what they imply for product behavior)
+
+The system is governed by three laws that are *always in effect* (`identity/MISSION.md`, `framework/three-laws.md`):
+
+1. **Hierarchy Law — "The human is the prior, not the bottleneck."**
+   Operator identity is loaded every session; the AI proposes and executes but never overrides. *Product implication:* identity/context loading must be automatic and invisible; the human's role is to set direction and rate outcomes, not to babysit.
+
+2. **Routing Law — "Prediction errors are routed to the right substrate."**
+   Tasks are classified by **novelty × stakes × reversibility**. The decision rule:
+   ```
+   IF novelty > 0.7 AND stakes > 0.5 AND reversibility < 0.3:
+       → STOP. Surface to the human with task, scores, recommendation, risks.
+   ELSE:
+       → Proceed autonomously. Log the classification.
+   ```
+   Thresholds are *adaptive* — they tighten when autonomous work gets low ratings and loosen when escalations are consistently rated 5/5. *Product implication:* the escalation message is a first-class UX object (must be ≤5 lines, phone-readable), and the threshold-tuning loop needs to be visible and tunable.
+
+3. **Coupling Law — "The exo-cortex maintains shared model state between human and AI."**
+   Every interaction updates shared memory so the human and AI don't drift apart. *Product implication:* memory write is non-optional; the system "compounds" only if this never silently fails.
 
 ---
 
 ## 5. Architecture & Components
 
-Centaurion is deliberately **all markdown + JSON, with no compiled hooks** — the intelligence lives in prompts so any agent runtime that can read files can run it. The repository is the product.
+Centaurion's intelligence lives in markdown and JSON, by design — "any runtime that reads markdown can run Centaurion." The repo is organized into functional directories:
 
-| Directory | What it is | Role |
-|-----------|-----------|------|
-| `identity/` | The operator's "TELOS" profile — PURPOSE, MISSION, GOALS, PREFERENCES, plus deeper files (BELIEFS, HISTORY, MODELS, etc.) and an optional `BASELINE-INTEGRAL.md` calibration file | The prior. Loaded at SENSE on every session |
-| `framework/` | The reasoning rules — Three Laws, Precision Ratio, the Active Inference loop, the Routing Gate (with explicit 0–1 novelty/stakes/reversibility scoring), and supporting models (Markov Blanket, sensing layers) | How the system thinks |
-| `agents/` | Agent personas (see below) | Who is acting |
-| `skills/` | Portable `SKILL.md` capability files | What the system can do |
-| `memory/` | JSON pointers/config for the memory stack (Supermemory, wiki repos, Graphiti, MemPalace) plus `memory/state/` runtime files (routing log, ratings, health/onboarding state) | Where it remembers |
-| `workflows/` | Recurring automations described as markdown specs (daily health check, weekly review, gap analysis, feedback capture) | What runs on a schedule |
+| Directory | Role | What's in it |
+|---|---|---|
+| `identity/` | **Who the operator is** (TELOS system) | `PURPOSE.md`, `MISSION.md`, `GOALS.md`, `PREFERENCES.md`, plus `BELIEFS`, `MODELS`, `HISTORY`, etc. `BASELINE-INTEGRAL.md` (operator calibration) is generated per-install and gitignored. |
+| `framework/` | **How the system thinks** | Three Laws, Precision Ratio, Active Inference loop, Routing Gate, Five Sensing Layers, Markov Blanket, "11 levels." |
+| `agents/` | **Who the agents are** | Personas: `Cortex.md`, `Nova.md`, `Daemon.md`. |
+| `skills/` | **What the system can do** | Portable `SKILL.md` files (see §6). |
+| `memory/` | **Where it remembers** | Pointers/config to the memory layers (`supermemory.json`, `graphiti.json`, `mempalace.json`, `wiki-repos.json`) and live `state/` files (routing log, ratings, onboarding state, weekly reviews). |
+| `workflows/` | **What runs automatically** | Markdown specs for daily health, weekly gap analysis, feedback capture, client onboarding, AOB weekly ops. |
 
-**Agent personas** (currently personality definitions, not separately deployed services):
-- **Cortex** — the reasoning agent (prefrontal cortex). Runs the full loop; classifies, routes, executes. This is the default persona in Claude Code.
-- **Nova** — the sensing agent (afferent nervous system). Environmental scanning, signal detection, filtering noise; intended to run on a lightweight always-on runtime with Telegram.
-- **Daemon** — the identity-root agent (the Markov-blanket boundary). Maintains coherence across agents and is intended to expose a personal MCP API.
+**Entry points.** `CLAUDE.md` is the execution schema for Claude Code (loads automatically). `AGENTS.md` is the equivalent for other runtimes (Codex, pi, OpenClaw, Agent Zero). Both encode the same Three Laws and the same loop.
 
-**The skill system:** Each skill is a self-contained `SKILL.md` with a name, a "USE WHEN" trigger, and a procedure. This is the primary extension point — adding a capability means adding a markdown file, and skills are portable across runtimes (Claude Code, and via `AGENTS.md`, other agents like Codex/pi/OpenClaw/Agent Zero).
+**The agent personas** (metaphor-driven, per operator preference):
 
-There is also an **existing web surface** (`frontend/` React + TypeScript, `backend/` FastAPI) deployed via Docker/Render, currently a thin dashboard shell over the system rather than the primary interaction surface.
+- **Cortex** — the reasoning agent ("prefrontal cortex"). Deep analysis, planning, execution. Runs on Claude Code. This is the agent a session usually *is*.
+- **Nova** — the sensing agent ("afferent nervous system"). Environmental scanning and signal detection; surfaces only what matters; tags everything by venture. Intended runtime: OpenClaw + Telegram on a VPS.
+- **Daemon** — the identity-root agent ("the Greek daimon" / Markov-blanket boundary). Maintains coherence across agents, guards the identity, exposes a personal API (MCP). Partly aspirational (see §9).
+
+**The skill system.** Each skill is a self-contained `SKILL.md` with YAML frontmatter (`name`, `description`, and "USE WHEN" trigger guidance). Skills are runtime-agnostic instruction sets, not code. Richer skills (e.g. `building-an-exo`, `integral-baseline`, `onboarding`) ship with `references/`, `templates/`, and `schema.json` alongside the `SKILL.md`. There is also a `.claude/skills/` mirror for Claude Code's native skill discovery.
 
 ---
 
-## 6. Current Capabilities (Installed Skills)
+## 6. Current Capabilities (installed skills)
 
 | Skill | What it does |
-|-------|--------------|
-| `centaurion-core` | Loads identity, the Three Laws, and the loop at session start |
-| `routing-gate` | Classifies a task on novelty/stakes/reversibility and decides autonomous-vs-escalate |
-| `onboarding` | First-run, idempotent setup flow; delivers an integral baseline assessment, writes `identity/BASELINE-INTEGRAL.md`, and marks onboarding complete |
-| `integral-baseline` | AQAL + Integral Life Practice assessment (Light 25Q / Deep 75Q) to calibrate the operator model |
-| `weekly-review` | L2 structured weekly comparison of outcomes vs. predictions; phone-readable summary |
-| `gap-analysis` | Knowledge-topology gap analysis over the wiki repos (intended to use InfraNodus) |
-| `sa-scan` | Daily "situational awareness" scan over a tracked set of stock tickers |
-| `autoresearch` | Autonomous overnight research iteration on a defined question/metric |
-| `aob-ops` | Venture skill: AOB CRM/membership/facilitator operations |
-| `builderbee-delivery` | Venture skill: BuilderBee client delivery / GoHighLevel setup |
-| `building-an-exo` | A substantial methodology skill (ExO 3.0 / Intelligence Stack / "REWRITE" playbook) for redesigning a firm around AI |
-
-**Scheduled workflows** (markdown specs): a daily health check that opens a GitHub Issue for phone review, a weekly review, a weekly gap analysis, client/venture ops workflows, and a feedback-capture loop that backfills ratings into routing accuracy.
+|---|---|
+| `centaurion-core` | Foundational skill — loads identity, Three Laws, and the Active Inference loop at session start ("L0 sensing"). |
+| `routing-gate` | Classifies a task on novelty/stakes/reversibility and decides autonomous-vs-escalate. Operationalizes the Routing Law. |
+| `onboarding` | First-run flow for a new operator: detects first install, runs the integral baseline assessment, writes `BASELINE-INTEGRAL.md`, schedules a 90-day refresh, marks onboarding complete (idempotent). |
+| `integral-baseline` | AQAL + Integral Life Practice assessment of the operator (Light = 25Q / Deep = 75Q) to calibrate routing confidence, automation bias, and tone to the actual person. |
+| `weekly-review` | "L2 sensing" — structured weekly comparison of outcomes vs. predictions; trends in ratings, routing accuracy, knowledge growth, cross-venture patterns. |
+| `sa-scan` | Daily situational-awareness scan across 18 tracked stock tickers; detects threshold breaches and sector patterns. |
+| `gap-analysis` | "L4 sensing" — knowledge-topology / gap analysis across the wiki repos (InfraNodus). "What are we missing?" |
+| `autoresearch` | Autonomous overnight research iteration — define a metric/question, the agent iterates off-hours, operator reviews in the morning. |
+| `aob-ops` | AOB operations — CRM hygiene, membership ops, facilitator coordination. |
+| `builderbee-delivery` | BuilderBee client delivery — GoHighLevel setup, client onboarding, automation building. |
+| `building-an-exo` | A large, citation-heavy methodology skill applying ExO 3.0 / the Intelligence Stack / the REWRITE playbook to redesign a firm around AI. Ships with extensive `references/` and `templates/`. (This is reference IP encoded as a skill, not Centaurion-operational tooling.) |
 
 ---
 
 ## 7. Integrations & Surfaces
 
-- **Runtime:** Runs inside an agentic harness. Primary: Claude Code (`CLAUDE.md` auto-loads the schema). Portable to other runtimes via `AGENTS.md` (Codex, pi, OpenClaw, Agent Zero).
-- **Review surfaces:** Phone-first — chat app, Telegram (for the Nova sensing agent), and GitHub Issues (the daily health check is delivered as an issue). No dependency on a desktop.
-- **Memory / MCP:** `Supermemory` is wired as an MCP server (`.mcp.json`) and is the real-time shared memory bus, with venture-scoped containers (aob / builderbee / centaurion / personal) and auto-capture/auto-recall. The broader memory architecture also references **wiki repos** (synced peer-to-peer via Syncthing), **InfraNodus** for topology, **Graphiti/Neo4j** for a temporal graph, and **MemPalace** for verbatim archive.
-- **State:** Append-only JSONL files (`routing-log.jsonl`, `ratings.jsonl`) plus JSON status files for health/onboarding/autoresearch.
-- **Automation cadence:** A "dev loop" runs the system against itself on a schedule (reported as 3×/day on a VPS), exercising the loop and self-verification tests.
+**Runtime / harness.** Centaurion runs inside an agentic harness. The primary one is **Claude Code** (driven from a phone via the Claude app, or desktop). The same instruction set is portable to other runtimes via `AGENTS.md`.
 
-A large catalog of additional MCP integrations is available to the harness (CRM/GoHighLevel, GitHub, calendar/email, analytics, design/video tooling, etc.), which is what lets the venture skills actually touch live systems.
+**Review surfaces (phone-first).** The operator reviews from a phone: Telegram, GitHub mobile (Issues are a deliberate review surface), and the Claude app. There is also a **React + TypeScript dashboard** (`frontend/`) backed by a **FastAPI** service (`backend/`) — currently a separate, partly mock-data web UI rather than the primary surface.
+
+**MCP integrations.** The repo declares an MCP connection to **Supermemory** (`.mcp.json`, `https://mcp.supermemory.ai/mcp`). The broader environment also exposes many other MCP servers (GitHub, and a long list of third-party tools), but the only one the repo itself configures is Supermemory.
+
+**Memory stack** (`README.md`, `memory/`):
+- **Layer 1 — Supermemory:** real-time shared bus, ambient capture + recall, scoped by venture "containers" (`centaurion-aob`, `-builderbee`, `-framework`, `-malik`). Free tier; round-trip verified; first live capture logged 2026-04-19.
+- **Layer 2 — LLM Wikis** (per-venture repos), **InfraNodus** (knowledge topology), **Graphiti/Neo4j** (temporal graph of how facts change).
+- **Layer 3 — MemPalace:** verbatim archive of raw conversation exports.
+
+**Automation.** GitHub Actions workflows exist (`.github/workflows/ci.yml`, `daily-dev-loop.yml`), plus deploy scripts for VPS-hosted loops (`deploy/vps1`, `deploy/vps2`) covering autoresearch, weekly review, health checks, and a routing watchdog.
 
 ---
 
 ## 8. Key Product Principles
 
-- **Precision Ratio = predictive order ÷ thermodynamic cost.** Every feature should either improve predictions or reduce cost (time, money, cognitive load). If it does neither, it shouldn't ship.
-- **Human-as-prior.** Calibrate to the specific operator; defer on high-stakes/irreversible decisions; never make the human an approval queue for routine work.
-- **Compounding memory.** Every interaction must leave the system smarter — the REMEMBER step is mandatory, not optional.
-- **Concise, structured, phone-readable.** Tables and three-bullet summaries over prose. Surface tradeoffs rather than a single "obvious" answer.
-- **Portability over lock-in.** Markdown skills and instructions so the system isn't tied to one runtime.
+- **Precision Ratio** (`Precision = Predictive Order / Thermodynamic Cost`). Every feature should either improve predictions (numerator) or reduce cost in time/money/attention (denominator). If it does neither, question it.
+- **Human-as-prior.** The AI never overrides; it proposes, executes, and learns under the operator's calibration.
+- **Concise, structured, phone-readable output.** Three bullets beat three paragraphs; tables and headers over prose; surface tradeoffs rather than presenting one option as obvious.
+- **Compounding memory.** Every interaction must leave the system smarter; the memory write is mandatory.
+- **Markdown over code.** Intelligence lives in prompts and instruction files so any markdown-reading runtime can run it. (This is a strength for portability and a constraint for enforceability — see §9.)
+- **Adaptive routing.** Escalation thresholds learn from outcome ratings.
 
 ---
 
-## 9. Current State vs. Gaps
+## 9. Current State vs. Gaps (honest assessment)
 
-**What is real today:**
-- The full reasoning schema (loop, Three Laws, routing gate with concrete scoring) is written and loads automatically in Claude Code.
-- A working set of skills and workflow specs, plus self-verification tests.
-- Supermemory MCP connected with live capture; routing/ratings state files defined; an onboarding/calibration flow.
-- An existing (thin) web dashboard and a deployment path.
+**What is real and working:**
+- The instruction layer (`CLAUDE.md`, `AGENTS.md`, `framework/`, `identity/`, `agents/`) is complete and coherent.
+- The skill library exists and is well-specified.
+- Supermemory is connected and round-trip-verified.
+- State files exist and are being written (`routing-log.jsonl`, `ratings.jsonl`, weekly reviews for 2026-W16/W17).
+- The onboarding + integral-baseline calibration flow is built and idempotent.
 
-**What is prototype-level or aspirational (honest gaps):**
-- **The "product" is currently a prompt/instruction layer, not an application.** Behavior depends on the agent faithfully following markdown; there is no enforcement engine, no typed schema for skills, and no runtime that guarantees the loop executes.
-- **Memory is partly pointers.** Supermemory is live, but wiki repos, Graphiti/Neo4j, InfraNodus, and MemPalace are mostly planned/config-only. There is no unified observability over what the system "knows."
-- **Routing learning is manual/file-based.** Thresholds are described as adjustable from ratings, but the feedback loop is JSONL append + human interpretation, not an automated tuning system.
-- **Multi-agent is mostly personas, not deployed services.** Nova and Daemon are well-specified but not running as independent, coordinated processes; the Daemon MCP API is conceptual.
-- **The web dashboard is minimal** relative to the richness of the underlying model — it does not yet visualize routing, memory, ratings trends, or multi-venture status.
-- **No real onboarding/review UI.** Today everything is text-in-a-harness; non-technical operators cannot easily install, calibrate, or review.
+**What is prototype-level or aspirational (gaps):**
+- **Enforcement is by convention, not code.** The loop, the Routing Gate math, and the mandatory memory-write are *instructions to an LLM*, not guaranteed code paths. Nothing structurally prevents a step from being skipped. This is the single biggest reliability gap.
+- **Routing/ratings are append-only JSONL files.** There is no queryable store, no dashboard over them, and threshold auto-tuning is described but not demonstrably automated.
+- **Daemon (the coherence/identity-root agent and personal MCP API) is largely future-state.** Graphiti/Neo4j and MemPalace are referenced as Month-2 layers; only Supermemory is live.
+- **Nova** depends on external VPS + Telegram infrastructure that lives outside this repo.
+- **The web dashboard is partly mock data** and disconnected from the markdown/agent core — there's no single integrated surface that shows the loop, the routing log, and memory together.
+- **Single-operator today.** The onboarding flow anticipates multi-operator, but identity, ventures, and tickers are hard-coded to one person.
+- **Some "skills" are reference IP** (notably `building-an-exo`) rather than operational tooling, which can blur "what the product does" vs. "what it knows."
 
 ---
 
 ## 10. Suggested Product-Development Asks for roxx.ai
 
-These are derived from the gaps above and ranked by leverage on the Precision Ratio:
+Concrete areas where external product work would compound, ordered roughly by leverage:
 
-1. **Mobile review surface.** A phone-first inbox where the operator sees what the system did, what it's escalating (with the novelty/stakes/reversibility classification visible), and can rate outputs 1–5 in one tap. This is the single highest-leverage surface — it operationalizes the Hierarchy and Routing Laws.
-2. **Onboarding & calibration UX.** Turn the `onboarding` + `integral-baseline` skills into a guided, non-technical flow that produces the operator profile and sets initial routing thresholds — so Centaurion can be adopted by founders who don't live in a terminal.
-3. **Memory & observability layer.** A real, queryable, *correctable* view of shared memory (Supermemory + wikis + temporal graph) with a way to fix stale/wrong facts. Directly addresses the Coupling Law and the "I already told you that" failure.
-4. **Routing engine + auto-tuning.** Promote the routing gate from a markdown rule + JSONL log into an instrumented service that records classifications, ties them to ratings, and adjusts thresholds with the human in the loop. Make routing accuracy a first-class, charted metric.
-5. **Multi-venture dashboard.** A single view across ventures (AOB / BuilderBee / Centaurion-style tagging) showing status, alerts, ratings trends, and cross-venture connections — the "highest-value insights" the framework explicitly wants surfaced.
-6. **Skill framework / marketplace.** Formalize the `SKILL.md` contract (schema, triggers, versioning, tests) and build a way to author, validate, share, and install skills — turning the extension model into a real platform surface.
-7. **Agent orchestration.** Stand up Nova and Daemon as actual coordinated services (sensing + coherence/identity API) rather than personas, with the Daemon MCP boundary as the integration point for external systems.
+1. **Make the loop enforceable, not advisory.** A thin orchestration layer (or harness middleware) that *guarantees* the SENSE→…→REMEMBER steps run — especially the Routing Gate evaluation and the memory write — with structured logging at each step. This converts "the model should" into "the system does."
+
+2. **Routing & feedback observability.** A real datastore + dashboard over `routing-log.jsonl` and `ratings.jsonl`: routing accuracy over time, rating trends, escalation volume, and a UI to view/adjust the adaptive thresholds. This is the proof-of-value surface (the Precision Ratio made visible).
+
+3. **Mobile review surface.** A purpose-built, phone-first review experience for the escalation queue and morning batch review — approve/reject/rate in one or two taps, replacing the current GitHub-Issues/Telegram improvisation. Optimize for the ≤5-line escalation card.
+
+4. **Multi-venture dashboard.** A single pane showing per-venture state (AOB / BuilderBee / Centaurion), recent agent work, alerts, and cross-venture connections (the operator explicitly values cross-venture insight as highest-value).
+
+5. **Unified memory & observability layer.** Reconcile the memory stack (Supermemory live; Graphiti/MemPalace planned) behind one interface, with health/coherence checks — effectively building out the "Daemon" coherence role as actual software.
+
+6. **Onboarding UX for new operators.** Productize `skills/onboarding/` + `integral-baseline` into a guided first-run experience that calibrates a *new* operator's identity, ventures, and routing thresholds — the path from single-user system to product.
+
+7. **Skill packaging / marketplace.** A clean format, validator, and install/share mechanism for skills (the `SKILL.md` + `references/` + `templates/` + `schema.json` pattern already gestures at this), so capabilities can be authored, versioned, and distributed.
+
+8. **Integrate or retire the web stack.** Decide whether the existing `frontend/`+`backend/` becomes the real surface (wired to live data) or is replaced; today it's a parallel artifact with mock data.
 
 ---
 
-## Appendix: Source Files (for grounding)
+### Open items flagged as assumptions (could not be fully verified from the repo)
 
-- Execution schema: `CLAUDE.md`, `AGENTS.md`
-- Identity: `identity/` (PURPOSE, MISSION, GOALS, PREFERENCES, BELIEFS, HISTORY, MODELS, …)
-- Framework: `framework/` (three-laws, precision-ratio, routing-gate, active-inference-loop, sensing layers, markov-blanket)
-- Agents: `agents/` (Cortex, Nova, Daemon)
-- Skills: `skills/*/SKILL.md`
-- Memory: `memory/*.json`, `memory/state/*`
-- Workflows: `workflows/*.md`
-- Web surface: `frontend/`, `backend/`, `render.yaml`, `Dockerfile`
-- State/planning: `.planning/STATE.md`, `docs/architecture.md`
+- **roxx.ai** does not appear anywhere in the repository; this document is written *for* them, not *about* an existing relationship.
+- The **only repo-configured MCP integration is Supermemory.** GitHub and the many other MCP tools available in the operating environment are not declared in `.mcp.json`, so their role in Centaurion proper is inferred, not confirmed.
+- **Nova/Daemon runtimes, Graphiti/Neo4j, MemPalace, and InfraNodus** are described in docs/config but their live operational status is not verifiable from repo contents alone — treat as planned/partial.
+- The **dashboard's data source** is mock data in the files reviewed; degree of any live wiring is unconfirmed.
+- Specific external infra (VPS IPs, Telegram bot, wiki repos under `MalikJPalamar/*`) is referenced but lives outside this repository.
