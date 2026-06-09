@@ -88,6 +88,7 @@ Update shared memory (Supermemory + state files):
 - `skills/aob-ops/` — AOB operations (CRM, membership, facilitators)
 - `skills/builderbee-delivery/` — BuilderBee client delivery (GHL, onboarding)
 - `skills/autoresearch/` — Autonomous overnight research iteration
+- `skills/building-an-exo/` — ExO 3.0: Intelligence Stack, DRIVE/SHAPE, REWRITE Playbook, Edge Twin (OpenExO, OS Outline v20)
 
 ## Key Files
 
