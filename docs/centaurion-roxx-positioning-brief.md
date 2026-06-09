@@ -8,11 +8,19 @@
 
 ## 1. One-sentence description (the roxx.ai seed)
 
-> **Centaurion is an exo-cortex — a human-AI operating system that lets a solo founder run multiple ventures with less cognitive load, by pairing their judgment with AI agents that sense, decide, act, and remember on their behalf.**
+> **Centaurion is an AI agent framework for a single operator running multiple businesses: it processes each task through a fixed sequence, auto-executes low-risk tasks, escalates high-risk ones for user approval, and stores context across sessions.**
 
-Shorter variants to test:
-- "An AI chief-of-staff that runs *as* you, not *for* you — across all your companies."
-- "The operating system for the one-person holding company."
+Plain-language variants to test:
+- "Software framework that runs an AI agent to handle recurring operational tasks across several businesses for one user, with approval gating on high-risk actions."
+- "AI agent system for managing multiple businesses: automated task execution, rule-based escalation to the user, and persistent memory across sessions."
+
+**What it is, factually:** a set of structured Markdown/JSON instruction files that run inside the Claude Code agent environment, plus a prototype web dashboard (React front end, FastAPI back end). It is a configuration/instruction layer plus supporting scripts, not a packaged SaaS product.
+
+**What it does:** runs each task through a seven-step sequence (load context → propose approach → assess → classify → execute → evaluate → record); classifies tasks by novelty, stakes, and reversibility to decide auto-execute vs. escalate; writes each interaction to memory so context persists.
+
+**Main components:** session-loaded user/business config; the task-sequence and escalation rule set (thresholds adjust on 1–5 user ratings); a library of 11 skill modules; Supermemory integration (live, per-business); JSONL logs of classifications and ratings; scheduled runs via GitHub Actions/VPS; a prototype review dashboard (mock data).
+
+**Status:** single user; the task sequence and memory-write are enforced by instruction, not code; the dashboard and several memory layers are prototype-stage.
 
 ---
 

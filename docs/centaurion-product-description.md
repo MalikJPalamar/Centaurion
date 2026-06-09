@@ -6,7 +6,9 @@
 
 ## 1. Executive Summary
 
-Centaurion is an **exo-cortex** — a composite human-AI operating system that lets a single founder run multiple ventures with *less* cognitive load, not more. It pairs a human operator (who supplies values, taste, and strategic direction) with a set of named AI agents (who supply analysis, memory, and tireless execution). The product is currently implemented as a **markdown-and-JSON instruction layer that runs inside an agentic harness** — primarily Claude Code, with a portable schema (`AGENTS.md`) for other runtimes. Every task is executed through a seven-step "active inference" loop and gated by a routing rule that decides whether the AI proceeds autonomously or escalates the decision to the human. The organizing first principle is the **Precision Ratio**: get better at predicting what the operator needs while spending less time, money, and attention doing it.
+Centaurion is an **AI agent framework** for a single operator who manages multiple businesses. Factually, it is a set of structured Markdown and JSON instruction files that run inside the Claude Code agent environment (with a portable `AGENTS.md` schema for other runtimes), plus a prototype web dashboard (React front end, FastAPI back end). It is a configuration/instruction layer plus supporting scripts, not a packaged SaaS product.
+
+It processes each task through a fixed seven-step sequence — load user context, propose an approach, assess fit, classify the task, execute, evaluate the result, record it. It classifies every task by novelty, stakes, and reversibility, then either executes it automatically or stops and presents it to the user for approval. It writes each interaction to an external memory service and to local log files so context persists across sessions. Escalation thresholds adjust based on the user's 1–5 ratings of prior output.
 
 ---
 
