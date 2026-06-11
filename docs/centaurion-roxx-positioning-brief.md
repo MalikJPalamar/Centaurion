@@ -6,13 +6,9 @@
 
 ---
 
-## 1. One-sentence description (the roxx.ai seed)
+## 1. Product description (the roxx.ai seed)
 
-> **AI agent framework for a single operator managing multiple businesses: it runs each task through a fixed seven-step sequence, classifies it by novelty, stakes, and reversibility to either auto-execute or escalate for user approval, and persists context across sessions.**
-
-### Consolidated description
-
-**AI agent framework for a single operator managing multiple businesses.** It is built as structured Markdown and JSON instruction files that run inside the Claude Code agent environment (with a portable `AGENTS.md` schema for other runtimes) and ships with a prototype web dashboard (React/FastAPI). The framework configures an AI agent to handle recurring business-operations tasks: each task runs through a fixed seven-step sequence — load user context, propose an approach, assess fit, classify the task, execute, evaluate the result, and log it — and is classified by novelty, stakes, and reversibility, so low-risk tasks are executed automatically and high-risk ones are escalated for the user's approval (escalation thresholds adjust to the user's 1–5 ratings of past output). Context persists across sessions through an external memory service scoped per business and local log files. The framework includes a library of task modules for operations such as weekly review, market scanning, knowledge-gap analysis, research, and CRM/membership work. It is single-user today; the task sequence and memory writes are enforced by instruction to the AI rather than by code, and the dashboard and several memory layers are prototype-stage.
+> AI operations system for an independent operator running multiple businesses. It assigns an AI agent to handle recurring operational work — client and membership administration, CRM updates, scheduling, research, monitoring, and weekly reporting — across all of the operator's businesses from one place. Each task is processed through a fixed sequence: the system loads the relevant business context, proposes an approach, executes, evaluates the result, and records the outcome. Before execution, every task is scored on novelty, stakes, and reversibility: routine low-risk tasks run automatically, while unusual, high-stakes, or hard-to-reverse tasks are held and sent to the operator for approval as a short, phone-readable summary. Approval thresholds adjust over time based on the operator's 1–5 ratings of completed work. All activity is written to a persistent memory store scoped to each business, so the agent retains context between sessions and the operator does not re-explain anything. Includes a web dashboard for reviewing activity and a modular task library that can be extended with new capabilities.
 
 ---
 
