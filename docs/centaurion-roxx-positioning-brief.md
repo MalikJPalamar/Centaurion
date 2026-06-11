@@ -8,7 +8,15 @@
 
 ## 1. Product description (the roxx.ai seed)
 
-> Dedicated, symbiotic personal AI agent that is cryptographically bound to a single user and co-evolves with them over their lifetime. It maintains a continuously updated model of the user — developmental stage across six lines (cognitive, emotional, interpersonal, somatic, spiritual, strategic), behavioral patterns, biases, preferences, and biological parameters such as sleep, energy, and somatic state — and functions as a persistent external memory layer that captures and indexes all information the user encounters across sessions. It processes each delegated task through a fixed sequence: load the user model and relevant context, propose an approach, classify the task by novelty, stakes, and reversibility, execute or escalate, and record the outcome. Routine low-risk tasks run autonomously; novel, high-stakes, or hard-to-reverse decisions are returned to the user. The user's ratings of completed work update both the user model and the escalation thresholds, so the agent and user co-evolve: the model of the user deepens as the user develops, and the user delegates more as the agent's accuracy increases. Domain-specific workloads — business operations, research, and monitoring — run as interchangeable modules on the person-bound core.
+> **Personal AI software agent** dedicated to a single user and cryptographically bound to them. **Primary function:** it performs tasks on the user's behalf while building a model of the user and a persistent memory of everything the user encounters, and it co-evolves with the user through ongoing feedback.
+>
+> **Key features:**
+> - Cryptographic one-user binding; not shared or transferable.
+> - User model covering developmental stage across six lines (cognitive, emotional, interpersonal, somatic, spiritual, strategic), behavioral patterns, biases, preferences, and biological parameters (sleep, energy, somatic state).
+> - Persistent memory that captures and indexes all information the user encounters, available across sessions.
+> - Task handling that classifies each task by novelty, stakes, and reversibility — running low-risk tasks automatically and escalating high-risk ones for approval.
+> - Feedback loop: user ratings update the user model and the escalation thresholds.
+> - Modular domain capabilities (business operations, research, monitoring).
 
 ---
 
