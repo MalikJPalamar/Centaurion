@@ -8,15 +8,7 @@
 
 ## 1. Product description (the roxx.ai seed)
 
-> **Personal AI software agent** dedicated to a single user and cryptographically bound to them. **Primary function:** it performs tasks on the user's behalf while building a model of the user and a persistent memory of everything the user encounters, and it co-evolves with the user through ongoing feedback.
->
-> **Key features:**
-> - Cryptographic one-user binding; not shared or transferable.
-> - User model covering developmental stage across six lines (cognitive, emotional, interpersonal, somatic, spiritual, strategic), behavioral patterns, biases, preferences, and biological parameters (sleep, energy, somatic state).
-> - Persistent memory that captures and indexes all information the user encounters, available across sessions.
-> - Task handling that classifies each task by novelty, stakes, and reversibility — running low-risk tasks automatically and escalating high-risk ones for approval.
-> - Feedback loop: user ratings update the user model and the escalation thresholds.
-> - Modular domain capabilities (business operations, research, monitoring).
+> **Personal AI software agent** bound to a single user through cryptographic authentication; non-transferable and non-shared. Performs tasks on the user's behalf, maintains a persistent cross-session memory that indexes all information the user encounters, and builds a structured model of the user covering cognitive and behavioral patterns, biases, preferences, and biological parameters such as sleep and energy. Each task is classified by novelty, stakes, and reversibility: low-risk tasks execute automatically; high-risk tasks are escalated for user approval. User ratings of completed work adjust both the user model and the escalation thresholds. Capabilities are organized into modules: business operations (CRM updates, scheduling, membership and client administration), research (automated multi-source research and knowledge-gap analysis), and monitoring (scheduled scans of tracked metrics with threshold alerts and periodic summary reports).
 
 ---
 
