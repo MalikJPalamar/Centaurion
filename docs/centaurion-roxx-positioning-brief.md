@@ -8,15 +8,15 @@
 
 ## 1. Product description (the roxx.ai seed)
 
-> AI operations system for an independent operator running multiple businesses. It assigns an AI agent to handle recurring operational work — client and membership administration, CRM updates, scheduling, research, monitoring, and weekly reporting — across all of the operator's businesses from one place. Each task is processed through a fixed sequence: the system loads the relevant business context, proposes an approach, executes, evaluates the result, and records the outcome. Before execution, every task is scored on novelty, stakes, and reversibility: routine low-risk tasks run automatically, while unusual, high-stakes, or hard-to-reverse tasks are held and sent to the operator for approval as a short, phone-readable summary. Approval thresholds adjust over time based on the operator's 1–5 ratings of completed work. All activity is written to a persistent memory store scoped to each business, so the agent retains context between sessions and the operator does not re-explain anything. Includes a web dashboard for reviewing activity and a modular task library that can be extended with new capabilities.
+> Personal AI agent permanently bound to a single individual and designed to evolve with them over their lifetime. The agent is cryptographically tied to its owner and maintains a continuously updated model of who that person is: their subjective developmental stage (assessed across cognitive, emotional, interpersonal, somatic, spiritual, and strategic lines), their biases, behavioral patterns, preferences, and characteristic ways of thinking, along with biological and nervous-system parameters such as sleep, energy, and somatic state. It also functions as the person's external cortex — a persistent memory layer that captures and organizes all knowledge and information they encounter, so nothing is lost between sessions and the model deepens with every interaction. The agent acts on its owner's behalf: it executes routine work autonomously and pauses to ask when a decision is novel, high-stakes, or hard to reverse, recalibrating its judgment from the owner's feedback. Person and agent co-evolve — as the person develops, the agent's model of them updates; as the agent learns, the person can safely delegate more. Domain-specific work (business operations, research, monitoring) runs as interchangeable modules on top of this person-bound core.
 
 ---
 
 ## 2. Who it's for (target persona)
 
-- **Primary:** The multi-venture solo operator / "company of one at scale" — a founder running 2–4 businesses simultaneously who is the bottleneck for every business.
-- **Secondary:** Fractional executives, solopreneurs, and small founding teams drowning in cross-context switching.
-- **Behavioral signature:** thinks in systems and metaphors, reviews work from a phone, wants to *direct and rate* rather than micromanage, distrusts AI that needs constant re-explaining.
+- **Primary:** An individual who wants a lifelong personal AI — one agent that is theirs alone, knows them deeply (how they think, where they are in their development, how their body and energy run), and grows with them rather than resetting every session.
+- **First concrete instance:** the multi-venture solo operator — a founder running several businesses who is the bottleneck for all of them. Their ventures are the proving ground for the person-bound core, not the product itself.
+- **Behavioral signature:** invested in their own development, thinks in systems, reviews from a phone, wants to *direct and rate* rather than micromanage, distrusts AI that needs constant re-explaining.
 
 ---
 
@@ -33,13 +33,14 @@
 
 ## 4. Strongest angle (the wedge)
 
-**"The human is the prior, not the bottleneck."**
+**One agent, bound to you, for life.**
 
-Centaurion's whole design inverts the default AI-assistant relationship. Instead of you serving the AI prompts, the AI runs a disciplined loop on your behalf and **only interrupts you when a decision is genuinely novel, high-stakes, and hard to reverse** — surfaced as a ≤5-line, phone-readable card you can rate 1–5. Everything else it does autonomously and remembers forever.
+Every other AI is rented intelligence: generic, stateless, the same for everyone, gone when the session ends. Centaurion is the opposite — a single agent tied to one person that starts by learning who you actually are (your developmental stage, biases, behavioral patterns, even how your body and energy run) and then never stops updating that model. You and it co-evolve: it gets more accurate about you; you get to delegate more of your life and work to it.
 
-Two ideas do the selling:
-1. **The Routing Gate** — it knows when to act and when to ask (novelty × stakes × reversibility). This is the trust mechanism.
-2. **Compounding memory** — every interaction makes the system smarter; you never re-explain context.
+Three ideas do the selling:
+1. **Person-bound** — calibrated to *you* via a structured assessment of your development and patterns, not a generic user profile.
+2. **The Routing Gate** — it knows when to act and when to ask (novelty × stakes × reversibility), and only interrupts for what genuinely needs you. This is the trust mechanism.
+3. **The external cortex** — everything you encounter and decide is captured into a permanent, growing memory; you never re-explain context, and the relationship compounds for life.
 
 ---
 
