@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Centaurion — Viral Reel (9:16)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1080px; height: 1920px;
+        overflow: hidden;
+        background: #000;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      #root {
+        position: relative;
+        width: 1080px; height: 1920px;
+        background: #000;
+        color: #fff;
+        overflow: hidden;
+      }
+
+      /* Camera shake wrapper — everything visual lives inside, so shake/rotate hits the whole frame */
+      .shake {
+        position: absolute;
+        inset: 0;
+        transform-origin: center center;
+      }
+
+      .stage {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 120px 40px;
+        gap: 12px;
+        opacity: 0;
+      }
+
+      /* ===== Beat 1 — HOOK ===== */
+      .hook-line-1 {
+        font-family: "Anton", "Impact", "Arial Black", sans-serif;
+        font-weight: 400;
+        font-size: 200px;
+        line-height: 0.94;
+        letter-spacing: -0.02em;
+        color: #fff;
+        text-transform: uppercase;
+        text-align: center;
+        max-width: 1000px;
+      }
+      .hook-line-2 {
+        font-family: "Anton", "Impact", "Arial Black", sans-serif;
+        font-weight: 400;
+        font-size: 170px;
+        line-height: 0.94;
+        letter-spacing: -0.02em;
+        color: #fff;
+        text-transform: uppercase;
+        text-align: center;
+        margin-top: 18px;
+        max-width: 1000px;
+      }
+
+      /* ===== Beat 2 — STACK (affirmation cascade) ===== */
+      #stage-2 {
+        justify-content: center;
+        gap: 28px;
+      }
+      .stack-row {
+        font-family: "Anton", "Impact", "Arial Black", sans-serif;
+        font-weight: 400;
+        font-size: 150px;
+        line-height: 0.96;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        text-align: center;
+        opacity: 0;
+        white-space: nowrap;
+        max-width: 1000px;
+      }
+      .stack-row.red { color: #FF3535; }
+      .stack-row.white { color: #fff; }
+
+      /* ===== Beat 3 — PIVOT ===== */
+      #stage-3 .pivot-line {
+        font-family: "JetBrains Mono", "Courier New", monospace;
+        font-weight: 500;
+        font-size: 64px;
+        color: #888;
+        letter-spacing: 0.08em;
+        text-align: center;
+        opacity: 0;
+      }
+
+      /* ===== Beat 4 — BIAS WALL ===== */
+      .bias-card {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 50px;
+        opacity: 0;
+      }
+      .bias-text {
+        font-family: "Anton", "Impact", "Arial Black", sans-serif;
+        font-weight: 400;
+        line-height: 0.92;
+        letter-spacing: -0.025em;
+        text-transform: uppercase;
+        text-align: center;
+        color: #fff;
+        font-size: 180px;
+        max-width: 1000px;
+      }
+      .bias-text.two-line { font-size: 150px; }
+      .bias-text.small { font-size: 140px; }
+      .bias-text.tight { font-size: 130px; }
+      .bias-card.red-bg { background: #FF3535; }
+      .bias-card.red-bg .bias-text { color: #000; }
+
+      /* ===== Beat 5 — NUMBER ===== */
+      #stage-5 { justify-content: center; gap: 0; }
+      .big-number {
+        font-family: "Anton", "Impact", "Arial Black", sans-serif;
+        font-weight: 400;
+        font-size: 560px;
+        line-height: 0.86;
+        letter-spacing: -0.04em;
+        color: #fff;
+        opacity: 0;
+        text-align: center;
+        max-width: 1000px;
+      }
+      .number-label {
+        font-family: "Inter", sans-serif;
+        font-weight: 900;
+        font-size: 48px;
+        line-height: 1.1;
+        letter-spacing: -0.01em;
+        color: #fff;
+        text-align: center;
+        text-transform: uppercase;
+        opacity: 0;
+        margin-top: 24px;
+        max-width: 880px;
+      }
+
+      /* ===== Beat 6 — PRICE ===== */
+      #stage-6 { justify-content: center; gap: 24px; }
+      .price-line {
+        font-family: "Anton", "Impact", "Arial Black", sans-serif;
+        font-weight: 400;
+        font-size: 150px;
+        line-height: 0.94;
+        letter-spacing: -0.02em;
+        color: #fff;
+        text-align: center;
+        text-transform: uppercase;
+        opacity: 0;
+        max-width: 1000px;
+      }
+      .price-line .yes {
+        color: #FF3535;
+      }
+
+      /* ===== Beat 7 — FLIP ===== */
+      #stage-7 { justify-content: center; gap: 60px; }
+      .flip-question {
+        font-family: "Inter", sans-serif;
+        font-weight: 600;
+        font-size: 80px;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        color: #fff;
+        text-align: center;
+        opacity: 0;
+        max-width: 1000px;
+      }
+      .flip-slam {
+        font-family: "Anton", "Impact", "Arial Black", sans-serif;
+        font-weight: 400;
+        font-size: 220px;
+        line-height: 0.94;
+        letter-spacing: -0.025em;
+        color: #E8B872;
+        text-align: center;
+        text-transform: uppercase;
+        opacity: 0;
+        max-width: 1000px;
+      }
+
+      /* ===== Beat 8 — BRAND ===== */
+      #stage-8 {
+        justify-content: center;
+        gap: 32px;
+        background: #0A0908;
+      }
+      .brand-cover {
+        position: absolute;
+        inset: 0;
+        background: #0A0908;
+        opacity: 0;
+        z-index: -1;
+      }
+      .wordmark {
+        font-family: "Instrument Serif", "Times New Roman", serif;
+        font-weight: 400;
+        font-size: 170px;
+        line-height: 1.0;
+        letter-spacing: 0.02em;
+        color: #ECE5D5;
+        text-align: center;
+        opacity: 0;
+        max-width: 1000px;
+      }
+      .wordmark-tagline {
+        font-family: "Instrument Serif", "Times New Roman", serif;
+        font-style: italic;
+        font-weight: 400;
+        font-size: 56px;
+        line-height: 1.2;
+        color: #E8B872;
+        text-align: center;
+        opacity: 0;
+        max-width: 1000px;
+      }
+      .wordmark-url {
+        font-family: "JetBrains Mono", "Courier New", monospace;
+        font-weight: 500;
+        font-size: 38px;
+        color: #ECE5D5;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        opacity: 0;
+        margin-top: 20px;
+      }
+
+      /* ===== Flash transition overlay ===== */
+      .flash {
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        opacity: 0;
+        z-index: 100;
+        pointer-events: none;
+      }
+
+      /* ===== Glitch RGB-split — applied via class toggle in timeline ===== */
+      .glitch {
+        text-shadow:
+          -8px 0 0 #FF3535,
+          8px 0 0 #00FFFF;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="22"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div
+        id="reel"
+        class="clip"
+        data-start="0"
+        data-duration="22"
+        data-track-index="1"
+        style="position:absolute;inset:0;"
+      >
+        <div class="shake" id="shake">
+
+          <!-- ===== Beat 1 — HOOK (0-2.0) ===== -->
+          <div class="stage" id="stage-1">
+            <div class="hook-line-1" id="hook-1">YOUR AI</div>
+            <div class="hook-line-2" id="hook-2">AGREES WITH YOU.</div>
+          </div>
+
+          <!-- ===== Beat 2 — STACK (2.0-4.5) ===== -->
+          <div class="stage" id="stage-2">
+            <div class="stack-row white" id="stack-1">GENIUS.</div>
+            <div class="stack-row red"   id="stack-2">BRILLIANT.</div>
+            <div class="stack-row white" id="stack-3">INCREDIBLE.</div>
+            <div class="stack-row red"   id="stack-4">VISIONARY.</div>
+            <div class="stack-row white" id="stack-5">PERFECT.</div>
+          </div>
+
+          <!-- ===== Beat 3 — PIVOT (4.5-6.0) ===== -->
+          <div class="stage" id="stage-3">
+            <div class="pivot-line" id="pivot-1">// MEANWHILE,</div>
+          </div>
+
+          <!-- ===== Beat 4 — BIAS WALL (6.0-10.5) ===== -->
+          <div class="bias-card" id="bias-1"><div class="bias-text">CONFIRMATION<br/>BIAS</div></div>
+          <div class="bias-card" id="bias-2"><div class="bias-text small">DUNNING<br/>KRUGER</div></div>
+          <div class="bias-card red-bg" id="bias-3"><div class="bias-text">ANCHORING</div></div>
+          <div class="bias-card" id="bias-4"><div class="bias-text tight">SURVIVORSHIP<br/>BIAS</div></div>
+          <div class="bias-card" id="bias-5"><div class="bias-text">SUNK COST</div></div>
+          <div class="bias-card red-bg" id="bias-6"><div class="bias-text small">AVAILABILITY</div></div>
+          <div class="bias-card" id="bias-7"><div class="bias-text">IKEA EFFECT</div></div>
+          <div class="bias-card" id="bias-8"><div class="bias-text">STATUS QUO</div></div>
+          <div class="bias-card" id="bias-9"><div class="bias-text small">+ 180 MORE</div></div>
+
+          <!-- ===== Beat 5 — NUMBER (10.5-13.0) ===== -->
+          <div class="stage" id="stage-5">
+            <div class="big-number" id="big-number">188</div>
+            <div class="number-label" id="number-label">known cognitive biases.<br/>working against you. right now.</div>
+          </div>
+
+          <!-- ===== Beat 6 — PRICE (13.0-15.5) ===== -->
+          <div class="stage" id="stage-6">
+            <div class="price-line" id="price-1">EVERY <span class="yes">YES</span></div>
+            <div class="price-line" id="price-2">COMPOUNDS</div>
+            <div class="price-line" id="price-3">THE BLIND SPOT.</div>
+          </div>
+
+          <!-- ===== Beat 7 — FLIP (15.5-18.5) ===== -->
+          <div class="stage" id="stage-7">
+            <div class="flip-question" id="flip-q">what if your AI</div>
+            <div class="flip-slam" id="flip-s">PUSHED<br/>BACK?</div>
+          </div>
+
+          <!-- ===== Beat 8 — BRAND (18.5-22.0) ===== -->
+          <div class="brand-cover" id="brand-cover"></div>
+          <div class="stage" id="stage-8">
+            <div class="wordmark" id="wordmark">Centaurion</div>
+            <div class="wordmark-tagline" id="wordmark-tag">the AI that disagrees.</div>
+            <div class="wordmark-url" id="wordmark-url">centaurion.me</div>
+          </div>
+
+          <!-- Flash overlay — top z-index, covers entire frame -->
+          <div class="flash" id="flash"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      /* Helper: white flash at time t (duration 0.18s) */
+      function flash(t, intensity = 1) {
+        tl.fromTo("#flash",
+          { opacity: 0 },
+          { opacity: intensity, duration: 0.04, ease: "power2.out", overwrite: "auto" }, t);
+        tl.to("#flash", { opacity: 0, duration: 0.14, ease: "power3.in", overwrite: "auto" }, t + 0.04);
+      }
+
+      /* Helper: camera shake on shake wrapper */
+      function shake(t, magnitude = 1) {
+        const m = magnitude;
+        tl.fromTo("#shake",
+          { x: 0, y: 0, rotation: 0 },
+          { x: -10 * m, y: 6 * m, rotation: -0.6 * m, duration: 0.06, ease: "power2.out", overwrite: "auto" }, t);
+        tl.to("#shake", { x: 12 * m, y: -8 * m, rotation: 0.7 * m, duration: 0.08, ease: "power2.inOut", overwrite: "auto" }, t + 0.06);
+        tl.to("#shake", { x: -6 * m, y: 4 * m, rotation: -0.3 * m, duration: 0.08, ease: "power2.inOut", overwrite: "auto" }, t + 0.14);
+        tl.to("#shake", { x: 0, y: 0, rotation: 0, duration: 0.12, ease: "power3.out", overwrite: "auto" }, t + 0.22);
+      }
+
+      // =================================================================
+      // BEAT 1 — HOOK (0.0–2.0)
+      // =================================================================
+      tl.set("#stage-1", { opacity: 1 }, 0);
+      tl.fromTo("#hook-1",
+        { opacity: 0, scale: 1.12 },
+        { opacity: 1, scale: 1, duration: 0.32, ease: "power3.out", transformOrigin: "center center" }, 0.1);
+      tl.fromTo("#hook-2",
+        { opacity: 0, scale: 1.12 },
+        { opacity: 1, scale: 1, duration: 0.32, ease: "power3.out", transformOrigin: "center center" }, 0.32);
+      shake(0.1, 0.6);
+
+      // ----- Transition to Beat 2 -----
+      flash(1.95, 1);
+      tl.set("#stage-1", { opacity: 0 }, 2.0);
+
+      // =================================================================
+      // BEAT 2 — STACK (2.0–4.5) — affirmation cascade
+      // =================================================================
+      tl.set("#stage-2", { opacity: 1 }, 2.0);
+      const stackTimes = [2.05, 2.50, 2.95, 3.40, 3.90];
+      const stackIds   = ["#stack-1", "#stack-2", "#stack-3", "#stack-4", "#stack-5"];
+      const stackEases = ["back.out(2)", "power4.out", "back.out(1.8)", "expo.out", "back.out(2.2)"];
+      stackTimes.forEach((t, i) => {
+        tl.fromTo(stackIds[i],
+          { opacity: 0, scale: 1.18, y: 30 },
+          { opacity: 1, scale: 1, y: 0, duration: 0.18, ease: stackEases[i], transformOrigin: "center center" }, t);
+        shake(t, 0.4);
+      });
+
+      // ----- Transition to Beat 3 -----
+      flash(4.42, 1);
+      tl.set("#stage-2", { opacity: 0 }, 4.5);
+      // hide stack rows for memory cleanliness
+      tl.set(stackIds, { opacity: 0 }, 4.5);
+
+      // =================================================================
+      // BEAT 3 — PIVOT (4.5–6.0) — black + tiny mono
+      // =================================================================
+      tl.set("#stage-3", { opacity: 1 }, 4.5);
+      tl.fromTo("#pivot-1",
+        { opacity: 0, x: -20 },
+        { opacity: 1, x: 0, duration: 0.55, ease: "power2.out" }, 4.75);
+
+      // ----- Transition to Beat 4 -----
+      flash(5.92, 0.9);
+      tl.set("#stage-3", { opacity: 0 }, 6.0);
+      tl.set("#pivot-1", { opacity: 0 }, 6.0);
+
+      // =================================================================
+      // BEAT 4 — BIAS WALL (6.0–10.5) — 9 cards, 0.5s apart
+      // =================================================================
+      const biasIds   = ["#bias-1","#bias-2","#bias-3","#bias-4","#bias-5","#bias-6","#bias-7","#bias-8","#bias-9"];
+      const biasStart = 6.0;
+      const biasGap   = 0.5;
+      biasIds.forEach((id, i) => {
+        const t = biasStart + i * biasGap;
+        tl.set(id, { opacity: 1 }, t);
+        tl.fromTo(`${id} .bias-text`,
+          { opacity: 0, scale: 1.08 },
+          { opacity: 1, scale: 1, duration: 0.12, ease: "power3.out", transformOrigin: "center center" }, t);
+        // shake intensity ramps up
+        shake(t, 0.3 + i * 0.08);
+        // hide at end of its window — except the last one which hands off to the flash
+        if (i < biasIds.length - 1) {
+          tl.set(id, { opacity: 0 }, t + biasGap - 0.001);
+        }
+      });
+
+      // ----- Transition to Beat 5 -----
+      flash(10.42, 1);
+      tl.set(biasIds, { opacity: 0 }, 10.5);
+
+      // =================================================================
+      // BEAT 5 — NUMBER (10.5–13.0) — giant 188 with shake
+      // =================================================================
+      tl.set("#stage-5", { opacity: 1 }, 10.5);
+      tl.fromTo("#big-number",
+        { opacity: 0, scale: 1.25, y: -20 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.32, ease: "back.out(1.8)", transformOrigin: "center center" }, 10.55);
+      shake(10.55, 1.2);
+      tl.fromTo("#number-label",
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 11.4);
+      // Hold
+
+      // ----- Transition to Beat 6 -----
+      flash(12.92, 0.85);
+      tl.set("#stage-5", { opacity: 0 }, 13.0);
+      tl.set(["#big-number","#number-label"], { opacity: 0 }, 13.0);
+
+      // =================================================================
+      // BEAT 6 — PRICE (13.0–15.5) — "every YES compounds the blind spot"
+      // =================================================================
+      tl.set("#stage-6", { opacity: 1 }, 13.0);
+      tl.fromTo("#price-1",
+        { opacity: 0, scale: 1.1 },
+        { opacity: 1, scale: 1, duration: 0.28, ease: "back.out(1.6)", transformOrigin: "center center" }, 13.1);
+      shake(13.1, 0.7);
+      tl.fromTo("#price-2",
+        { opacity: 0, x: -30 },
+        { opacity: 1, x: 0, duration: 0.32, ease: "expo.out" }, 13.55);
+      tl.fromTo("#price-3",
+        { opacity: 0, scale: 1.12 },
+        { opacity: 1, scale: 1, duration: 0.36, ease: "back.out(1.8)", transformOrigin: "center center" }, 14.05);
+      shake(14.05, 1.0);
+      // Hold
+
+      // ----- Transition to Beat 7 -----
+      flash(15.42, 1);
+      tl.set("#stage-6", { opacity: 0 }, 15.5);
+      tl.set(["#price-1","#price-2","#price-3"], { opacity: 0 }, 15.5);
+
+      // =================================================================
+      // BEAT 7 — FLIP (15.5–18.5) — "what if your AI / PUSHED BACK?"
+      // =================================================================
+      tl.set("#stage-7", { opacity: 1 }, 15.5);
+      tl.fromTo("#flip-q",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 15.65);
+
+      // Mini flash before the slam
+      flash(16.78, 1);
+      tl.fromTo("#flip-s",
+        { opacity: 0, scale: 1.22 },
+        { opacity: 1, scale: 1, duration: 0.32, ease: "back.out(2.2)", transformOrigin: "center center" }, 16.85);
+      shake(16.85, 1.3);
+      // Hold flip-slam ~1.5s
+
+      // ----- Transition to Beat 8 (BRAND) — fade flash, swap to brand background -----
+      flash(18.42, 0.85);
+      tl.set("#stage-7", { opacity: 0 }, 18.5);
+      tl.set(["#flip-q","#flip-s"], { opacity: 0 }, 18.5);
+
+      // =================================================================
+      // BEAT 8 — BRAND (18.5–22.0) — Centaurion wordmark
+      // =================================================================
+      // Swap the visible background to brand cream-dark via cover layer
+      tl.set("#brand-cover", { opacity: 1, zIndex: 0 }, 18.5);
+      tl.set("#stage-8", { opacity: 1 }, 18.5);
+
+      tl.fromTo("#wordmark",
+        { opacity: 0, letterSpacing: "0.16em", y: 10 },
+        { opacity: 1, letterSpacing: "0.02em", y: 0, duration: 1.0, ease: "expo.out" }, 18.65);
+      tl.fromTo("#wordmark-tag",
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 19.6);
+      tl.fromTo("#wordmark-url",
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }, 20.4);
+
+      // Gentle final breath
+      tl.to("#wordmark",
+        { letterSpacing: "0.035em", duration: 1.2, ease: "sine.inOut" }, 20.7);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
