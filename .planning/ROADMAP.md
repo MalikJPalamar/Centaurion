@@ -48,6 +48,7 @@
 - [ ] gh-aw or equivalent scheduled issue creation for daily health
 - [ ] InfraNodus MCP for gap analysis (or equivalent)
 - [ ] Wiki repos as separate GitHub repos (not just docs/ subdirectories)
+  - PT-7: Wiki-as-repos migration kit added (`deploy/wiki-migration/`) — operator runs `migrate-wikis.sh --execute` to create the repos.
 
 **Definition of Done:** Nova responds to a Telegram message using Centaurion identity. Syncthing running. At least one gh-aw workflow creating issues.
 
