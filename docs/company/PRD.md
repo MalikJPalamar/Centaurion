@@ -43,3 +43,7 @@ Identity files · WO-010 curation judgment · secrets · policy thresholds · th
 
 ## 6. Operating Protocol (steady state)
 Morning ≤10 min: health issue → approve specs → merge PRs → Nova priority.
+Daytime: lights out (auto-fetch, routing-gate escalations only). Evening: health workflow, SA scan, autoresearch, Syncthing. Weekly: compaction PR review, gap analysis, threshold tuning.
+
+## 7. Acceptance Test — "Can the factory build the company?"
+WO-001…022 shipped through the line at exactly 2 touches each (WO-010 curation exempt) · Sprints 1-3 ≤30 days from factory-open · zero hand-built components outside §5 · cost/WO trending down · Week 5: one full week where Malik's only inputs are gates + priorities. Fail on any WO → the factory receives a spec to fix itself first. Either way the factory improves — that is the flywheel.
