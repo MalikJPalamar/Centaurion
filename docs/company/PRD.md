@@ -38,6 +38,9 @@ Canonical = partitioned markdown wikis (personal/aob/builderbee/centaurion) — 
 ## 4. v0.5 Amendments
 Hermes single-gateway (all channels, one process — pi-mom struck) · Agent Zero scoped to WO-021 charter · Archon seat confirmed = Stores+router+UA (validation, not adoption) · local $0 cells route routine website WOs when hardware lands (factory A6) · Archestra remains the enterprise chassis, trigger-gated (first RBAC/compliance client or AOB rollout).
 
+### A12 — Animated onboarding for Centaurion
+Centaurion ("the symbiotic co-evolving agent") gets an animated terminal onboarding flow inspired by OpenSpec's interactive setup wizard. First-run experience walks the operator through identity binding, agent roster, gateway config, and knowledge-layer bootstrap. Scope: CLI-first (terminal ASCII art + step-by-step prompts), portable to web later. Reference: OpenSpec `openspec init` onboarding UX.
+
 ## 5. Human-Only (permanent)
 Identity files · WO-010 curation judgment · secrets · policy thresholds · the two gates.
 
