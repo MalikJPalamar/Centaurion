@@ -1,18 +1,19 @@
 # Project Discernment Doctrine
 
-> Canonical. Three production systems, same shape, different products. They share a doctrine, never a core runtime.
+> Canonical. Three production systems + one research program, same doctrine, never a shared core runtime.
 
-## The Three Projects
+## The Four Projects
 
-| Project | Produces | Input | Current state |
+| Project | Kind | Produces | Notes |
 |---|---|---|---|
-| **Dark Factory** | Verified software (spec → PR, 2 human touches) | Approved OpenSpec change | docs/factory/PRD.md, P0' in progress |
-| **Cognitive Company** | Business operations under human priors | Priors + signals | Framework live in this repo; infrastructure = WO-001..023, built BY the factory |
-| **GTM Harness** | Demand: campaigns, nurture, pipeline | Offer + audience | Greenfield. Seed = 3 strip-mined GTM skills (Twenty client, Mautic nurture, GTM sequence engine). Spike = WO-024 |
+| **Dark Factory** | Production system | Verified software | PRD live |
+| **Cognitive Company** | Production system | Business operations | Blueprint fills its data + validation layer |
+| **GTM Harness** | Production system | Demand (campaigns, nurture, pipeline) | Twenty + Mautic + sequence engine; WO-024 spike DEFERRED |
+| **Centaurion Symbiote** | Research program | A co-evolving agent cognitively + cryptographically encoded to one human | CONSUMES harness doctrine; its own track, NOT factory work orders. Do not schedule; do not conflate. |
 
 ## Dependency Law
 
-Factory builds the other two. Company operates all three. GTM funds them.
+Factory builds the production systems. Company operates them. GTM funds them. The Symbiote research draws components from all, contributes requirements back through canonical docs only.
 
 ## Anti-Conflation Rules (hard)
 
