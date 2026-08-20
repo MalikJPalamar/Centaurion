@@ -10,7 +10,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/  — commented out: conflicts with backend/lib/ (Python setuptools artifact, not needed here)
 lib64/
 parts/
 sdist/
@@ -41,6 +41,7 @@ htmlcov/
 # Logs
 *.log
 logs/.watchdog*
+logs/trajectory/
 
 # Environment
 .env

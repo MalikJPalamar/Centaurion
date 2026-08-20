@@ -1,4 +1,7 @@
-from fastapi import APIRouter
+from dataclasses import asdict
+from typing import Optional
+
+from fastapi import APIRouter, Query
 from api.mock_data import (
     get_dashboard_stats,
     get_ai_operations,
@@ -58,3 +61,42 @@ async def settings():
 @router.put("/settings")
 async def save_settings(settings_data: dict):
     return update_settings(settings_data)
+
+
+# ---------------------------------------------------------------------------
+# /doctor/trajectory — provenance query routes (WO-025)
+# ---------------------------------------------------------------------------
+
+from lib.trajectory import TrajectoryReader
+
+_trajectory_reader = TrajectoryReader()
+
+
+@router.get("/doctor/trajectory/files")
+async def trajectory_files(wo: Optional[str] = Query(None)):
+    """List trajectory log files, optionally filtered by WO."""
+    return [str(f.name) for f in _trajectory_reader.list_files(wo=wo)]
+
+
+@router.get("/doctor/trajectory/query")
+async def trajectory_query(
+    wo: Optional[str] = Query(None),
+    phase: Optional[str] = Query(None),
+    after: Optional[str] = Query(None),
+    before: Optional[str] = Query(None),
+):
+    """Query trajectory entries with optional filters."""
+    entries = _trajectory_reader.query(wo=wo, phase=phase, after=after, before=before)
+    return [asdict(e) for e in entries]
+
+
+@router.get("/doctor/trajectory/provenance")
+async def trajectory_provenance(
+    wo: str = Query(...),
+    action_index: int = Query(...),
+):
+    """Answer: 'which skill/policy caused action N in WO-xxx?'"""
+    entry = _trajectory_reader.provenance(wo, action_index)
+    if entry is None:
+        return {"error": f"No action at index {action_index} for {wo}"}
+    return asdict(entry)
