@@ -28,7 +28,7 @@ CENTAURION_REPO = os.environ.get("CENTAURION_REPO", os.path.expanduser("~/Centau
 HONCHO_CONFIG = {
     "honcho": {
         "enabled": True,
-        "app_name": "centaurion-omega",
+        "app_name": "centaurion-centaurion",
         "user_id": "malik-palamar",
         "contextCadence": 5,      # Refresh base context every 5 messages
         "dialecticCadence": 10,    # Run dialectic reasoning every 10 messages
@@ -57,10 +57,10 @@ def generate_honcho_config():
 def get_setup_instructions():
     """Return setup instructions for Honcho."""
     return """
-# Honcho Setup for Centaurion Omega
+# Honcho Setup for Centaurion Centaurion
 
 ## 1. Sign up at honcho.dev (free tier)
-   - Create an app named "centaurion-omega"
+   - Create an app named "centaurion-centaurion"
    - Get your API key
 
 ## 2. Add to Hermes .env
@@ -71,7 +71,7 @@ def get_setup_instructions():
    # Add under the root level:
    honcho:
      enabled: true
-     app_name: centaurion-omega
+     app_name: centaurion-centaurion
 
 ## 4. Verify
    hermes

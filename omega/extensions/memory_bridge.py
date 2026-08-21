@@ -169,7 +169,7 @@ class MemoryBridgeExtension:
                 content=f"[{timestamp}] {summary}",
                 venture=self.session_venture,
                 metadata={
-                    "source": "hermes-omega",
+                    "source": "hermes-centaurion",
                     "venture": self.session_venture,
                     "timestamp": timestamp,
                 },

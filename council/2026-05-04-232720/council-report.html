@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Council Verdict: 2026-05-04</title>
+<style>
+ :root {
+ --paper: #fafaf7;
+ --ink: #141413;
+ --ink-soft: #4b4b47;
+ --ink-mute: #8a8a83;
+ --rule: #e5e3dc;
+ --accent: #1e3a5f;
+ --accent-soft: #e8eef5;
+ --sans: "Inter", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+ --serif: "Iowan Old Style", "Iowan", ui-serif, Georgia, Cambria, "Times New Roman", serif;
+ --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+ }
+ * { box-sizing: border-box; }
+ html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); }
+ body { font-family: var(--serif); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+ .wrap { max-width: 780px; margin: 0 auto; padding: 64px 32px 96px; }
+
+ .eyebrow {
+ font-family: var(--sans);
+ font-size: 11px;
+ letter-spacing: 0.22em;
+ text-transform: uppercase;
+ color: var(--accent);
+ font-weight: 600;
+ margin: 0 0 16px;
+ }
+ h1.question {
+ font-family: var(--serif);
+ font-weight: 500;
+ font-size: 34px;
+ line-height: 1.25;
+ letter-spacing: -0.01em;
+ margin: 0 0 20px;
+ color: var(--ink);
+ }
+ .meta {
+ font-family: var(--sans);
+ font-size: 13px;
+ color: var(--ink-mute);
+ margin: 0 0 56px;
+ border-bottom: 1px solid var(--rule);
+ padding-bottom: 28px;
+ }
+
+ section.verdict {
+ background: var(--accent-soft);
+ border-left: 3px solid var(--accent);
+ padding: 36px 40px;
+ margin: 0 0 56px;
+ border-radius: 2px;
+ }
+ section.verdict h2 {
+ font-family: var(--sans);
+ font-size: 11px;
+ letter-spacing: 0.22em;
+ text-transform: uppercase;
+ color: var(--accent);
+ margin: 0 0 24px;
+ font-weight: 600;
+ }
+ section.verdict h3 {
+ font-family: var(--sans);
+ font-size: 14px;
+ font-weight: 600;
+ color: var(--ink);
+ margin: 28px 0 8px;
+ letter-spacing: 0;
+ }
+ section.verdict h3:first-of-type { margin-top: 0; }
+ section.verdict p, section.verdict ul { margin: 0 0 8px; }
+ section.verdict ul { padding-left: 20px; }
+ section.verdict li { margin-bottom: 6px; }
+ section.verdict .recommendation {
+ font-size: 19px;
+ line-height: 1.5;
+ margin-top: 4px;
+ }
+ section.verdict .one-thing {
+ font-family: var(--serif);
+ font-style: italic;
+ font-size: 18px;
+ border-top: 1px solid rgba(30, 58, 95, 0.2);
+ padding-top: 20px;
+ margin-top: 28px;
+ }
+
+ .round-label {
+ font-family: var(--sans);
+ font-size: 11px;
+ letter-spacing: 0.22em;
+ text-transform: uppercase;
+ color: var(--ink-mute);
+ font-weight: 600;
+ margin: 0 0 16px;
+ padding-top: 16px;
+ border-top: 1px solid var(--rule);
+ }
+
+ details {
+ border-bottom: 1px solid var(--rule);
+ padding: 20px 0;
+ }
+ details[open] { padding-bottom: 28px; }
+ summary {
+ cursor: pointer;
+ list-style: none;
+ font-family: var(--sans);
+ font-weight: 500;
+ font-size: 15px;
+ color: var(--ink);
+ display: flex;
+ align-items: baseline;
+ gap: 12px;
+ user-select: none;
+ }
+ summary::-webkit-details-marker { display: none; }
+ summary::before {
+ content: "+";
+ font-family: var(--mono);
+ color: var(--accent);
+ font-weight: 400;
+ font-size: 16px;
+ transition: transform 160ms ease;
+ display: inline-block;
+ width: 12px;
+ }
+ details[open] summary::before { content: "−"; }
+ .advisor-kind {
+ font-family: var(--sans);
+ font-size: 11px;
+ letter-spacing: 0.16em;
+ text-transform: uppercase;
+ color: var(--ink-mute);
+ margin-left: 4px;
+ }
+ details .body {
+ margin-top: 16px;
+ padding-left: 24px;
+ color: var(--ink-soft);
+ font-size: 16px;
+ line-height: 1.65;
+ }
+ details .body p { margin: 0 0 12px; }
+ details .body p:last-child { margin-bottom: 0; }
+
+ footer {
+ margin-top: 80px;
+ padding-top: 24px;
+ border-top: 1px solid var(--rule);
+ font-family: var(--sans);
+ font-size: 12px;
+ color: var(--ink-mute);
+ line-height: 1.6;
+ }
+ footer code {
+ font-family: var(--mono);
+ background: rgba(30, 58, 95, 0.08);
+ padding: 1px 6px;
+ border-radius: 3px;
+ color: var(--ink);
+ font-size: 11px;
+ }
+
+ @media (max-width: 640px) {
+ .wrap { padding: 40px 20px 64px; }
+ h1.question { font-size: 26px; }
+ section.verdict { padding: 28px 24px; }
+ }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+ <p class="eyebrow">Council Verdict</p>
+ <h1 class="question">Centaurion v0.1: Hermes architecture (&ldquo;agent that grows with you&rdquo;) or Agent Zero architecture (&ldquo;agent with a computer in a container&rdquo;)?</h1>
+ <p class="meta">2026-05-04 23:27 UTC &nbsp;·&nbsp; 5 advisors · 5 peer reviewers</p>
+
+ <section class="verdict">
+ <h2>Synthesis</h2>
+
+ <h3>Where the council agrees</h3>
+ <ul>
+ <li><strong>Hermes vs Agent Zero is a false dichotomy.</strong> First Principles, Expansionist, and Contrarian converged independently. Hermes is an identity/memory stance; Agent Zero is an execution substrate. Orthogonal, not alternatives.</li>
+ <li><strong>Composition over selection: Hermes-spine + Agent Zero-limbs.</strong> Persistent identity issues intent; ephemeral containers execute; memory layer eats their traces.</li>
+ <li><strong>The memory layer is not load-bearing.</strong> First Principles and Executor both note Supermemory + wikis + Graphiti are already built and consumed by either architecture.</li>
+ <li><strong>The Routing Gate is the structural decision.</strong> Contrarian explicitly (&ldquo;enforced kernel&rdquo;), First Principles implicitly (&ldquo;pick the seam&rdquo;).</li>
+ </ul>
+
+ <h3>Where the council clashes</h3>
+ <ul>
+ <li><strong>Empirical bake-off vs. structural decision.</strong> Executor wants 10 days of side-by-side implementation. First Principles and Contrarian say the question is structurally answered. Both have a point — bake-offs catch real friction but pre-empt the reframe and burn the operator&rsquo;s binding constraint, attention.</li>
+ <li><strong>Single-operator vs multi-tenant horizon.</strong> Expansionist sees v0.1 as foundation for Centaurion-as-SaaS. Four advisors stay inside single-operator framing. Topology is generalizable, but identity loading is operator-specific and revenue-bot&rsquo;s mandate is to <em>fund</em> Centaurion, not <em>be</em> it.</li>
+ </ul>
+
+ <h3>Blind spots the council caught</h3>
+ <ul>
+ <li><strong>Observability of the Routing Gate, on a phone, in &lt;10 seconds.</strong> Four of five reviewers converged on this miss independently. Without a mobile audit surface for every novelty/stakes/reversibility decision, Coupling Law compounds invisibly and the Contrarian&rsquo;s &ldquo;patches become the architecture&rdquo; failure ships regardless of which substrate wins.</li>
+ <li><strong>Operator bandwidth is the binding constraint</strong>, not adapter line count or seam location. The real architectural metric is <em>surface-to-operator ratio per unit of compounded value</em>.</li>
+ </ul>
+
+ <h3>The recommendation</h3>
+ <p class="recommendation">Build Centaurion v0.1 as <strong>Hermes-spine + Agent Zero-limbs, with the Routing Gate as the explicit, audited seam.</strong> Four of five advisors converged on this composition. Reject the bake-off (empiricism aimed at the wrong axis). Reject the SaaS scaling (premature; harden single-operator first). The chairman sides with First Principles&rsquo; buildable seam over Contrarian&rsquo;s kernel framing, but Contrarian&rsquo;s failure mode governs <em>how</em> the seam is implemented.</p>
+
+ <p class="one-thing"><strong>Do first:</strong> Before wiring Hermes or Agent Zero into v0.1, build the phone-readable Routing Gate audit log &mdash; every gate decision writes to <code>memory/state/routing-log.jsonl</code> with a one-line Telegram digest legible in under 10 seconds.</p>
+ </section>
+
+ <p class="round-label">Round 1: Advisors</p>
+
+ <details>
+ <summary>The Contrarian <span class="advisor-kind">downside lens</span></summary>
+ <div class="body">
+ <p>Both options encode a category error, and picking either locks it in.</p>
+ <p>The fatal flaw: you&rsquo;re framing this as memory-centric vs. capability-centric, but Centaurion&rsquo;s actual load-bearing claim is the Routing Gate &mdash; novelty &times; stakes &times; reversibility, with the human as prior. Neither Hermes nor Agent Zero implements that gate. Hermes assumes continuity <em>is</em> the value; Agent Zero assumes capability <em>is</em> the value. Both quietly demote the human-as-prior to a stylistic preference. Within six months you will discover the agent has been auto-executing things that should have surfaced, because the substrate has no native concept of &ldquo;stop and ask Malik.&rdquo; You&rsquo;ll patch around it. The patches will be the actual architecture.</p>
+ <p>Specific mechanism of failure for Hermes: a &ldquo;grows with you&rdquo; agent compounds <em>its</em> model of you, not your model of it. After a year of phone-only feedback, you cannot audit what it learned, what it pruned, or what wrong inference it&rsquo;s now confidently acting on. Coupling Law without an externalized, queryable substrate is just a black box that flatters you. Graphiti and MemPalace are still &ldquo;planned&rdquo; &mdash; that&rsquo;s the load-bearing assumption.</p>
+ <p>Specific mechanism of failure for Agent Zero: &ldquo;give it a computer and let it figure it out&rdquo; with a $1K cap and revenue mandate is how you wake up to a $400 Anthropic bill from a loop that almost worked. Containerized tool-use without a hardened routing gate is a gradient toward unsupervised execution. Felixbox phases 1-8 already built means the <em>capability</em> problem is largely solved; doubling down on it is solving yesterday&rsquo;s bottleneck.</p>
+ <p>The right v0.1 commitment isn&rsquo;t Hermes or Agent Zero. It&rsquo;s the Routing Gate as an enforced kernel, with both as swappable runtimes underneath. Otherwise the Three Laws are vibes.</p>
+ </div>
+ </details>
+
+ <details>
+ <summary>The First Principles Thinker <span class="advisor-kind">reframe lens</span></summary>
+ <div class="body">
+ <p>The framing assumes &ldquo;Hermes&rdquo; and &ldquo;Agent Zero&rdquo; are competing architectures. They aren&rsquo;t. One is a memory/identity stance. The other is an execution substrate. You can&rsquo;t choose between them any more than you can choose between &ldquo;having a spine&rdquo; and &ldquo;having hands.&rdquo;</p>
+ <p>Test the premises:</p>
+ <p><strong>Premise 1: v0.1 requires an architectural commitment.</strong> Survives, but barely. The Three Laws <em>are</em> the architecture. Coupling Law already commits you to memory-centric continuity. Routing Law already commits you to capability-bounded execution. The commitment was made before this question got asked.</p>
+ <p><strong>Premise 2: Hermes-style continuity and Agent Zero-style sandboxed capability are alternatives.</strong> Fails. Continuity is the <em>what</em> (state that compounds). Sandboxed Linux is the <em>how</em> (where execution happens). A persistent identity needs a body to act through. A sandboxed agent without continuity is amnesiac labor.</p>
+ <p><strong>Premise 3: Wrong choice = rewriting memory layer.</strong> Fails. The memory layer is already built (Supermemory + wikis + Graphiti). Neither option rewrites it. Both consume it.</p>
+ <p>The real question: <strong>what is the boundary between the agent&rsquo;s identity and its execution substrate?</strong> Hermes = identity. Agent Zero = substrate. Centaurion already declared both as runtimes &mdash; the architectural decision is <em>the seam</em>, not the side.</p>
+ <p>Build it: Hermes-shaped continuity layer (memory, identity, Three Laws) issues intent. Agent Zero-shaped containers execute. The seam is the Routing Gate &mdash; it decides what crosses from persistent self into ephemeral capability. Felixbox/revenue-bot proves you need both: the mandate persists (Hermes), the execution is autonomous and capability-rich (Agent Zero).</p>
+ <p>Pick the seam. The sides are already chosen.</p>
+ </div>
+ </details>
+
+ <details>
+ <summary>The Expansionist <span class="advisor-kind">upside lens</span></summary>
+ <div class="body">
+ <p>Both options are too small. The user is anchored on &ldquo;pick a foundation&rdquo; when the real upside is <strong>Hermes-as-substrate, Agent Zero as a spawned tool</strong> &mdash; and the meta-move that unlocks: Centaurion becomes a <em>fleet conductor</em>, not an agent.</p>
+ <p>Concretely: Hermes is the spine because Coupling Law compounds in memory, not in containers. But Agent Zero containers are disposable limbs you fork on demand. One container per Felixbox phase. One per venture (AOB, BuilderBee, Centaurion.me). One per overnight autoresearch run. They die; the memory layer eats their traces. You get capability-richness <em>without</em> contaminating the persistent self.</p>
+ <p>The undervalued upside this opens:</p>
+ <p><strong>1. Sellable substrate.</strong> Once Hermes-spine + Agent Zero limbs work for Malik, it works for any operator. The exo-cortex is the product. $10K MRR ceiling is wrong &mdash; this is a $100/mo SaaS where every user gets their own Hermes that grows with them. Revenue-bot&rsquo;s actual job is selling Centaurion seats.</p>
+ <p><strong>2. Container-as-skill.</strong> SKILL.md files already exist as markdown. Now each skill can ship its own Agent Zero container image. Skills become <em>executable workspaces</em>, not prompts. The skills/ directory becomes a marketplace.</p>
+ <p><strong>3. Multi-operator coupling.</strong> Hermes-spine means cross-user memory channels. Malik&rsquo;s Cortex can hand context to a client&rsquo;s Cortex inside BuilderBee delivery. Exo-cortex-to-exo-cortex protocols. This is where the moat is.</p>
+ <p><strong>4. Phone stays the cockpit.</strong> Persistent Hermes means the phone never loses thread. Containers boot in 200ms when needed; the user never sees them.</p>
+ <p>Don&rsquo;t pick A or B. Pick the topology where A is the self and B is the hand. That&rsquo;s the bigger company.</p>
+ </div>
+ </details>
+
+ <details>
+ <summary>The Outsider <span class="advisor-kind">fresh-eyes lens</span></summary>
+ <div class="body">
+ <p>I have no idea what most of this means, and I am presumably your target audience for whatever you&rsquo;re building.</p>
+ <p>Things that are opaque to a stranger: &ldquo;Exo-cortex&rdquo; &mdash; extra brain? An AI assistant? &ldquo;Centaurion v0.1&rdquo; &mdash; a product? A personal config? Why the version number on a thing one person uses? &ldquo;Felixbox&rdquo; / &ldquo;Hermes&rdquo; / &ldquo;Agent Zero&rdquo; / &ldquo;OpenClaw&rdquo; / &ldquo;Pi&rdquo; / &ldquo;VPS1&rdquo; &mdash; five named things in two sentences. I cannot tell which are products you use, products you&rsquo;ve built, or codenames for the same thing. Two of them are also called &ldquo;Hermes&rdquo; (revenue-bot brand AND Nous Research agent), which is going to bite you. &ldquo;Three Laws: Hierarchy, Routing, Coupling&rdquo; &mdash; sounds important, means nothing without definitions. &ldquo;Coupling-centric&rdquo; &mdash; undefined, then used as a deciding factor. &ldquo;Phone-first favors persistent state&rdquo; &mdash; asserted, not argued. &ldquo;Markdown is runtime&rdquo; &mdash; a slogan, not an explanation.</p>
+ <p>The framing problem: you&rsquo;re asking &ldquo;memory-centric vs capability-centric&rdquo; as if these are the only two axes and as if they&rsquo;re mutually exclusive. A naive reader would ask: why can&rsquo;t the thing that remembers also run code? What stops you from picking one as the shell and bolting the other on later? You assert &ldquo;wrong choice = rewriting memory layer&rdquo; but don&rsquo;t show why the choice is irreversible.</p>
+ <p>Also: the question is decided by your own constraint list. Two of three signals point at A. You&rsquo;ve already chosen &mdash; you&rsquo;re looking for permission.</p>
+ </div>
+ </details>
+
+ <details>
+ <summary>The Executor <span class="advisor-kind">Monday-morning lens</span></summary>
+ <div class="body">
+ <p>Monday morning, Option A: you wire Hermes&rsquo; memory schema into the existing Supermemory + wiki layer, write an adapter so the Active Inference Loop reads/writes through Hermes&rsquo; identity anchor, and pick one venture (AOB) to run end-to-end. First friction: schema impedance. Hermes wants its own memory shape; you already have three layers. You&rsquo;ll spend the week writing translators.</p>
+ <p>Monday morning, Option B: Agent Zero is already one of your four runtimes, so you give it a Felixbox subtask (one revenue-bot phase) and watch it execute in its container. First friction: state evaporates between runs. You&rsquo;ll spend the week bolting persistence onto a stateless thing.</p>
+ <p>Stop debating. Run a 10-day bake-off:</p>
+ <ul>
+ <li>Days 1-3: Pick ONE concrete task that hits both Coupling and Capability &mdash; e.g., &ldquo;ingest a Telegram doc, update wiki, execute a Felixbox phase-2 step, remember it next session.&rdquo;</li>
+ <li>Days 4-6: Implement under Hermes. Time it. Note what broke.</li>
+ <li>Days 7-9: Implement under Agent Zero. Time it. Note what broke.</li>
+ <li>Day 10: Whichever needed fewer adapter lines wins. The other becomes a subordinate runtime, not the foundation.</li>
+ </ul>
+ <p>What actually eats time: not the &ldquo;architecture&rdquo; &mdash; the adapter layer between whichever you pick and the Three Laws / routing log / ratings.jsonl you already wrote. Build the adapter first on a throwaway branch before committing to either.</p>
+ <p>Don&rsquo;t pick on vibes. Pick on adapter line count after a real task. Two weeks, decided. Hermes probably wins on phone-first persistence. But prove it with the bake-off, not this thread.</p>
+ </div>
+ </details>
+
+ <p class="round-label">Round 2: Peer review</p>
+
+ <details>
+ <summary>Reviewer 1</summary>
+ <div class="body">
+ <p><strong>Strongest: B.</strong> B dismantles the false dichotomy correctly. Hermes is identity-stance; Agent Zero is execution substrate. They aren&rsquo;t alternatives &mdash; they&rsquo;re orthogonal axes. B&rsquo;s &ldquo;pick the seam, not the side&rdquo; reframes the question into something actionable, and correctly identifies the Routing Gate as that seam.</p>
+ <p><strong>Biggest blind spot: C.</strong> C leaps from &ldquo;pick the topology&rdquo; to &ldquo;$100/mo SaaS, marketplace, multi-operator protocols&rdquo; without addressing the actual question. Turning Centaurion itself into the product is a fourth venture nobody asked for, and ignores the Hierarchy Law (human as prior, not as customer-acquisition surface).</p>
+ <p><strong>All five missed:</strong> None asked what failure mode the operator can actually detect from a phone. The Three Laws assume the human can audit. If Cortex auto-executes wrongly, what&rsquo;s the surface that surfaces it? That&rsquo;s the real v0.1 question.</p>
+ </div>
+ </details>
+
+ <details>
+ <summary>Reviewer 2</summary>
+ <div class="body">
+ <p><strong>Strongest: B.</strong> B kills the false dichotomy with the cleanest mechanism: Hermes is identity, Agent Zero is substrate, the architectural decision is <em>the seam</em>, not the side. C arrives at similar topology but inflates into SaaS fantasy.</p>
+ <p><strong>Biggest blind spot: C.</strong> C should have addressed cost and attention budget before proposing a fleet conductor with multi-operator coupling. The operator has $1K total cap, runs three ventures from a phone, hasn&rsquo;t shipped v0.1. C scaled the company before scaling the spine.</p>
+ <p><strong>All five missed:</strong> Who audits the Routing Gate itself. When the gate misclassifies, what catches it? Without a closed-loop audit on the gate&rsquo;s own decisions &mdash; ratings.jsonl fed back into thresholds &mdash; the Three Laws degrade silently regardless of which runtime sits underneath.</p>
+ </div>
+ </details>
+
+ <details>
+ <summary>Reviewer 3</summary>
+ <div class="body">
+ <p><strong>Strongest: B.</strong> B is the only response that dissolves the false dichotomy with a load-bearing reframe AND lands an actionable construction: Hermes issues intent, Agent Zero executes, Routing Gate is the seam.</p>
+ <p><strong>Biggest blind spot: C.</strong> C&rsquo;s blind spot is security and trust boundaries. It proposes selling Hermes seats, cross-operator memory channels, and a skills marketplace &mdash; but never addresses how identity-anchored memory survives multi-tenancy, how containers spawned per-venture handle credential isolation, or what happens when a client&rsquo;s Cortex gets a poisoned context. It scales the architecture before hardening it.</p>
+ <p><strong>All five missed:</strong> The operator&rsquo;s own bandwidth as the binding constraint. Whatever foundation gets picked, Malik is the prior in the Routing Gate &mdash; phone-first, scanning bullets. The real architectural metric isn&rsquo;t adapter lines or seam location &mdash; it&rsquo;s <em>surface-to-operator ratio per unit of compounded value</em>.</p>
+ </div>
+ </details>
+
+ <details>
+ <summary>Reviewer 4</summary>
+ <div class="body">
+ <p><strong>Strongest: B.</strong> B dismantles the false dichotomy with a load-bearing reframe and grounds it in the existing Three Laws. It produces an actionable architectural pattern that survives Felixbox/revenue-bot stress without rewrites.</p>
+ <p><strong>Biggest blind spot: C.</strong> C leaps to &ldquo;$100/mo SaaS, marketplace, multi-operator coupling&rdquo; without addressing the operator&rsquo;s stated $1K cap, $10K MRR target, or the fact that revenue-bot&rsquo;s mandate is <em>funding</em> Centaurion, not selling it. Identity loading and BASELINE-INTEGRAL are deeply Malik-specific.</p>
+ <p><strong>All five missed:</strong> Observability of the Routing Gate itself. routing-log.jsonl and ratings.jsonl exist, but no response asked: how does Malik audit, on a phone, what the gate classified as auto-executable last week? The seam B identifies is only trustworthy if its decisions are legible in under 10 seconds on mobile. That&rsquo;s the actual v0.1 deliverable.</p>
+ </div>
+ </details>
+
+ <details>
+ <summary>Reviewer 5</summary>
+ <div class="body">
+ <p><strong>Strongest: B.</strong> B kills the false dichotomy cleanly and names the actual decision: the seam, not the side. It&rsquo;s the only response that treats the Three Laws as already-binding architecture rather than decorative preamble.</p>
+ <p><strong>Biggest blind spot: E.</strong> E proposes a 10-day bake-off but ignores that the question was already answered structurally. E will spend 10 days proving Hermes &ldquo;wins on phone-first persistence&rdquo; &mdash; which it pre-concedes &mdash; while the real implementation question (where the Routing Gate lives, how intent crosses the seam) goes unbuilt. Empiricism aimed at the wrong axis is just expensive vibes.</p>
+ <p><strong>All five missed:</strong> Observability of the Routing Gate itself. If the Gate is the kernel or the seam, it needs an audit trail Malik can review on his phone &mdash; every novelty/stakes/reversibility score, every auto-execute vs. surface decision, queryable. Without that, Coupling Law compounds invisibly. The Gate must be legible, not just enforced.</p>
+ </div>
+ </details>
+
+ <footer>
+ Generated by the <code>llm-council</code> skill on 2026-05-04 23:27 UTC.
+ Full transcript and anonymization map in
+ <code>council-transcript.md</code>.
+ </footer>
+
+</div>
+</body>
+</html>

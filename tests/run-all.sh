@@ -51,7 +51,7 @@ run_phase 5 "Operational Workflows" "tests/verify-operational.sh"
 run_phase 6 "Cross-Venture Coherence" "tests/verify-coherence.sh"
 run_phase 7 "Production Deployment" "tests/verify-production.sh"
 run_phase 8 "Operational Automation" "tests/verify-automation.sh"
-run_phase 10 "Hermes Integration" "tests/verify-hermes-integration.sh"
+run_phase 10 "Centaurion Integration" "tests/verify-hermes-integration.sh"
 
 # Dev loop infrastructure (not a development phase, but a meta-test)
 echo ""

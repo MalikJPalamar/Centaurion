@@ -98,7 +98,7 @@ volumes:
 def get_setup_instructions():
     """Return setup instructions for Graphiti + Neo4j."""
     return """
-# Graphiti + Neo4j Setup for Centaurion Omega
+# Graphiti + Neo4j Setup for Centaurion Centaurion
 
 ## Infrastructure Impact
   - RAM: ~512MB-1GB for Neo4j (your VPS2 has 56% memory used, should be fine)
@@ -126,7 +126,7 @@ def get_setup_instructions():
    echo 'NEO4J_PASSWORD=centaurion2026' >> ~/.hermes/.env
 
 ## 4. Seed the graph
-   python3 -c "from omega.extensions.graphiti_bridge import seed_graph; seed_graph()"
+   python3 -c "from centaurion.extensions.graphiti_bridge import seed_graph; seed_graph()"
 
 ## 5. Verify
    # Open Neo4j browser at http://your-vps2-ip:7474
@@ -203,7 +203,7 @@ class GraphitiBridgeExtension:
                 self.graphiti.add_episode(
                     name=f"session_{datetime.utcnow().strftime('%Y%m%d_%H%M')}",
                     body=summary,
-                    source="hermes-omega",
+                    source="hermes-centaurion",
                     timestamp=datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
                 )
             except Exception:
