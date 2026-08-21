@@ -1,164 +1,128 @@
 # Copy — Landing (`/`)
 
-**Voice gate:** No forbidden words. Every sentence earns its space. Mechanism over claim.
+**Voice:** provocation-framed. Indictment first, offer second. "Six weeks" is the thread.
 
 ---
 
 ## 1. Hero (100vh)
 
-**Wordmark:** `CENTAURION` (platinum gradient, display weight)
+**Eyebrow (mono caption):** SIX WEEKS
 
-**One-line thesis (Mercury, body+1):**
-The exo-cortex for organizations that intend to survive the next decade.
+**H1 (display-1, platinum):**
+Most AI strategies are productivity theater.
 
-**The Equation (mono, display-2, centered, the visual anchor):**
+**Subhead (body-lg, mercury):**
+Yours has six weeks to be different.
 
-```
-Fitness  =  Predictive Order
-            ─────────────────
-            Thermodynamic Cost
-```
+**Equation glyph (mono, 0.7 opacity — supporting evidence, not centerpiece):**
+Fitness = Predictive Order / Thermodynamic Cost
 
-**Equation caption (mono caption, uppercase tracking):**
-ADAPTED FROM FRISTON. ENGINEERED FOR ENTERPRISE.
+**Equation caption (mono, mist):**
+RAISE THE TOP. LOWER THE BOTTOM. SHIP THE RATIO.
 
-**Primary CTA (hairline outline):**
-Subscribe to the Brief →
+**CTA (Signal Blue, solid):** Request a conversation →
 
 ---
 
-## 2. The Problem
+## 2. The condition
 
-**Eyebrow (mono caption):** THE CONDITION
+**Eyebrow:** The condition
 
-**Heading (display-3):**
-Two disruptions, arriving together.
+**H2:** Two shocks. Same six weeks.
 
 **Body:**
-The first disruption is workforce: a re-architecture of cognitive labor as agents move from assistant to operator. The second is macro: a geopolitical and energy regime change that breaks the assumptions every five-year plan was built on. They are arriving together and they compound.
+Workforce shock. Agents move from assistant to operator. Every function reshapes around them, whether you plan it or not.
 
-No human leadership team can read the signal volume, at the speed it arrives, with the precision the decisions require. The bottleneck is no longer information. The bottleneck is prediction.
+Macro shock. The geopolitical and energy regime every five-year plan was built on is over. The plan is a fiction now.
+
+They compound. Your leadership team is trying to read both, in real time, from the same seat. You cannot out-hire this and you cannot out-consult it. You install an exo-cortex or you don't survive the compounding.
 
 ---
 
-## 3. The Three Laws (3 scroll-locked panels)
+## 3. The Three Laws (scroll-locked panels)
 
-**Section eyebrow (mono caption):** THE THREE LAWS
+**Section eyebrow:** The three laws
 
 ### Panel 1 — Hierarchy
-
-**Display:** Hierarchy.
-
-**Body (Mercury, body):**
-Cognition is layered. Each layer predicts the layer below. An organization whose architecture does not mirror this will spend its energy correcting itself.
+Prediction is layered. Every layer forecasts the one below it. When your org chart doesn't mirror your prediction stack, error has nowhere to flow. That is what a stuck company feels like from the inside.
 
 ### Panel 2 — Routing
-
-**Display:** Routing.
-
-**Body:**
-Information must reach the agent — human or machine — with the lowest prediction error for that signal class. Misrouting is the dominant cost in most enterprises. Most do not know they are paying it.
+Every signal has a best-fit agent — human, machine, or paired. Route by competence, not by title, or you pay the same cost twice. Most enterprises route by org chart. That's the tax nobody counts.
 
 ### Panel 3 — Coupling
-
-**Display:** Coupling.
-
-**Body:**
-Human and machine agents must be bidirectionally coupled. One-way automation is brittle. Co-evolution is anti-fragile. The coupling is the product.
+One-way automation breaks under contact. Human and agent must update each other, both directions, every cycle. The coupling is what you are actually buying. Everything else is a demo.
 
 ---
 
 ## 4. Nova & Cortex
 
-**Eyebrow (mono caption):** THE EXO-CORTEX
+**Eyebrow:** The exo-cortex
 
-**Heading (display-3):**
-Two agents. One architecture.
-
-**Body (two columns):**
+**H2:** Two agents run it.
 
 **Nova — Perception.**
-Nova handles the five sensing layers: inner telemetry, outer market, macro foresight, cultural undercurrent, existential drift. Nova reduces a thousand signals to the ones that matter.
+Nova sees. Five sensing layers in parallel, all the time. Nova is the reason you find out what changed before your competitors do — not after.
 
 **Cortex — Reasoning.**
-Cortex handles prediction, planning, hypothesis. Cortex turns Nova's signal into decisions a human can act on, and surfaces the ones a human must.
+Cortex decides. It reads Nova, forms the hypothesis, recommends the move. And flags the calls a human still has to make, so nothing quietly bypasses judgment.
 
-**Caption beneath:**
-Together they form the exo-cortex: the predictive layer your organization is currently trying to grow on its own, slowly, at high cost.
+**Caption:**
+Together they are the layer your leadership team is failing to grow — slowly, at cost, and while the window closes.
 
 ---
 
 ## 5. The 11 Levels — preview
 
-**Eyebrow (mono caption):** AGENTIC ENGINEERING
+**Eyebrow:** Where teams ship
 
-**Heading (display-3):**
-The taxonomy ends at eight. We extend it to eleven.
+**H2:** The industry ends at eight. We ship at eleven.
 
 **Body:**
-Levels 1 through 8 describe what most teams ship today: from prompt-tuned assistants to multi-agent workflows under human review. Centaurion's extension begins where human review ends.
+One through eight is what everyone else calls state of the art. Nine through eleven is what six weeks with us looks like.
 
-**Three rows (mono labels, display values):**
+- **L09** · Autonomous Deployment Pipelines
+- **L10** · Simulation-First Development
+- **L11** · Physical-Digital Bridge
 
-- **Level 09** — Autonomous Deployment Pipelines
-- **Level 10** — Simulation-First Development
-- **Level 11** — Physical-Digital Bridge
-
-**CTA (text link with arrow):**
-See the full taxonomy →
+**CTA:** See where you are →
 
 ---
 
 ## 6. The Method — preview
 
-**Eyebrow (mono caption):** THE METHOD
+**Eyebrow:** The loop
 
-**Heading (display-3):**
-Sense. Predict. Act. Observe. Update. Re-route. Re-couple.
+**H2:** We run one thing. Seven times.
 
 **Body:**
-The Active Inference Loop is the seven-step cycle every Centaurion engagement runs on. It is borrowed from how brains stay alive and adapted to how organizations stay solvent.
+Sense. Predict. Act. Observe. Update. Re-route. Re-couple. Every engagement runs the same cycle, biweekly, until the prediction gap closes on the number that matters.
 
-**CTA:**
-Read the Method →
+**CTA:** See the loop →
 
 ---
 
 ## 7. Engagement tiers
 
-**Eyebrow (mono caption):** ENGAGE
+**Eyebrow:** Three ways in
 
-**Heading (display-3):**
-Three ways in. Each one earns the next.
-
-**Three cards (left to right, escalating commitment):**
+**H2:** Free is fine. Six weeks is the point.
 
 ### The Brief
-A weekly intelligence dispatch. The signals worth your attention, with the reasoning shown.
+Weekly. Free. Where we think in public before you decide to hire.
 **CTA (hairline):** Subscribe →
 
 ### The Method
-The framework as a working document. Equation, Laws, Sensing Layers, Loop, Roadmap.
+The framework as a working document. Read once. Reference for a year.
 **CTA (platinum):** Download →
 
 ### Advisory
-A six-week minimum engagement. Sensing Stack audit, Predictive Layer design, 11-Levels assessment.
+Six weeks minimum. From $999/mo. Where we install the exo-cortex.
 **CTA (Signal Blue):** Request a conversation →
 
 ---
 
 ## 8. Footer
 
-**Wordmark (small, platinum):** CENTAURION
+Wordmark small. Brief subscribe input. Sections nav. Strategic Foresight Dashboard link.
 
-**Brief subscribe (single hairline input + arrow button):**
-Placeholder: `you@company.com`
-
-**Footer nav (mono caption, uppercase, tracking +0.08em):**
-- METHOD
-- LEVELS
-- ENGAGE
-- STRATEGIC FORESIGHT DASHBOARD
-
-**Legal line (Mist, caption):**
-© 2026 Centaurion. Operating from Spain. Built for the decade ahead.
+© 2026 Centaurion · Operating from Spain · Built for the decade ahead.

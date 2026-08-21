@@ -4,79 +4,60 @@
 
 ## Hero
 
-**Eyebrow (mono caption):** ENGAGE
+**Eyebrow:** Engage
 
-**Heading (display-2):**
-Three ways in. Each one earns the next.
+**H1:** Free. Free. Or six weeks.
 
-**Subhead (Mercury, body+1):**
-The Brief is for people deciding whether to take Centaurion seriously. The Method is for people who already do. Advisory is for people ready to install it.
+**Subhead:** The Brief is where we think in public. The Method is what we hand you. Advisory is where we install it.
 
 ---
 
-## The Tiers
-
-**Section eyebrow:** THE LADDER
-
-*Three-column comparison grid. Visual hierarchy escalates left to right.*
+## The tiers
 
 ### The Brief
-
-**Format:** Weekly email.
-**Length:** Eight minutes to read.
-**Price:** Free.
-**Contains:** The signals worth your attention, with the reasoning shown.
-**For:** Operators who want to think with us before they hire us.
-**CTA (hairline outline):** Subscribe →
-*Single field: email.*
-
----
+- **Format:** Weekly email
+- **Length:** Eight minutes to read
+- **Price:** Free
+- **Contains:** The signals worth your attention, with the reasoning shown.
+- **For:** Operators who want to think with us before they hire us.
+- **CTA (hairline):** Subscribe →
 
 ### The Method
-
-**Format:** Working document, PDF.
-**Length:** Forty pages, dense.
-**Price:** Free, gated.
-**Contains:** Equation, Three Laws, Five Sensing Layers, Active Inference Loop, Roadmap, applied examples.
-**For:** Strategy and AI leadership ready to evaluate Centaurion as a partner.
-**CTA (platinum gradient):** Download →
-*Two fields: email, role + company.*
-
----
+- **Format:** Working PDF
+- **Length:** Forty pages, dense
+- **Price:** Free, gated
+- **Contains:** Equation. Three laws. Five sensing layers. The loop. Roadmap. Applied examples.
+- **For:** Strategy and AI leadership evaluating us as a partner.
+- **CTA (platinum):** Download →
 
 ### Advisory
-
-**Format:** Six-week minimum engagement, optional renewal.
-**Price:** From $999 / month.
-**Contains:**
-- Sensing Stack audit across the five layers
-- Predictive Layer design with hypothesis library
-- 11-Levels assessment with target-state plan
-- Bi-weekly Active Inference Loop reviews with named operators
-- Direct line to Cortex and Nova architecture leads
-
-**For:** Chief AI Officers, CTOs, founder-CEOs ready to install the system, not just discuss it.
-
-**CTA (Signal Blue, solid):** Request a conversation →
+- **Format:** Six-week minimum
+- **Length:** Optional renewal
+- **Price:** From $999 / month
+- **Contains:** Sensing Stack audit · Predictive Layer design · 11-Levels assessment · Biweekly loop reviews · Direct line to Nova and Cortex architecture leads
+- **For:** Chief AI Officers, CTOs, founder-CEOs ready to install the system, not discuss it.
+- **CTA (Signal Blue):** Request a conversation →
 
 ---
 
-## The Form
+## The Brief subscribe
 
-**Heading (display-3):**
-Tell us where you are.
+**Eyebrow:** The Brief
+**H2:** Subscribe.
 
-**Subhead (Mercury):**
-Five fields. We reply within 48 hours. If we are not the right fit we will say so and route you to someone who is.
+One field. No sequence.
 
-**Fields:**
-- Name
-- Role
-- Company
-- Current AI maturity *(dropdown, Levels 1–11)*
-- Primary challenge *(textarea, 280 characters max)*
+---
 
-**Submit button (Signal Blue, solid):** Send →
+## The form
 
-**Below form (Mist, caption):**
-Submissions reach the founder directly. No sales sequence. No drip.
+**Eyebrow:** Advisory
+**H2:** Tell us where you are.
+
+Five fields. We reply within 48 hours. If we're not the right fit we say so and route you to someone who is.
+
+Submissions reach the founder. No drip. No sequence.
+
+**Fields:** Name · Role · Company · Current AI maturity (dropdown, Levels 1–11) · Primary challenge (textarea, 280 chars)
+
+**Submit (Signal Blue):** Send →

@@ -4,13 +4,13 @@ export const namedAgents = [
     name: "Nova",
     role: "Perception",
     description:
-      "Nova handles the five sensing layers: inner telemetry, outer market, macro foresight, cultural undercurrent, existential drift. Nova reduces a thousand signals to the ones that matter.",
+      "Nova sees. Five sensing layers in parallel, all the time. Nova is the reason you find out what changed before your competitors do — not after.",
   },
   {
     id: "cortex",
     name: "Cortex",
     role: "Reasoning",
     description:
-      "Cortex handles prediction, planning, hypothesis. Cortex turns Nova's signal into decisions a human can act on, and surfaces the ones a human must.",
+      "Cortex decides. It reads Nova, forms the hypothesis, recommends the move. And flags the calls a human still has to make, so nothing quietly bypasses judgment.",
   },
 ] as const;
