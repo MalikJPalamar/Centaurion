@@ -1,0 +1,37 @@
+---
+import Base from "../layouts/Base.astro";
+import HeroEquation from "../components/sections/HeroEquation.astro";
+import ProblemSection from "../components/sections/ProblemSection.astro";
+import ThreeLawsPanels from "../components/sections/ThreeLawsPanels.astro";
+import AgentsBrief from "../components/sections/AgentsBrief.astro";
+import LevelsPreview from "../components/sections/LevelsPreview.astro";
+import MethodPreview from "../components/sections/MethodPreview.astro";
+import TiersGrid from "../components/sections/TiersGrid.astro";
+import StickyAdvisoryCTA from "../components/StickyAdvisoryCTA.astro";
+
+const orgJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Centaurion",
+  url: "https://centaurion.me",
+  description:
+    "Human-AI augmentation advisory practice. Centaurion engineers the ratio of predictive order to thermodynamic cost.",
+  founder: { "@type": "Person", name: "Malik J. Palamar" },
+  sameAs: ["https://centaurion.me"],
+};
+---
+<Base
+  title="Centaurion — The exo-cortex for organizations that intend to survive."
+  description="Human-AI augmentation advisory. Predictive order, per unit thermodynamic cost. Friston, deployed."
+  path="/"
+>
+  <HeroEquation />
+  <ProblemSection />
+  <ThreeLawsPanels />
+  <AgentsBrief />
+  <LevelsPreview />
+  <MethodPreview />
+  <TiersGrid />
+  <StickyAdvisoryCTA />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+</Base>

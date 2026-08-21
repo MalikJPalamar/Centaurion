@@ -1,0 +1,34 @@
+---
+type Props = {
+  class?: string;
+  height?: number;
+  ariaLabel?: string;
+};
+const { class: className = "", height = 32, ariaLabel = "Centaurion" } = Astro.props as Props;
+---
+<svg
+  class={className}
+  height={height}
+  viewBox="0 0 320 32"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label={ariaLabel}
+>
+  <defs>
+    <linearGradient id="wordmark-fill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--color-platinum-from)" />
+      <stop offset="50%" stop-color="var(--color-platinum-via)" />
+      <stop offset="100%" stop-color="var(--color-platinum-to)" />
+    </linearGradient>
+  </defs>
+  <text
+    x="0"
+    y="24"
+    font-family="'Inter Display', Inter, system-ui, sans-serif"
+    font-weight="800"
+    font-size="24"
+    letter-spacing="0.18em"
+    fill="url(#wordmark-fill)"
+  >CENTAURION</text>
+</svg>

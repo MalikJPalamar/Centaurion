@@ -1,0 +1,42 @@
+---
+// Appears after 70% scroll, dismissible.
+---
+<aside
+  id="sticky-advisory"
+  class="fixed bottom-6 right-6 z-30 hidden hairline bg-carbon p-4 max-w-xs shadow-none"
+  aria-label="Advisory call invitation"
+>
+  <p class="text-body text-mercury mb-3">
+    Where is your organization on the 11-level scale?
+  </p>
+  <div class="flex items-center gap-3">
+    <a href="/engage" class="btn-signal">Request →</a>
+    <button id="sticky-dismiss" type="button" class="font-mono text-caption uppercase tracking-[0.08em] text-mist hover:text-mercury transition-colors duration-hover" aria-label="Dismiss">
+      ✕
+    </button>
+  </div>
+</aside>
+<script is:inline>
+  (() => {
+    if (typeof window === "undefined") return;
+    const el = document.getElementById("sticky-advisory");
+    const dismiss = document.getElementById("sticky-dismiss");
+    if (!el || !dismiss) return;
+    if (sessionStorage.getItem("sticky-advisory-dismissed") === "1") return;
+
+    const onScroll = () => {
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = docH > 0 ? window.scrollY / docH : 0;
+      if (ratio >= 0.7) {
+        el.classList.remove("hidden");
+        window.removeEventListener("scroll", onScroll);
+      }
+    };
+    dismiss.addEventListener("click", () => {
+      el.classList.add("hidden");
+      sessionStorage.setItem("sticky-advisory-dismissed", "1");
+    });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  })();
+</script>
