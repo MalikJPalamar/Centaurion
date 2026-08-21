@@ -1,0 +1,37 @@
+---
+// Three stacked layers; up-arrow (prediction error) and down-arrow (predictions).
+type Props = { class?: string };
+const { class: className = "" } = Astro.props as Props;
+---
+<svg
+  class={className}
+  viewBox="0 0 360 360"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-label="Hierarchy diagram: stacked layers with bidirectional flow"
+>
+  <defs>
+    <linearGradient id="lh-stroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--color-platinum-from)" />
+      <stop offset="50%" stop-color="var(--color-platinum-via)" />
+      <stop offset="100%" stop-color="var(--color-platinum-to)" />
+    </linearGradient>
+    <marker id="lh-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="url(#lh-stroke)" />
+    </marker>
+  </defs>
+  <g stroke="url(#lh-stroke)" stroke-width="1.5" fill="none">
+    <rect x="60" y="60" width="240" height="44" />
+    <rect x="60" y="158" width="240" height="44" />
+    <rect x="60" y="256" width="240" height="44" />
+    <line x1="160" y1="104" x2="160" y2="158" marker-end="url(#lh-arrow)" />
+    <line x1="200" y1="158" x2="200" y2="104" marker-end="url(#lh-arrow)" />
+    <line x1="160" y1="202" x2="160" y2="256" marker-end="url(#lh-arrow)" />
+    <line x1="200" y1="256" x2="200" y2="202" marker-end="url(#lh-arrow)" />
+  </g>
+  <g font-family="'JetBrains Mono', monospace" font-size="10" fill="var(--color-mist)" letter-spacing="0.08em">
+    <text x="60" y="50">STRATEGIC</text>
+    <text x="60" y="148">CONCEPTUAL</text>
+    <text x="60" y="246">SENSORIMOTOR</text>
+  </g>
+</svg>

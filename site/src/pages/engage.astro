@@ -1,0 +1,122 @@
+---
+import Base from "../layouts/Base.astro";
+import AdvisoryForm from "../components/AdvisoryForm.tsx";
+
+const tiers = [
+  {
+    name: "The Brief",
+    format: "Weekly email",
+    length: "Eight minutes to read",
+    price: "Free",
+    contains: "The signals worth your attention, with the reasoning shown.",
+    audience: "Operators who want to think with us before they hire us.",
+    cta: { label: "Subscribe →", href: "#brief", variant: "hairline" as const },
+  },
+  {
+    name: "The Method",
+    format: "Working document, PDF",
+    length: "Forty pages, dense",
+    price: "Free, gated",
+    contains: "Equation, Three Laws, Five Sensing Layers, Active Inference Loop, Roadmap, applied examples.",
+    audience: "Strategy and AI leadership ready to evaluate Centaurion as a partner.",
+    cta: { label: "Download →", href: "/method#method", variant: "platinum" as const },
+  },
+  {
+    name: "Advisory",
+    format: "Six-week minimum engagement",
+    length: "Optional renewal",
+    price: "From $999 / month",
+    contains: "Sensing Stack audit · Predictive Layer design · 11-Levels assessment · Bi-weekly Loop reviews · Direct line to Cortex and Nova architecture leads",
+    audience: "Chief AI Officers, CTOs, founder-CEOs ready to install the system.",
+    cta: { label: "Request a conversation →", href: "#form", variant: "signal" as const },
+  },
+];
+---
+<Base
+  title="Engage — Centaurion"
+  description="Three ways into Centaurion. The Brief, the Method, and Advisory engagements."
+  path="/engage"
+>
+  <section class="container-page section">
+    <p class="eyebrow reveal">Engage</p>
+    <h1 class="text-display-2 text-platinum mt-6 max-w-4xl reveal">
+      Three ways in. Each one earns the next.
+    </h1>
+    <p class="text-body-lg max-w-prose text-mercury mt-8 reveal">
+      The Brief is for people deciding whether to take Centaurion seriously.
+      The Method is for people who already do. Advisory is for people ready
+      to install it.
+    </p>
+  </section>
+
+  <section class="container-page" aria-labelledby="ladder-heading">
+    <h2 id="ladder-heading" class="sr-only">The Tiers</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      {tiers.map((t) => (
+        <article class="hairline bg-carbon p-8 flex flex-col gap-5 reveal">
+          <h3 class="text-display-3 text-platinum">{t.name}</h3>
+          <dl class="grid gap-3">
+            <div>
+              <dt class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Format</dt>
+              <dd class="text-body text-mercury">{t.format}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Length</dt>
+              <dd class="text-body text-mercury">{t.length}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Price</dt>
+              <dd class="text-body text-mercury">{t.price}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-caption uppercase tracking-[0.08em] text-mist">Contains</dt>
+              <dd class="text-body text-mercury">{t.contains}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-caption uppercase tracking-[0.08em] text-mist">For</dt>
+              <dd class="text-body text-mercury">{t.audience}</dd>
+            </div>
+          </dl>
+          <a href={t.cta.href} class:list={[
+            "self-start mt-auto",
+            t.cta.variant === "hairline" && "btn-hairline",
+            t.cta.variant === "platinum" && "btn-platinum",
+            t.cta.variant === "signal" && "btn-signal",
+          ]}>{t.cta.label}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container-page section" aria-labelledby="brief-heading" id="brief">
+    <div class="hairline bg-carbon p-10 grid gap-4 max-w-2xl reveal">
+      <p class="eyebrow">The Brief</p>
+      <h2 id="brief-heading" class="text-display-3 text-platinum">Subscribe.</h2>
+      <p class="text-body text-mercury">One field. No follow-up sequence.</p>
+      <form action="/api/subscribe" method="POST" class="flex items-stretch hairline mt-2">
+        <label for="brief-email" class="sr-only">Email</label>
+        <input id="brief-email" type="email" name="email" required placeholder="you@company.com" class="flex-1 bg-transparent px-4 py-3 text-mercury placeholder:text-mist focus:outline-none" />
+        <button type="submit" class="px-5 font-mono text-caption uppercase tracking-[0.08em] text-mercury hover:text-platinum-from transition-colors duration-hover">Subscribe →</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="container-page section" aria-labelledby="form-heading" id="form">
+    <div class="grid md:grid-cols-[1fr_1.2fr] gap-12">
+      <div class="space-y-4 reveal">
+        <p class="eyebrow">Advisory</p>
+        <h2 id="form-heading" class="text-display-3 text-platinum">Tell us where you are.</h2>
+        <p class="text-body-lg text-mercury max-w-prose">
+          Five fields. We reply within 48 hours. If we are not the right fit
+          we will say so and route you to someone who is.
+        </p>
+        <p class="text-body text-mist max-w-prose">
+          Submissions reach the founder directly. No sales sequence. No drip.
+        </p>
+      </div>
+      <div class="reveal">
+        <AdvisoryForm client:visible />
+      </div>
+    </div>
+  </section>
+</Base>
