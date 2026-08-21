@@ -1,0 +1,43 @@
+---
+import EquationGlyph from "../svg/EquationGlyph.astro";
+import Wordmark from "../svg/Wordmark.astro";
+import { equation } from "../../content/brand";
+---
+<section class="relative min-h-[100dvh] flex items-center" aria-labelledby="hero-heading">
+  <div class="container-page py-24 grid gap-16 w-full">
+    <div class="space-y-10 max-w-4xl">
+      <p class="eyebrow reveal">{equation.caption}</p>
+      <h1 id="hero-heading" class="sr-only">Centaurion — the exo-cortex for organizations that intend to survive.</h1>
+      <div class="reveal" aria-hidden="false">
+        <Wordmark height={56} ariaLabel="Centaurion" />
+      </div>
+      <p class="text-body-lg max-w-2xl text-mercury reveal">
+        The exo-cortex for organizations that intend to survive the next decade.
+      </p>
+      <div class="reveal pt-4">
+        <EquationGlyph class="w-full max-w-3xl" />
+      </div>
+      <div class="reveal pt-6">
+        <form
+          action="/api/subscribe"
+          method="POST"
+          class="flex items-stretch max-w-md hairline"
+          aria-label="Subscribe to the Centaurion Brief"
+        >
+          <label for="hero-email" class="sr-only">Email</label>
+          <input
+            id="hero-email"
+            type="email"
+            name="email"
+            required
+            placeholder="you@company.com"
+            class="flex-1 bg-transparent px-4 py-3 text-mercury placeholder:text-mist focus:outline-none"
+          />
+          <button type="submit" class="px-5 font-mono text-caption uppercase tracking-[0.08em] text-mercury hover:text-platinum-from transition-colors duration-hover">
+            Subscribe →
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

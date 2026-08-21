@@ -1,0 +1,21 @@
+# build
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# os
+.DS_Store
+
+# editors
+.vscode/
+.idea/
+
+# cloudflare
+.wrangler/

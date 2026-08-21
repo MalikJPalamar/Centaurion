@@ -1,0 +1,18 @@
+/* Centaurion design tokens — single source of truth for color and motion.
+   Hex codes appear ONLY in this file. */
+
+:root {
+  --color-obsidian: #050505;
+  --color-carbon: #0e0e10;
+  --color-graphite: #1a1a1c;
+  --color-mercury: #c0c0c0;
+  --color-mist: #6b6b6b;
+  --color-signal-blue: #5b8def;
+  --color-platinum-from: #e5e4e2;
+  --color-platinum-via: #b7b5b2;
+  --color-platinum-to: #8c8a87;
+
+  --duration-hover: 200ms;
+  --duration-fade: 800ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
