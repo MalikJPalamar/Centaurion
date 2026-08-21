@@ -219,6 +219,11 @@ class DockerSandbox(Sandbox):
             "--security-opt", "no-new-privileges",
             "--read-only",
             "--tmpfs", "/tmp:size=64m",
+            # Run as the host user: with --cap-drop ALL, in-container root loses
+            # CAP_DAC_OVERRIDE and cannot write into a bind mount owned by the
+            # host UID (e.g. GitHub runners). Matching UID/GID makes the workdir
+            # writable and drops in-container root entirely.
+            *(["--user", f"{os.getuid()}:{os.getgid()}"] if hasattr(os, "getuid") else []),
             "-v", f"{workdir}:{self.workdir_in_container}:rw",
             "-w", self.workdir_in_container,
             self.image,
