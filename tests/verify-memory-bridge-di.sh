@@ -8,7 +8,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-EXT_DIR="$REPO_ROOT/omega/extensions"
+EXT_DIR="$REPO_ROOT/centaurion/extensions"
 PASS=0
 FAIL=0
 TOTAL=0

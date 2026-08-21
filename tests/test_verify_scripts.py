@@ -61,12 +61,14 @@ def test_verify_script(script: Path) -> None:
     if name in PRODUCTION_ONLY and os.environ.get("CENTAURION_PRODUCTION") != "1":
         pytest.skip(PRODUCTION_ONLY[name])
 
+    env = dict(os.environ, CENTAURION_NESTED_PYTEST_SKIP="1")
     result = subprocess.run(
         ["bash", str(script)],
         cwd=str(REPO_ROOT),
         capture_output=True,
         text=True,
         timeout=300,
+        env=env,
     )
 
     if name in KNOWN_REPO_DEBT and result.returncode != 0:
