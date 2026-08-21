@@ -116,7 +116,12 @@ check_file_contains "centaurion/extensions/tool_forge.py" \
 echo ""
 echo "═══ F6: Pytest suite ═══"
 
-if command -v python3 >/dev/null 2>&1; then
+if [ "${CENTAURION_NESTED_PYTEST_SKIP:-0}" = "1" ]; then
+  # Invoked from inside the pytest suite (test_verify_scripts.py): the unit
+  # tests below are already collected by the outer run; re-invoking pytest
+  # here would recurse into the wrapper and hang.
+  pass "F6.1: pytest suite covered by outer pytest run (nested invocation skipped)"
+elif command -v python3 >/dev/null 2>&1; then
   if python3 -m pytest --version >/dev/null 2>&1; then
     if (cd "$REPO_ROOT" && python3 -m pytest \
           tests/test_sandbox.py \
