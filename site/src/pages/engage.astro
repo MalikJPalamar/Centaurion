@@ -14,38 +14,37 @@ const tiers = [
   },
   {
     name: "The Method",
-    format: "Working document, PDF",
+    format: "Working PDF",
     length: "Forty pages, dense",
     price: "Free, gated",
-    contains: "Equation, Three Laws, Five Sensing Layers, Active Inference Loop, Roadmap, applied examples.",
-    audience: "Strategy and AI leadership ready to evaluate Centaurion as a partner.",
+    contains: "Equation. Three laws. Five sensing layers. The loop. Roadmap. Applied examples.",
+    audience: "Strategy and AI leadership evaluating us as a partner.",
     cta: { label: "Download →", href: "/method#method", variant: "platinum" as const },
   },
   {
     name: "Advisory",
-    format: "Six-week minimum engagement",
+    format: "Six-week minimum",
     length: "Optional renewal",
     price: "From $999 / month",
-    contains: "Sensing Stack audit · Predictive Layer design · 11-Levels assessment · Bi-weekly Loop reviews · Direct line to Cortex and Nova architecture leads",
-    audience: "Chief AI Officers, CTOs, founder-CEOs ready to install the system.",
+    contains: "Sensing Stack audit · Predictive Layer design · 11-Levels assessment · Biweekly loop reviews · Direct line to Nova and Cortex architecture leads",
+    audience: "Chief AI Officers, CTOs, founder-CEOs ready to install the system, not discuss it.",
     cta: { label: "Request a conversation →", href: "#form", variant: "signal" as const },
   },
 ];
 ---
 <Base
   title="Engage — Centaurion"
-  description="Three ways into Centaurion. The Brief, the Method, and Advisory engagements."
+  description="Free. Free. Or six weeks. Three ways in and each earns the next."
   path="/engage"
 >
   <section class="container-page section">
     <p class="eyebrow reveal">Engage</p>
-    <h1 class="text-display-2 text-platinum mt-6 max-w-4xl reveal">
-      Three ways in. Each one earns the next.
+    <h1 class="text-display-1 text-platinum mt-6 max-w-5xl reveal">
+      Free. Free. Or six weeks.
     </h1>
     <p class="text-body-lg max-w-prose text-mercury mt-8 reveal">
-      The Brief is for people deciding whether to take Centaurion seriously.
-      The Method is for people who already do. Advisory is for people ready
-      to install it.
+      The Brief is where we think in public. The Method is what we hand you.
+      Advisory is where we install it.
     </p>
   </section>
 
@@ -92,7 +91,7 @@ const tiers = [
     <div class="hairline bg-carbon p-10 grid gap-4 max-w-2xl reveal">
       <p class="eyebrow">The Brief</p>
       <h2 id="brief-heading" class="text-display-3 text-platinum">Subscribe.</h2>
-      <p class="text-body text-mercury">One field. No follow-up sequence.</p>
+      <p class="text-body text-mercury">One field. No sequence.</p>
       <form action="/api/subscribe" method="POST" class="flex items-stretch hairline mt-2">
         <label for="brief-email" class="sr-only">Email</label>
         <input id="brief-email" type="email" name="email" required placeholder="you@company.com" class="flex-1 bg-transparent px-4 py-3 text-mercury placeholder:text-mist focus:outline-none" />
@@ -105,13 +104,13 @@ const tiers = [
     <div class="grid md:grid-cols-[1fr_1.2fr] gap-12">
       <div class="space-y-4 reveal">
         <p class="eyebrow">Advisory</p>
-        <h2 id="form-heading" class="text-display-3 text-platinum">Tell us where you are.</h2>
+        <h2 id="form-heading" class="text-display-2 text-platinum">Tell us where you are.</h2>
         <p class="text-body-lg text-mercury max-w-prose">
-          Five fields. We reply within 48 hours. If we are not the right fit
-          we will say so and route you to someone who is.
+          Five fields. We reply within 48 hours. If we're not the right fit
+          we say so and route you to someone who is.
         </p>
         <p class="text-body text-mist max-w-prose">
-          Submissions reach the founder directly. No sales sequence. No drip.
+          Submissions reach the founder. No drip. No sequence.
         </p>
       </div>
       <div class="reveal">

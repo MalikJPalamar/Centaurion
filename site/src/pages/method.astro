@@ -5,43 +5,41 @@ import LoopDiagram from "../components/svg/LoopDiagram.astro";
 import { threeLaws, sensingLayers, loopSteps, roadmap } from "../content/brand";
 ---
 <Base
-  title="The Centaurion Method — Friston, deployed."
-  description="The Centaurion Equation, Three Laws, Five Sensing Layers, and Active Inference Loop, written for operators."
+  title="The Method — Centaurion"
+  description="One equation. Three laws. Seven steps. What six weeks with Centaurion actually looks like."
   path="/method"
 >
   <section class="container-page section">
-    <p class="eyebrow reveal">The Centaurion Method</p>
-    <h1 class="text-display-2 text-platinum mt-6 max-w-4xl reveal">Friston, deployed.</h1>
+    <p class="eyebrow reveal">The method</p>
+    <h1 class="text-display-1 text-platinum mt-6 max-w-5xl reveal">
+      One equation. Three laws. Seven steps.
+    </h1>
     <p class="text-body-lg max-w-prose text-mercury mt-8 reveal">
-      The free energy principle says any system that persists must minimize
-      surprise. We made it executable for organizations.
+      Everything below is what six weeks with us actually looks like.
     </p>
   </section>
 
   <section class="container-page section" aria-labelledby="equation-heading">
-    <p class="eyebrow reveal">The Equation</p>
+    <p class="eyebrow reveal">The equation</p>
     <h2 id="equation-heading" class="sr-only">The Centaurion Equation</h2>
-    <div class="reveal mt-12">
-      <EquationGlyph class="w-full max-w-3xl" />
+    <div class="reveal mt-12 max-w-3xl">
+      <EquationGlyph class="w-full" />
     </div>
     <p class="text-body-lg max-w-prose text-mercury mt-12 reveal">
-      Karl Friston's free energy principle states that self-organizing systems
-      — cells, brains, ecologies — survive by minimizing the difference between
-      what they predict and what they sense. The cost of that minimization is
-      energetic. Translate this from biology to enterprise: an organization
-      survives by predicting its environment well enough, fast enough, at a
-      metabolic cost it can pay. AI augmentation increases the numerator. Bad
-      AI implementation inflates the denominator. Most enterprises today are
-      doing both at once and wondering why the ratio worsens.
+      Raise the top. Lower the bottom. Ship the ratio. That's the practice.
+      Everything below is how.
     </p>
-    <p class="text-body-lg max-w-prose text-platinum mt-6 reveal">
-      Centaurion engineers the ratio. That is the entire practice.
+    <p class="text-body max-w-prose text-mist mt-4 reveal">
+      Predictive order is how well your organization forecasts the environment
+      it operates in. Thermodynamic cost is what it burns getting there —
+      compute, meetings, headcount, delay. AI in the wrong place raises both.
+      Centaurion engineers the ratio.
     </p>
   </section>
 
   <section class="container-page section" aria-labelledby="laws-deeper-heading">
-    <p class="eyebrow reveal">Architecture</p>
-    <h2 id="laws-deeper-heading" class="text-display-3 text-platinum mt-6 reveal">The Three Laws.</h2>
+    <p class="eyebrow reveal">The three laws</p>
+    <h2 id="laws-deeper-heading" class="text-display-2 text-platinum mt-6 reveal">Architecture.</h2>
     <ol class="grid gap-12 mt-12">
       {threeLaws.map((law) => (
         <li class="grid md:grid-cols-[120px_1fr] gap-8 reveal hairline-top pt-8">
@@ -57,10 +55,9 @@ import { threeLaws, sensingLayers, loopSteps, roadmap } from "../content/brand";
 
   <section class="container-page section" aria-labelledby="sensing-heading">
     <p class="eyebrow reveal">Perception</p>
-    <h2 id="sensing-heading" class="text-display-3 text-platinum mt-6 reveal">The Five Sensing Layers.</h2>
+    <h2 id="sensing-heading" class="text-display-2 text-platinum mt-6 reveal">Five depths.</h2>
     <p class="text-body-lg max-w-prose text-mercury mt-6 reveal">
-      A complete sensing stack reads at five depths. Most organizations read at
-      one or two and call it strategy.
+      Most organizations read at two and call it strategy.
     </p>
     <ul class="grid gap-0 mt-12 hairline-top">
       {sensingLayers.map((layer) => (
@@ -75,7 +72,7 @@ import { threeLaws, sensingLayers, loopSteps, roadmap } from "../content/brand";
 
   <section class="container-page section" aria-labelledby="loop-heading">
     <p class="eyebrow reveal">Execution</p>
-    <h2 id="loop-heading" class="text-display-3 text-platinum mt-6 reveal">The Active Inference Loop.</h2>
+    <h2 id="loop-heading" class="text-display-2 text-platinum mt-6 reveal">The loop that runs your engagement.</h2>
     <div class="grid md:grid-cols-2 gap-16 items-center mt-12">
       <ol class="grid gap-4 reveal">
         {loopSteps.map((step) => (
@@ -95,8 +92,8 @@ import { threeLaws, sensingLayers, loopSteps, roadmap } from "../content/brand";
   </section>
 
   <section class="container-page section" aria-labelledby="roadmap-heading">
-    <p class="eyebrow reveal">Trajectory</p>
-    <h2 id="roadmap-heading" class="text-display-3 text-platinum mt-6 reveal">The Roadmap.</h2>
+    <p class="eyebrow reveal">Where this goes</p>
+    <h2 id="roadmap-heading" class="text-display-2 text-platinum mt-6 reveal">Four years. Four layers.</h2>
     <ul class="grid gap-0 mt-12 hairline-top">
       {roadmap.map((p) => (
         <li class="grid md:grid-cols-[120px_120px_1fr] gap-6 py-6 border-b border-graphite reveal items-baseline">
@@ -110,12 +107,12 @@ import { threeLaws, sensingLayers, loopSteps, roadmap } from "../content/brand";
 
   <section class="container-page section" aria-labelledby="method-cta-heading">
     <div class="hairline bg-carbon p-12 grid gap-6 max-w-3xl reveal">
-      <p class="eyebrow">Tier 2</p>
-      <h2 id="method-cta-heading" class="text-display-3 text-platinum">Take the Method with you.</h2>
+      <p class="eyebrow">The method as a PDF</p>
+      <h2 id="method-cta-heading" class="text-display-3 text-platinum">Read it once. Reference it for a year.</h2>
       <p class="text-body-lg text-mercury max-w-prose">
-        The full framework as a working document. Equation, Laws, Sensing
-        Layers, Loop, Roadmap. Built to be read once, then referenced for a
-        year.
+        The full framework as a working document. Equation, laws, sensing
+        layers, loop, roadmap. Built to be read on a plane and referenced in
+        every planning meeting for the next twelve months.
       </p>
       <form
         action="/api/method-download"
