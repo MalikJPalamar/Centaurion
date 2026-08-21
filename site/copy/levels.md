@@ -8,7 +8,7 @@
 
 **H1:** Every AI strategy has a level. Most won't say which.
 
-**Subhead:** Eight is the industry ceiling. Eleven is where six weeks with us gets you.
+**Subhead:** Eight is the industry ceiling. Nine and ten are where six weeks with us puts you. Eleven is where we're taking the industry.
 
 ---
 

@@ -78,7 +78,7 @@ Together they are the layer your leadership team is failing to grow — slowly, 
 **H2:** The industry ends at eight. We ship at eleven.
 
 **Body:**
-One through eight is what everyone else calls state of the art. Nine through eleven is what six weeks with us looks like.
+One through eight is what everyone else calls state of the art. Nine and ten are where six weeks with us puts you. Eleven is where we're taking the industry.
 
 - **L09** · Autonomous Deployment Pipelines
 - **L10** · Simulation-First Development
